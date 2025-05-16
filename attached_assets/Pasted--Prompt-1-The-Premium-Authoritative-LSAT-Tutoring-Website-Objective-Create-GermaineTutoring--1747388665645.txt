@@ -1,0 +1,78 @@
+
+
+Prompt 1: The "Premium & Authoritative" LSAT Tutoring Website
+
+Objective: Create GermaineTutoring.com, a website for male LSAT tutor Germaine Washington, designed to establish immediate credibility and convey a premium, results-driven service. Germaine holds a Princeton University Degree in Philosophy of Logic, achieved a perfect 180 LSAT Score, has tutored 500+ students over 5+ years, sees a 12+ average point increase for students on his longest plan, and 98% of his plan students see some score improvement.
+
+General Structure:
+
+Header: Site Name (GermaineTutoring.com or Germaine Washington LSAT Tutoring), Navigation (My Methodology, Tutoring Programs, Student Results, Free LSAT Guides, Book Consultation).
+
+Hero Section:
+
+Headline: "Achieve Your Target LSAT Score with Proven, Rule-Based Guidance from a Princeton Logic Expert."
+
+Sub-headline: "Expert tutoring from a 180 LSAT scorer with a Princeton Philosophy of Logic degree. Students on our Premium Mastery Program average a 12+ point increase. Learn the systematic approach to conquer the LSAT."
+
+Key Stats Callouts: "180 LSAT Score," "Princeton University, Philosophy of Logic," "500+ Students Helped," "12+ Avg. Point Increase (Premium Plan)."
+
+CTA: "Schedule Your Free Consultation."
+
+Methodology Section ('My Proven Approach'):
+
+Detailed explanation of Germaine's rule-based approach, emphasizing his Princeton Logic background.
+
+Sub-sections:
+
+(a) The 5-Step Critical Thinking Framework (Define problem, Identify steps, Execute, Know when to apply, Adapt).
+
+(b) 'Describe, Demonstrate, Duplicate' teaching model.
+
+Focus: Understanding underlying logic, not just memorization.
+
+Tutoring Programs (Pricing Tiers):
+
+Three plans:
+
+2-hour 'Targeted Strategy Session' (for specific issues).
+
+8-hour 'Standard Prep Program' (for 5-15 point improvements).
+
+24-hour 'Premium Mastery Program' (for 12+ point improvements or 170+ target, tagged 'Most Popular').
+
+Features: Hours, custom study plan depth, email/text support, question database access, number of practice test reviews (Standard: 1, Premium: 3), access to advanced/custom materials for Premium. Display per-hour value. Note about financing options.
+
+CTA: "Explore Programs" or "Book a Free Consultation."
+
+Student Results:
+
+Testimonials: Student photos (if available), specific score improvements (e.g., "Sarah K., 155 to 172"), quotes reflecting the methodology's effectiveness.
+
+Law School Acceptances: Logos/list of Top 20 law schools.
+
+Statistic Highlight: "98% of students on a plan see score improvement."
+
+Free LSAT Guides:
+
+3-4 initial guides (e.g., "Common LSAT Flaws & How to Fix Them," "Effective Blind Review Techniques," "Strategic Reading Comp Passage Analysis").
+
+Gated by email sign-up ("Join Our LSAT Community for Access").
+
+Main CTA Section:
+
+Headline: "Ready to Transform Your LSAT Score? Let's Strategize."
+
+Button: "Book Your Free Consultation Now" (links to calendar).
+
+About Germaine:
+
+Highlight: Princeton (Philosophy of Logic), 180 LSAT, 5+ years experience, 500+ students, passion for teaching logic.
+
+FAQs: Accordion style.
+
+Footer: Contact info (email, phone), Social media (Reddit, Instagram, Facebook, Twitter), Copyright, Privacy, Terms.
+
+Color Scheme: Deep Blue (primary), Gold/Amber (accents/CTAs), Off-White/Light Grey (backgrounds), Dark Grey (text).
+Fonts: Headings: Merriweather or Lora. Body: Open Sans or Lato.
+General Thematic Elements: Professional, Authoritative, Results-Driven, Systematic, Trustworthy, Premium. Emphasize expertise rooted in logic and proven outcomes.
+Note from Commentary: Focus on conveying expertise and trustworthiness. Methodology should prominently feature 'Describe, Demonstrate, Duplicate' and the 5-step critical thinking process. Ensure clear value in pricing tiers and include financing note. Highlight tutor's perfect score and Princeton background.
