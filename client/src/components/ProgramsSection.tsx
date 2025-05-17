@@ -59,16 +59,14 @@ const ProgramsSection = () => {
       savings: null,
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 2 Hours" },
-        { included: true, text: "Focused Diagnostic & Initial Strategy Session" },
+        { included: false, text: "Focused Diagnostic & Initial Strategy Session" },
         { included: true, text: "Section-Specific Strategy Discussion" },
         { included: true, text: "Personalized Study Plan Outline" },
         { included: false, text: "Free Practice Test Review Sessions" },
         { included: false, text: "Permanent Question Explanation Database Access" },
         { included: false, text: "Custom Strategy Materials" },
         { included: true, text: "Email & Text Support" },
-        { included: false, text: "Priority in New Material Creation/Selection" },
-        { included: false, text: "Priority Email & Text Support" },
-        { included: false, text: "Free Full Test Diagnostic Assessment" }
+        { included: false, text: "Priority in New Material Creation/Selection" }
       ],
       buttonText: "Purchase Session",
       highlighted: false
@@ -82,16 +80,14 @@ const ProgramsSection = () => {
       savings: "(12.5% savings)",
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 8 Hours" },
-        { included: true, text: "Focused Diagnostic & Initial Strategy Session (Included)" },
-        { included: true, text: "Section-Specific Strategy Discussion (Included)" },
-        { included: true, text: "Personalized Study Plan Outline (Included)" },
+        { included: true, text: "Focused Diagnostic & Strategy Call" },
+        { included: true, text: "Section-Specific Strategy Discussion" },
+        { included: true, text: "Personalized Study Plan Outline" },
         { included: true, text: "One Free Practice Test Review Session", bonus: true },
         { included: true, text: "Permanent Question Explanation Database Access", bonus: true },
         { included: true, text: "Custom Strategy Materials" },
         { included: true, text: "Email & Text Support" },
-        { included: false, text: "Priority in New Material Creation/Selection" },
-        { included: false, text: "Priority Email & Text Support" },
-        { included: true, text: "Free Full Test Diagnostic Assessment" }
+        { included: false, text: "Priority in New Material Creation/Selection" }
       ],
       buttonText: "Enroll in Program",
       highlighted: false
@@ -105,16 +101,14 @@ const ProgramsSection = () => {
       savings: "(25% savings)",
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 24 Hours" },
-        { included: true, text: "Focused Diagnostic & Initial Strategy Session (Included)" },
-        { included: true, text: "Section-Specific Strategy Discussion (Included)" },
-        { included: true, text: "Personalized Study Plan Outline (Included)" },
+        { included: true, text: "Focused Diagnostic & Initial Strategy Session" },
+        { included: true, text: "Section-Specific Strategy Discussion" },
+        { included: true, text: "Personalized Study Plan Outline" },
         { included: true, text: "Three One-Hour Free Practice Test Review Sessions", bonus: true },
         { included: true, text: "Permanent Full Question Explanation Database Access", bonus: true },
         { included: true, text: "Custom Strategy Materials" },
         { included: true, text: "Email & Text Support" },
-        { included: true, text: "Priority in New Material Creation/Selection" },
-        { included: true, text: "Priority Email & Text Support" },
-        { included: true, text: "Free Full Test Diagnostic Assessment" }
+        { included: true, text: "Priority in New Material Creation/Selection" }
       ],
       buttonText: "Enroll in Premium",
       highlighted: true
