@@ -150,6 +150,36 @@ const ProgramsSection = () => {
     }
   };
   
+  // Open Calendly for the 8-hour program
+  const open8HourCalendly = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Check if Calendly is loaded
+    if (window.Calendly) {
+      window.Calendly.initPopupWidget({
+        url: 'https://calendly.com/germaine-washington-tutoring/8-hr-lsat-plan'
+      });
+    } else {
+      console.error('Calendly not loaded yet');
+      // Fallback - open directly
+      window.open('https://calendly.com/germaine-washington-tutoring/8-hr-lsat-plan', '_blank');
+    }
+  };
+  
+  // Open Calendly for the 24-hour program
+  const open24HourCalendly = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Check if Calendly is loaded
+    if (window.Calendly) {
+      window.Calendly.initPopupWidget({
+        url: 'https://calendly.com/germaine-washington-tutoring/24-hour-lsat-premium-mastery-program'
+      });
+    } else {
+      console.error('Calendly not loaded yet');
+      // Fallback - open directly
+      window.open('https://calendly.com/germaine-washington-tutoring/24-hour-lsat-premium-mastery-program', '_blank');
+    }
+  };
+  
   // Handler for program buttons
   const handleProgramButtonClick = (programTitle: string) => {
     console.log(`Button clicked for: ${programTitle}`);
@@ -158,9 +188,9 @@ const ProgramsSection = () => {
     if (programTitle === "2-Hour LSAT Acceleration Session") {
       openTwoHourCalendly(new MouseEvent('click') as any);
     } else if (programTitle === "8-Hour LSAT Elevation Course") {
-      window.open('https://shop.germainetutoring.com/cart/42161250533441:1?channel=buy_button', '_blank');
+      open8HourCalendly(new MouseEvent('click') as any);
     } else if (programTitle === "24-Hour Premium Mastery Program") {
-      window.open('https://shop.germainetutoring.com/cart/42161421221953:1?channel=buy_button', '_blank');
+      open24HourCalendly(new MouseEvent('click') as any);
     }
   };
 
