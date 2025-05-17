@@ -5,6 +5,14 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
+import { 
+  Dialog, 
+  DialogContent, 
+  DialogHeader, 
+  DialogTitle,
+  DialogDescription,
+  DialogClose
+} from '@/components/ui/dialog';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -18,6 +26,8 @@ type EmailFormData = z.infer<typeof emailSchema>;
 
 const GuidesSection = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedGuide, setSelectedGuide] = useState<number | null>(null);
   const { toast } = useToast();
   
   const form = useForm<EmailFormData>({
@@ -33,19 +43,19 @@ const GuidesSection = () => {
       image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500",
       title: "Common LSAT Flaws & How to Fix Them",
       description: "Learn to identify and address the 7 most common logical fallacies that appear in LSAT Logical Reasoning questions.",
-      type: "20-page PDF Guide"
+      type: "Four-page PDF guide"
     },
     {
       image: "https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500",
       title: "Effective Blind Review Techniques",
       description: "Master the most powerful practice method for LSAT improvement with this step-by-step guide to conducting effective blind reviews.",
-      type: "15-page PDF + Worksheet"
+      type: "Three-page PDF and worksheet"
     },
     {
       image: "https://images.unsplash.com/photo-1599687351724-dfa3c4ff81b1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500",
       title: "Strategic Reading Comp Passage Analysis",
       description: "Transform your approach to Reading Comprehension with targeted strategies for breaking down complex passages efficiently.",
-      type: "18-page PDF + Annotation Guide"
+      type: "Six-page PDF and annotation guide"
     }
   ];
 
@@ -56,10 +66,11 @@ const GuidesSection = () => {
     onSuccess: () => {
       toast({
         title: "Success!",
-        description: "Thank you for signing up! You will receive the LSAT guides shortly.",
+        description: "Thank you for signing up! You will receive the LSAT guide shortly.",
       });
       form.reset();
       setIsSubmitting(false);
+      setIsDialogOpen(false);
     },
     onError: (error) => {
       toast({
@@ -76,13 +87,20 @@ const GuidesSection = () => {
     emailSignupMutation.mutate(data);
   };
 
+  const handleGuideClick = (index: number) => {
+    setSelectedGuide(index);
+    setIsDialogOpen(true);
+  };
+
   return (
     <section id="guides" className="py-20 bg-white">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <h2 className="font-heading font-bold text-primary text-3xl md:text-4xl mb-4">Free LSAT Guides</h2>
+          <h2 className="font-heading font-bold text-primary text-3xl md:text-4xl mb-4">
+            Subscribe for Exclusive Access to Our Free LSAT Guides
+          </h2>
           <p className="text-foreground text-lg leading-relaxed">
-            Access premium LSAT resources to jumpstart your preparation. Join our community to receive these guides and regular tips.
+            Join our community to unlock valuable resources designed to boost your LSAT performance and preparation strategy.
           </p>
         </div>
         
@@ -100,26 +118,31 @@ const GuidesSection = () => {
                 <p className="text-foreground mb-4">
                   {guide.description}
                 </p>
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center mb-4">
                   <span className="text-primary font-medium text-sm">{guide.type}</span>
-                  <i className="fas fa-lock text-accent"></i>
                 </div>
+                <Button 
+                  onClick={() => handleGuideClick(index)}
+                  className="w-full bg-accent hover:bg-accent/90 text-primary font-bold py-2 rounded-lg transition-colors"
+                >
+                  Download Now
+                </Button>
               </div>
             </div>
           ))}
         </div>
         
-        {/* Email Sign-up */}
-        <div className="bg-primary rounded-xl shadow-lg p-8 md:p-12">
-          <div className="md:flex items-center">
-            <div className="md:w-7/12 mb-8 md:mb-0 md:pr-8">
-              <h3 className="font-heading font-bold text-white text-2xl md:text-3xl mb-4">Join Our LSAT Community for Access</h3>
-              <p className="text-white/90 leading-relaxed">
-                Subscribe to receive these premium guides plus regular LSAT tips, strategy updates, and exclusive content to support your preparation journey.
-              </p>
-            </div>
+        {/* Subscription Dialog */}
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent className="sm:max-w-[500px]">
+            <DialogHeader>
+              <DialogTitle className="text-xl font-bold text-center">Join Our LSAT Community for Access!</DialogTitle>
+              <DialogDescription className="text-center pt-2">
+                Unlock this free guide and gain access to exclusive LSAT strategies, study tips, and updates from our community.
+              </DialogDescription>
+            </DialogHeader>
             
-            <div className="md:w-5/12">
+            <div className="py-4">
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
                   <FormField
@@ -127,11 +150,11 @@ const GuidesSection = () => {
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-white/90">Your Name</FormLabel>
+                        <FormLabel>Your Name</FormLabel>
                         <FormControl>
                           <Input 
                             placeholder="Enter your name" 
-                            className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/50"
+                            className="w-full px-4 py-3 rounded-lg"
                             {...field} 
                           />
                         </FormControl>
@@ -145,12 +168,12 @@ const GuidesSection = () => {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-white/90">Email Address</FormLabel>
+                        <FormLabel>Email Address</FormLabel>
                         <FormControl>
                           <Input 
                             placeholder="Enter your email" 
                             type="email"
-                            className="w-full px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-accent/50"
+                            className="w-full px-4 py-3 rounded-lg"
                             {...field} 
                           />
                         </FormControl>
@@ -164,14 +187,56 @@ const GuidesSection = () => {
                     disabled={isSubmitting}
                     className="w-full bg-accent hover:bg-accent/90 text-primary font-bold py-3 px-6 rounded-lg transition-colors"
                   >
-                    {isSubmitting ? 'Submitting...' : 'Get Free LSAT Guides'}
+                    {isSubmitting ? 'Submitting...' : 'Subscribe & Download'}
                   </Button>
                   
-                  <p className="text-white/70 text-sm">
-                    We respect your privacy and will never share your information. You can unsubscribe at any time.
+                  <p className="text-muted-foreground text-sm text-center">
+                    We respect your privacy and will never share your information.
                   </p>
                 </form>
               </Form>
+            </div>
+            
+            <div className="flex justify-center">
+              <DialogClose asChild>
+                <Button variant="ghost" className="text-sm">No thanks, maybe later</Button>
+              </DialogClose>
+            </div>
+          </DialogContent>
+        </Dialog>
+        
+        {/* Information Section */}
+        <div className="bg-primary rounded-xl shadow-lg p-8 md:p-12">
+          <div className="md:flex items-center">
+            <div className="md:w-7/12 mb-8 md:mb-0 md:pr-8">
+              <h3 className="font-heading font-bold text-white text-2xl md:text-3xl mb-4">Why Join Our LSAT Community?</h3>
+              <p className="text-white/90 leading-relaxed">
+                Subscribe today and gain immediate access to our collection of free LSAT guides, plus receive regular tips, strategy updates, and exclusive content to support your preparation journey.
+              </p>
+              <ul className="text-white/90 mt-4 space-y-2">
+                <li className="flex items-center">
+                  <span className="mr-2">✓</span> Exclusive LSAT preparation materials
+                </li>
+                <li className="flex items-center">
+                  <span className="mr-2">✓</span> Regular tips and strategy updates
+                </li>
+                <li className="flex items-center">
+                  <span className="mr-2">✓</span> Priority notification for new content
+                </li>
+              </ul>
+            </div>
+            
+            <div className="md:w-5/12 bg-white rounded-xl p-6">
+              <h4 className="font-heading font-bold text-primary text-xl mb-4">Get Started Today</h4>
+              <p className="text-foreground/80 mb-4">
+                Click on any guide above to subscribe and get immediate access to high-quality LSAT preparation materials.
+              </p>
+              <Button 
+                onClick={() => handleGuideClick(0)}
+                className="w-full bg-accent hover:bg-accent/90 text-primary font-bold py-3 px-6 rounded-lg transition-colors"
+              >
+                Unlock All Free Guides
+              </Button>
             </div>
           </div>
         </div>

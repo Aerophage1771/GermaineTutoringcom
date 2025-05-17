@@ -1,0 +1,106 @@
+Objective:
+Redesign the "Free LSAT Guides" section. Update guide details, change the access mechanism to a subscription-gated popup, and revise the section header.
+
+Detailed Changes:
+
+    Section Header Update:
+
+        Current (Implied): "Free LSAT Guides" or similar.
+
+        New: Change to something like "Unlock Your Free LSAT Prep Essentials" or "Subscribe for Exclusive Access to Our Free LSAT Guides." The key is to indicate that subscription is required.
+
+    Guide Content Updates:
+
+        Guide 1 (Flaws):
+
+            Current Title (Example): "Mastering Common LSAT Flaws"
+
+            Current Description (Example): "A 20-page PDF guide detailing..."
+
+            New Description: Change to "A four-page PDF guide detailing..." (Keep the core topic the same, just update the page count and type).
+
+        Guide 2 (Blind Review):
+
+            Current Title (Example): "Effective Blind Review Techniques"
+
+            Current Description (Example): "Comprehensive guide to..."
+
+            New Description: Change to "A three-page PDF and worksheet for..."
+
+        Guide 3 (Reading Comp):
+
+            Current Title (Example): "Strategic Reading Comp Passage Analysis"
+
+            Current Description (Example): "In-depth PDF on..."
+
+            New Description: Change to "A six-page PDF and annotation guide for..."
+
+    Access Mechanism Change (Popup for Subscription):
+
+        Current Behavior (Implied): Clicking a guide might lead to a direct download or a separate subscription page/section.
+
+        New Behavior:
+
+            Each guide will still be presented as a distinct item (e.g., a card or list item).
+
+            Upon clicking any of the guide's "Download" or "Get Access" buttons:
+
+                A popup modal should appear.
+
+                This popup should not be a distinct, always-visible section on the page.
+
+            Popup Content:
+
+                Header: "Join Our LSAT Community for Access!" or "Subscribe to Unlock Your Guide!"
+
+                Body:
+
+                    Brief text explaining the benefits of joining/subscribing (e.g., "Get this guide and other exclusive LSAT tips, updates, and community support!").
+
+                    A subscription form (e.g., fields for Email Address, possibly Name).
+
+                    A "Subscribe" or "Join Now" button for the form.
+
+                Optional: A small "No thanks" or close (X) button for the popup.
+
+            Post-Subscription (Ideal UX): After successful subscription via the popup, the user should ideally get access to the guide they clicked (e.g., direct download initiated, or an email sent with the link). This part is backend/integration dependent.
+
+Visual and Structural Implications for a Developer:
+
+    Guide Presentation: Each guide (Flaws, Blind Review, Reading Comp) should still be visually distinct. This could be through cards, bordered list items, etc. Each should display:
+
+        Guide Title
+
+        Updated Description (e.g., "A four-page PDF guide...")
+
+        A Call-to-Action button (e.g., "Get Your Free Guide," "Download Now," "Unlock Access").
+
+    Popup/Modal Component:
+
+        A hidden modal component needs to be created.
+
+        JavaScript will be required to:
+
+            Show the modal when a guide's CTA button is clicked.
+
+            Hide the modal (e.g., on close button click, successful submission, or clicking outside the modal).
+
+        The modal will contain the "Join Our LSAT Community for Access" header, descriptive text, and the email subscription form.
+
+    Subscription Form:
+
+        Basic HTML form elements (<input type="email">, <button type="submit">).
+
+        Will require integration with an email marketing service (e.g., Mailchimp, ConvertKit) or a custom backend to handle subscriptions.
+
+Example Text for the Popup:
+
+(Popup Modal)
+
+Header: Join Our LSAT Community for Access!
+
+Body:
+Unlock this free guide and gain access to exclusive LSAT strategies, study tips, and updates from our community. Enter your email below to join and get your download!
+
+[Email Address Input Field]
+[Subscribe Button]
