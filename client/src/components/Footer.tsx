@@ -53,7 +53,20 @@ const Footer = () => {
               Expert LSAT tutoring from a Princeton Logic graduate and perfect scorer. 
               Helping students achieve their target scores through proven, systematic methods.
             </p>
-            {/* Social media buttons removed as requested */}
+            <div className="flex space-x-4">
+              <a href="#" className="text-white/70 hover:text-accent transition-colors" aria-label="Facebook">
+                <i className="fab fa-facebook-f"></i>
+              </a>
+              <a href="#" className="text-white/70 hover:text-accent transition-colors" aria-label="Twitter">
+                <i className="fab fa-twitter"></i>
+              </a>
+              <a href="#" className="text-white/70 hover:text-accent transition-colors" aria-label="Instagram">
+                <i className="fab fa-instagram"></i>
+              </a>
+              <a href="#" className="text-white/70 hover:text-accent transition-colors" aria-label="Reddit">
+                <i className="fab fa-reddit-alien"></i>
+              </a>
+            </div>
           </div>
           
           {/* Column 2: Quick Links */}
@@ -99,21 +112,22 @@ const Footer = () => {
             <div className="space-y-2">
               <p className="flex items-center text-white/70">
                 <i className="fas fa-envelope w-5 mr-2 text-accent"></i>
-                <a href="mailto:germaine@alumni.princeton.edu" className="hover:text-accent transition-colors">
-                  germaine@alumni.princeton.edu
+                <a href="mailto:germaine@germainetutoring.com" className="hover:text-accent transition-colors">
+                  germaine@germainetutoring.com
                 </a>
               </p>
               <p className="flex items-center text-white/70">
                 <i className="fas fa-phone w-5 mr-2 text-accent"></i>
-                <a href="tel:+18575443889" className="hover:text-accent transition-colors">
-                  (857) 544-3889
+                <a href="tel:+15555555555" className="hover:text-accent transition-colors">
+                  (555) 555-5555
                 </a>
               </p>
               <p className="flex items-start text-white/70">
                 <i className="fas fa-clock w-5 mr-2 text-accent mt-1"></i>
                 <span>
-                  Monday - Friday: 8am - Midnight ET<br />
-                  Saturday - Sunday: 10am - 8pm ET<br />
+                  Monday - Friday: 9am - 7pm EST<br />
+                  Saturday: 10am - 4pm EST<br />
+                  Sunday: Closed
                 </span>
               </p>
             </div>

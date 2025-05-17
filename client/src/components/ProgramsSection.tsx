@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
 
-// Define Calendly and Shopify types to avoid TypeScript errors
+// Define Calendly types to avoid TypeScript errors
 declare global {
   interface Window {
     Calendly?: {
       initPopupWidget: (options: { url: string }) => void;
-    },
-    ShopifyBuy?: any; // Define ShopifyBuy for TypeScript
+    }
   }
 }
 
@@ -52,7 +51,7 @@ const ProgramsSection = () => {
   }, []);
   const programs: Program[] = [
     {
-      title: "Two-Hour LSAT Tune-Up",
+      title: "Targeted Strategy Session",
       description: "Focused diagnostic and initial strategy session",
       price: "$199",
       duration: "2 hours",
@@ -71,11 +70,11 @@ const ProgramsSection = () => {
         { included: false, text: "Priority Email & Text Support" },
         { included: false, text: "Free Full Test Diagnostic Assessment" }
       ],
-      buttonText: "Schedule Session",
+      buttonText: "Purchase Session",
       highlighted: false
     },
     {
-      title: "8-Hour LSAT Elevation Course",
+      title: "Standard Prep Program",
       description: "Ideal for students targeting 5-10 point improvements",
       price: "$699",
       duration: "8 hours",
@@ -94,7 +93,7 @@ const ProgramsSection = () => {
         { included: false, text: "Priority Email & Text Support" },
         { included: true, text: "Free Full Test Diagnostic Assessment" }
       ],
-      buttonText: "Buy Now",
+      buttonText: "Enroll in Program",
       highlighted: false
     },
     {
@@ -117,12 +116,11 @@ const ProgramsSection = () => {
         { included: true, text: "Priority Email & Text Support" },
         { included: true, text: "Free Full Test Diagnostic Assessment" }
       ],
-      buttonText: "Buy Now",
+      buttonText: "Enroll in Premium",
       highlighted: true
     }
   ];
 
-  // Function to open Calendly for initial consultation
   const openCalendly = (e: React.MouseEvent) => {
     e.preventDefault();
     // Check if Calendly is loaded
@@ -136,146 +134,12 @@ const ProgramsSection = () => {
       window.open('https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=d39e17', '_blank');
     }
   };
-  
-  // Function to open Calendly for 2-hour session
-  const openTwoHourCalendly = (e: React.MouseEvent) => {
-    e.preventDefault();
-    // Check if Calendly is loaded
-    if (window.Calendly) {
-      window.Calendly.initPopupWidget({
-        url: 'https://calendly.com/germaine-washington-tutoring/2-hour-lsat-tutoring'
-      });
-    } else {
-      console.error('Calendly not loaded yet');
-      // Fallback - open directly
-      window.open('https://calendly.com/germaine-washington-tutoring/2-hour-lsat-tutoring', '_blank');
-    }
-  };
-
-  // Add Shopify scripts
-  useEffect(() => {
-    // Check if Shopify script already exists
-    if (!document.getElementById('shopify-buy-button')) {
-      const script = document.createElement('script');
-      script.id = 'shopify-buy-button';
-      script.src = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
-      script.async = true;
-      document.body.appendChild(script);
-
-      // Setup Shopify buy buttons after script loads
-      script.onload = () => {
-        if (window.ShopifyBuy) {
-          if (window.ShopifyBuy.UI) {
-            initShopifyButtons();
-          }
-        }
-      };
-    }
-  }, []);
-
-  // Initialize Shopify buttons
-  const initShopifyButtons = () => {
-    if (!window.ShopifyBuy) return;
-    
-    const client = window.ShopifyBuy.buildClient({
-      domain: 'gbjrnw-k7.myshopify.com',
-      storefrontAccessToken: '98d81682a2e4814b55038f26aaca030b',
-    });
-
-    // 8-Hour LSAT Elevation Course
-    window.ShopifyBuy.UI.onReady(client).then(function (ui: any) {
-      ui.createComponent('product', {
-        id: '7563837931585',
-        node: document.getElementById('product-component-1747461513439'),
-        moneyFormat: '%24%7B%7Bamount%7D%7D',
-        options: {
-          "product": {
-            "styles": {
-              "product": {
-                "@media (min-width: 601px)": {
-                  "max-width": "calc(25% - 20px)",
-                  "margin-left": "20px",
-                  "margin-bottom": "50px"
-                }
-              },
-              "button": {
-                "font-weight": "bold",
-                ":hover": {
-                  "background-color": "#000000"
-                },
-                "background-color": "#000000",
-                ":focus": {
-                  "background-color": "#000000"
-                }
-              }
-            },
-            "buttonDestination": "checkout",
-            "contents": {
-              "img": false,
-              "title": false,
-              "price": false
-            },
-            "text": {
-              "button": "Buy now"
-            }
-          }
-        }
-      });
-    });
-
-    // Premium Mastery Program
-    window.ShopifyBuy.UI.onReady(client).then(function (ui: any) {
-      ui.createComponent('product', {
-        id: '7563883905089',
-        node: document.getElementById('product-component-1747460463644'),
-        moneyFormat: '%24%7B%7Bamount%7D%7D',
-        options: {
-          "product": {
-            "styles": {
-              "product": {
-                "@media (min-width: 601px)": {
-                  "max-width": "calc(25% - 20px)",
-                  "margin-left": "20px",
-                  "margin-bottom": "50px"
-                }
-              },
-              "button": {
-                "font-weight": "bold",
-                ":hover": {
-                  "background-color": "#000000"
-                },
-                "background-color": "#000000",
-                ":focus": {
-                  "background-color": "#000000"
-                }
-              }
-            },
-            "buttonDestination": "checkout",
-            "contents": {
-              "img": false,
-              "title": false,
-              "price": false
-            },
-            "text": {
-              "button": "Buy now"
-            }
-          }
-        }
-      });
-    });
-  };
 
   // Handler for program buttons
   const handleProgramButtonClick = (programTitle: string) => {
     console.log(`Button clicked for: ${programTitle}`);
-    
-    // Handle different programs
-    if (programTitle === "Two-Hour LSAT Tune-Up") {
-      openTwoHourCalendly(new MouseEvent('click') as any);
-    } else {
-      // For other programs, fallback to consultation
-      openCalendly(new MouseEvent('click') as any);
-    }
+    // Open Calendly widget for all buttons
+    openCalendly(new MouseEvent('click') as any);
   };
 
 
@@ -352,22 +216,16 @@ const ProgramsSection = () => {
                 </ul>
 
                 <div className="mt-auto"> {/* This pushes the button to the bottom */}
-                  {program.title === "Two-Hour LSAT Tune-Up" ? (
-                    <button
-                      onClick={() => openTwoHourCalendly(new MouseEvent('click') as any)}
-                      className={`block text-center w-full py-3 px-6 rounded-lg transition-colors font-semibold ${
-                        program.highlighted
-                          ? "bg-accent border-2 border-accent text-primary hover:bg-accent/90"
-                          : "bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white"
-                      }`}
-                    >
-                      Schedule Session
-                    </button>
-                  ) : program.title === "8-Hour LSAT Elevation Course" ? (
-                    <div id="product-component-1747461513439" className="w-full"></div>
-                  ) : (
-                    <div id="product-component-1747460463644" className="w-full"></div>
-                  )}
+                  <button
+                    onClick={() => handleProgramButtonClick(program.title)} // Changed to more generic handler
+                    className={`block text-center w-full py-3 px-6 rounded-lg transition-colors font-semibold ${
+                      program.highlighted
+                        ? "bg-accent border-2 border-accent text-primary hover:bg-accent/90"
+                        : "bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white"
+                    }`}
+                  >
+                    {program.buttonText}
+                  </button>
                 </div>
               </div>
             </div>
