@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 
-// Define Calendly types to avoid TypeScript errors
+// Define Calendly and Shopify types to avoid TypeScript errors
 declare global {
   interface Window {
     Calendly?: {
       initPopupWidget: (options: { url: string }) => void;
-    }
+    },
+    ShopifyBuy?: any; // Define ShopifyBuy for TypeScript
   }
 }
 
@@ -51,7 +52,7 @@ const ProgramsSection = () => {
   }, []);
   const programs: Program[] = [
     {
-      title: "Targeted Strategy Session",
+      title: "Two-Hour LSAT Tune-Up",
       description: "Focused diagnostic and initial strategy session",
       price: "$199",
       duration: "2 hours",
@@ -70,11 +71,11 @@ const ProgramsSection = () => {
         { included: false, text: "Priority Email & Text Support" },
         { included: false, text: "Free Full Test Diagnostic Assessment" }
       ],
-      buttonText: "Purchase Session",
+      buttonText: "Schedule Session",
       highlighted: false
     },
     {
-      title: "Standard Prep Program",
+      title: "8-Hour LSAT Elevation Course",
       description: "Ideal for students targeting 5-10 point improvements",
       price: "$699",
       duration: "8 hours",
@@ -93,7 +94,7 @@ const ProgramsSection = () => {
         { included: false, text: "Priority Email & Text Support" },
         { included: true, text: "Free Full Test Diagnostic Assessment" }
       ],
-      buttonText: "Enroll in Program",
+      buttonText: "Buy Now",
       highlighted: false
     },
     {
@@ -116,11 +117,12 @@ const ProgramsSection = () => {
         { included: true, text: "Priority Email & Text Support" },
         { included: true, text: "Free Full Test Diagnostic Assessment" }
       ],
-      buttonText: "Enroll in Premium",
+      buttonText: "Buy Now",
       highlighted: true
     }
   ];
 
+  // Function to open Calendly for initial consultation
   const openCalendly = (e: React.MouseEvent) => {
     e.preventDefault();
     // Check if Calendly is loaded
@@ -134,12 +136,146 @@ const ProgramsSection = () => {
       window.open('https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=d39e17', '_blank');
     }
   };
+  
+  // Function to open Calendly for 2-hour session
+  const openTwoHourCalendly = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Check if Calendly is loaded
+    if (window.Calendly) {
+      window.Calendly.initPopupWidget({
+        url: 'https://calendly.com/germaine-washington-tutoring/2-hour-lsat-tutoring'
+      });
+    } else {
+      console.error('Calendly not loaded yet');
+      // Fallback - open directly
+      window.open('https://calendly.com/germaine-washington-tutoring/2-hour-lsat-tutoring', '_blank');
+    }
+  };
+
+  // Add Shopify scripts
+  useEffect(() => {
+    // Check if Shopify script already exists
+    if (!document.getElementById('shopify-buy-button')) {
+      const script = document.createElement('script');
+      script.id = 'shopify-buy-button';
+      script.src = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+      script.async = true;
+      document.body.appendChild(script);
+
+      // Setup Shopify buy buttons after script loads
+      script.onload = () => {
+        if (window.ShopifyBuy) {
+          if (window.ShopifyBuy.UI) {
+            initShopifyButtons();
+          }
+        }
+      };
+    }
+  }, []);
+
+  // Initialize Shopify buttons
+  const initShopifyButtons = () => {
+    if (!window.ShopifyBuy) return;
+    
+    const client = window.ShopifyBuy.buildClient({
+      domain: 'gbjrnw-k7.myshopify.com',
+      storefrontAccessToken: '98d81682a2e4814b55038f26aaca030b',
+    });
+
+    // 8-Hour LSAT Elevation Course
+    window.ShopifyBuy.UI.onReady(client).then(function (ui) {
+      ui.createComponent('product', {
+        id: '7563837931585',
+        node: document.getElementById('product-component-1747461513439'),
+        moneyFormat: '%24%7B%7Bamount%7D%7D',
+        options: {
+          "product": {
+            "styles": {
+              "product": {
+                "@media (min-width: 601px)": {
+                  "max-width": "calc(25% - 20px)",
+                  "margin-left": "20px",
+                  "margin-bottom": "50px"
+                }
+              },
+              "button": {
+                "font-weight": "bold",
+                ":hover": {
+                  "background-color": "#000000"
+                },
+                "background-color": "#000000",
+                ":focus": {
+                  "background-color": "#000000"
+                }
+              }
+            },
+            "buttonDestination": "checkout",
+            "contents": {
+              "img": false,
+              "title": false,
+              "price": false
+            },
+            "text": {
+              "button": "Buy now"
+            }
+          }
+        }
+      });
+    });
+
+    // Premium Mastery Program
+    window.ShopifyBuy.UI.onReady(client).then(function (ui) {
+      ui.createComponent('product', {
+        id: '7563883905089',
+        node: document.getElementById('product-component-1747460463644'),
+        moneyFormat: '%24%7B%7Bamount%7D%7D',
+        options: {
+          "product": {
+            "styles": {
+              "product": {
+                "@media (min-width: 601px)": {
+                  "max-width": "calc(25% - 20px)",
+                  "margin-left": "20px",
+                  "margin-bottom": "50px"
+                }
+              },
+              "button": {
+                "font-weight": "bold",
+                ":hover": {
+                  "background-color": "#000000"
+                },
+                "background-color": "#000000",
+                ":focus": {
+                  "background-color": "#000000"
+                }
+              }
+            },
+            "buttonDestination": "checkout",
+            "contents": {
+              "img": false,
+              "title": false,
+              "price": false
+            },
+            "text": {
+              "button": "Buy now"
+            }
+          }
+        }
+      });
+    });
+  };
 
   // Handler for program buttons
   const handleProgramButtonClick = (programTitle: string) => {
     console.log(`Button clicked for: ${programTitle}`);
-    // Open Calendly widget for all buttons
-    openCalendly(new MouseEvent('click') as any);
+    
+    // Handle different programs
+    if (programTitle === "Two-Hour LSAT Tune-Up") {
+      openTwoHourCalendly(new MouseEvent('click') as any);
+    } else {
+      // For other programs, fallback to consultation
+      openCalendly(new MouseEvent('click') as any);
+    }
   };
 
 

@@ -41,8 +41,8 @@ const GuidesSection = () => {
   const guides = [
     {
       image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500",
-      title: "Common LSAT Flaws & How to Fix Them",
-      description: "Learn to identify and address the 7 most common logical fallacies that appear in LSAT Logical Reasoning questions.",
+      title: "16 Common LSAT Flaws & How to Fix Them",
+      description: "Learn how to identify and address the 16 most common logical fallacies that appear in LSAT Logical Reasoning questions.",
       type: "Four-page PDF guide"
     },
     {
