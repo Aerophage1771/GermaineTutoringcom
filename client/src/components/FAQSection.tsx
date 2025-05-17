@@ -5,23 +5,27 @@ const FAQSection = () => {
   const faqs = [
     {
       question: "How are your tutoring sessions conducted?",
-      answer: "All tutoring sessions are conducted online via Zoom, which allows for screen sharing and collaborative document work. We use digital LSAT materials and a shared workspace where we can annotate problems together. This approach has proven highly effective and allows for maximum flexibility regardless of your location."
+      answer: "All tutoring sessions are conducted online via Google Meets, which allows for screen sharing and collaborative work. We use digital LSAT materials and a shared digital workspace where we can annotate problems together. This approach is highly effective and offers maximum flexibility regardless of your location."
     },
     {
       question: "How long does it typically take to see improvement?",
-      answer: "Most students begin to see meaningful improvement after 8-10 hours of tutoring, combined with consistent independent practice. For significant improvements (10+ points), I typically recommend 3-4 months of preparation. The Premium Mastery Program is designed to be completed over 2-4 months for optimal results."
+      answer: "My approach targets either the easiest wins or the most challenging areas early on to create quick, noticeable improvements, often within the first session. This initial progress builds confidence and sets the stage for tackling more entrenched issues or those requiring comprehensive strategies. While individual results vary, this focused start often allows students to feel and see positive movement quickly, motivating further engagement for deeper, sustained score growth."
     },
     {
       question: "What materials do I need to purchase?",
-      answer: "You'll need access to official LSAT PrepPlus questions through LSAC.org ($99 annual subscription). I provide all custom materials, worksheets, and strategy guides as part of your program. For Premium program students, I also provide additional specialized resources tailored to your specific needs."
+      answer: "You will need a Law Hub Advantage subscription from LSAC.org, which costs $99 for a year. This gives you access to official LSAT PrepTests. All other materials, including custom worksheets, strategy guides, and additional specialized resources, are provided by me as part of your tutoring program."
     },
     {
       question: "How does your approach differ from other tutors?",
-      answer: "My Princeton background in Philosophy of Logic gives me unique insight into the underlying reasoning patterns of the LSAT. Rather than teaching memorization or shortcuts, I focus on developing your fundamental logical reasoning abilities. My structured \"Describe, Demonstrate, Duplicate\" teaching model ensures you not only understand concepts but can apply them independently on test day."
+      answer: "My core interest lies in argumentation—the formulation and construction of sound arguments. I focus on developing this fundamental skill set first, then applying it to the various LSAT question types. This differs from approaches that teach question-specific tactics and then try to backtrack into underlying argumentation. If you're looking for a holistic, comprehensive method that builds transferable reasoning skills applicable across the entire test, my approach is designed for you."
     },
     {
       question: "What if I need to reschedule a session?",
-      answer: "I understand that schedules can change. I request 24 hours notice for any rescheduling. Sessions can be rescheduled without penalty with sufficient notice. For last-minute cancellations (less than 24 hours), there may be a partial session fee, depending on circumstances."
+      answer: "I understand that schedules change. I request at least 24 hours' notice for any rescheduling. Sessions can generally be rescheduled without issue with sufficient notice. For last-minute cancellations with at least two hours' notice, I'm usually flexible. However, repeated short-notice or last-minute reschedules may result in firmer enforcement of the 24-hour rule or, in some cases, forfeiture of the missed time."
+    },
+    {
+      question: "What if I'm not a 'logic person'?",
+      answer: "You don't need to be! My system is designed to break down complex LSAT logic into straightforward, understandable patterns and formulas. I've successfully helped many students, including humanities majors with zero formal logic background, achieve 170+ scores by making logic accessible and applicable."
     }
   ];
 
