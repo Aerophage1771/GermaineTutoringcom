@@ -13,7 +13,7 @@ const FAQSection = () => {
     },
     {
       question: "What materials do I need to purchase?",
-      answer: "You will need a Law Hub Advantage subscription from LSAC.org, which costs $99 for a year. This gives you access to official LSAT PrepTests. All other materials, including custom worksheets, strategy guides, and additional specialized resources, are provided by me as part of your tutoring program."
+      answer: "You will need a Law Hub Advantage subscription from LSAC.org, which costs $120 for a year. This gives you access to official LSAT PrepTests. All other materials, including custom worksheets, strategy guides, and additional specialized resources, are provided by me as part of your tutoring program."
     },
     {
       question: "How does your approach differ from other tutors?",
