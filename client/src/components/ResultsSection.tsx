@@ -77,7 +77,7 @@ const ResultsSection = () => {
               <div className="bg-primary-dark p-8 md:p-10" style={{ backgroundColor: "#0a1a35" }}>
                 <h3 className="font-heading font-bold text-white text-2xl mb-4">Score Improvements</h3>
                 <p className="text-white/90 mb-6">
-                  My students see an average improvement of 14+ points. Many achieve 170+ scores that open doors to top law schools.
+                  My course and program students see an average improvement of 14+ points. Many achieve 170+ scores that open doors to top law schools.
                 </p>
                 
                 <div className="space-y-6">
