@@ -41,14 +41,14 @@ const GuidesSection = () => {
   const guides = [
     {
       image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500",
-      title: "Common LSAT Flaws & How to Fix Them",
-      description: "Learn to identify and address the 7 most common logical fallacies that appear in LSAT Logical Reasoning questions.",
+      title: "16 Common LSAT Flaws & How to Fix Them",
+      description: "Learn how to identify and address the 16 most common logical fallacies that appear in LSAT Logical Reasoning questions.",
       type: "Four-page PDF guide"
     },
     {
       image: "https://images.unsplash.com/photo-1488190211105-8b0e65b80b4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&h=500",
-      title: "Effective Blind Review Techniques",
-      description: "Master the most powerful practice method for LSAT improvement with this step-by-step guide to conducting effective blind reviews.",
+      title: "How to Review Missed LSAT Questions",
+      description: "Master the most powerful practice methods for LSAT improvement with this step-by-step guide to conducting effective question review.",
       type: "Three-page PDF and worksheet"
     },
     {
@@ -205,41 +205,7 @@ const GuidesSection = () => {
           </DialogContent>
         </Dialog>
         
-        {/* Information Section */}
-        <div className="bg-primary rounded-xl shadow-lg p-8 md:p-12">
-          <div className="md:flex items-center">
-            <div className="md:w-7/12 mb-8 md:mb-0 md:pr-8">
-              <h3 className="font-heading font-bold text-white text-2xl md:text-3xl mb-4">Why Join Our LSAT Community?</h3>
-              <p className="text-white/90 leading-relaxed">
-                Subscribe today and gain immediate access to our collection of free LSAT guides, plus receive regular tips, strategy updates, and exclusive content to support your preparation journey.
-              </p>
-              <ul className="text-white/90 mt-4 space-y-2">
-                <li className="flex items-center">
-                  <span className="mr-2">✓</span> Exclusive LSAT preparation materials
-                </li>
-                <li className="flex items-center">
-                  <span className="mr-2">✓</span> Regular tips and strategy updates
-                </li>
-                <li className="flex items-center">
-                  <span className="mr-2">✓</span> Priority notification for new content
-                </li>
-              </ul>
-            </div>
-            
-            <div className="md:w-5/12 bg-white rounded-xl p-6">
-              <h4 className="font-heading font-bold text-primary text-xl mb-4">Get Started Today</h4>
-              <p className="text-foreground/80 mb-4">
-                Click on any guide above to subscribe and get immediate access to high-quality LSAT preparation materials.
-              </p>
-              <Button 
-                onClick={() => handleGuideClick(0)}
-                className="w-full bg-accent hover:bg-accent/90 text-primary font-bold py-3 px-6 rounded-lg transition-colors"
-              >
-                Unlock All Free Guides
-              </Button>
-            </div>
-          </div>
-        </div>
+        {/* Why Join section removed as requested */}
       </div>
     </section>
   );

@@ -50,8 +50,7 @@ const Footer = () => {
           <div className="md:col-span-2">
             <h3 className="font-heading font-bold text-xl mb-4">Germaine Washington LSAT Tutoring</h3>
             <p className="text-white/70 mb-4 leading-relaxed">
-              Expert LSAT tutoring from a Princeton Logic graduate and perfect scorer. 
-              Helping students achieve their target scores through proven, systematic methods.
+              Simplify your LSAT journey. Custom tutoring and planning from a perfect scorer.
             </p>
             {/* Social media buttons removed as requested */}
           </div>
@@ -99,22 +98,15 @@ const Footer = () => {
             <div className="space-y-2">
               <p className="flex items-center text-white/70">
                 <i className="fas fa-envelope w-5 mr-2 text-accent"></i>
-                <a href="mailto:germaine@germainetutoring.com" className="hover:text-accent transition-colors">
-                  germaine@germainetutoring.com
-                </a>
-              </p>
-              <p className="flex items-center text-white/70">
-                <i className="fas fa-phone w-5 mr-2 text-accent"></i>
-                <a href="tel:+15555555555" className="hover:text-accent transition-colors">
-                  (555) 555-5555
+                <a href="mailto:germaine@alumni.princeton.edu" className="hover:text-accent transition-colors">
+                  germaine@alumni.princeton.edu
                 </a>
               </p>
               <p className="flex items-start text-white/70">
                 <i className="fas fa-clock w-5 mr-2 text-accent mt-1"></i>
                 <span>
-                  Monday - Friday: 9am - 7pm EST<br />
-                  Saturday: 10am - 4pm EST<br />
-                  Sunday: Closed
+                  Monday - Friday: 9:00 AM - Midnight Eastern Time<br />
+                  Saturday - Sunday: 10:00 AM - 8:00 PM Eastern Time
                 </span>
               </p>
             </div>
