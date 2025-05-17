@@ -1,4 +1,13 @@
-import { useState } from 'react'; // Assuming useState might be used elsewhere or in future
+import { useState, useEffect } from 'react';
+
+// Define Calendly types to avoid TypeScript errors
+declare global {
+  interface Window {
+    Calendly?: {
+      initPopupWidget: (options: { url: string }) => void;
+    }
+  }
+}
 
 interface Feature {
   included: boolean;
@@ -19,6 +28,27 @@ interface Program {
 }
 
 const ProgramsSection = () => {
+  // Add Calendly script to the document when component mounts
+  useEffect(() => {
+    // Check if Calendly script already exists
+    if (!document.getElementById('calendly-script')) {
+      // Add Calendly CSS
+      const link = document.createElement('link');
+      link.href = 'https://assets.calendly.com/assets/external/widget.css';
+      link.rel = 'stylesheet';
+      document.head.appendChild(link);
+      
+      // Add Calendly JS
+      const script = document.createElement('script');
+      script.id = 'calendly-script';
+      script.src = 'https://assets.calendly.com/assets/external/widget.js';
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    
+    // We don't need to remove the script on unmount as it might be needed elsewhere
+    return () => {};
+  }, []);
   const programs: Program[] = [
     {
       title: "Targeted Strategy Session",
@@ -91,32 +121,25 @@ const ProgramsSection = () => {
     }
   ];
 
-  const scrollToConsultation = () => {
-    // This function can be reused or made more generic if needed
-    // For now, it still scrolls to an element with id 'consultation'
-    // You might want to change this to a contact section or a specific custom plan inquiry form
-    const element = document.getElementById('consultation'); // Ensure you have a section with id="consultation" or similar
-    if (element) {
-      window.scrollTo({
-        top: element.offsetTop - 80, // Adjust offset as needed for fixed headers
-        behavior: 'smooth'
+  const openCalendly = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Check if Calendly is loaded
+    if (window.Calendly) {
+      window.Calendly.initPopupWidget({
+        url: 'https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=d39e17'
       });
     } else {
-      console.warn("Target element 'consultation' not found for scrolling.");
-      // Fallback: you could open a mailto link or navigate to a contact page
-      // window.location.href = "mailto:your-email@example.com?subject=Custom Plan Inquiry";
+      console.error('Calendly not loaded yet');
+      // Fallback - open directly
+      window.open('https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=d39e17', '_blank');
     }
   };
 
-  // Simplified click handler for program buttons to make them more generic or link to purchase pages
+  // Handler for program buttons
   const handleProgramButtonClick = (programTitle: string) => {
     console.log(`Button clicked for: ${programTitle}`);
-    // In a real application, this would navigate to a checkout page or a specific program page
-    // For "Purchase Session", it might directly go to a payment gateway or a booking calendar
-    // For "Enroll in Program", it might go to a more detailed program page or an enrollment form
-    // For "Enroll in Premium", similar to above.
-    // This example uses scrollToConsultation for all, but you'd customize this.
-    scrollToConsultation(); 
+    // Open Calendly widget for all buttons
+    openCalendly(new MouseEvent('click') as any);
   };
 
 
@@ -209,13 +232,13 @@ const ProgramsSection = () => {
           ))}
         </div>
 
-        <div className="text-center bg-muted/50 rounded-lg p-6 max-w-3xl mx-auto"> {/* Changed max-w */}
-          <p className="text-foreground mb-4"> {/* Increased mb */}
+        <div className="text-center bg-muted/50 rounded-lg p-6 max-w-3xl mx-auto">
+          <p className="text-foreground mb-4">
             <i className="fas fa-info-circle mr-2 text-primary"></i>
             <span className="font-semibold">Financing options available during checkout.</span>
           </p>
           <button
-            onClick={scrollToConsultation} // This button can also use scrollToConsultation or a more specific action
+            onClick={openCalendly}
             className="inline-block bg-primary text-white hover:bg-primary/90 font-semibold py-3 px-6 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50"
           >
             I Need a Custom Plan

@@ -1,11 +1,54 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "wouter";
+
+// Define Calendly types
+declare global {
+  interface Window {
+    Calendly?: {
+      initPopupWidget: (options: { url: string }) => void;
+    }
+  }
+}
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
+  // Add Calendly script to the document when component mounts
+  useEffect(() => {
+    // Check if Calendly script already exists
+    if (!document.getElementById('calendly-script')) {
+      // Add Calendly CSS
+      const link = document.createElement('link');
+      link.href = 'https://assets.calendly.com/assets/external/widget.css';
+      link.rel = 'stylesheet';
+      document.head.appendChild(link);
+      
+      // Add Calendly JS
+      const script = document.createElement('script');
+      script.id = 'calendly-script';
+      script.src = 'https://assets.calendly.com/assets/external/widget.js';
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
+  
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
+  };
+  
+  const openCalendly = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Check if Calendly is loaded
+    if (window.Calendly) {
+      window.Calendly.initPopupWidget({
+        url: 'https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=d39e17'
+      });
+    } else {
+      console.error('Calendly not loaded yet');
+      // Fallback - open directly
+      window.open('https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=d39e17', '_blank');
+    }
+    setMobileMenuOpen(false);
   };
 
   const scrollToSection = (id: string) => {
@@ -62,10 +105,10 @@ const Header = () => {
             Free LSAT Guides
           </button>
           <button 
-            onClick={() => scrollToSection('consultation')} 
+            onClick={openCalendly} 
             className="bg-accent hover:bg-accent/90 text-white px-5 py-2 rounded font-semibold text-sm lg:text-base transition-colors"
           >
-            Book Consultation
+            Schedule Time With Me
           </button>
         </nav>
       </div>
@@ -98,10 +141,10 @@ const Header = () => {
             Free LSAT Guides
           </button>
           <button 
-            onClick={() => scrollToSection('consultation')} 
+            onClick={openCalendly} 
             className="bg-accent hover:bg-accent/90 text-white px-4 py-2 rounded font-semibold text-center transition-colors"
           >
-            Book Consultation
+            Schedule Time With Me
           </button>
         </div>
       </nav>

@@ -1,11 +1,24 @@
+// Define Calendly types to avoid TypeScript errors
+declare global {
+  interface Window {
+    Calendly?: {
+      initPopupWidget: (options: { url: string }) => void;
+    }
+  }
+}
+
 const AboutSection = () => {
-  const scrollToConsultation = () => {
-    const element = document.getElementById('consultation');
-    if (element) {
-      window.scrollTo({
-        top: element.offsetTop - 80,
-        behavior: 'smooth'
+  const openCalendly = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Check if Calendly is loaded
+    if (window.Calendly) {
+      window.Calendly.initPopupWidget({
+        url: 'https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=d39e17'
       });
+    } else {
+      console.error('Calendly not loaded yet');
+      // Fallback - open directly
+      window.open('https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=d39e17', '_blank');
     }
   };
 
@@ -35,10 +48,10 @@ const AboutSection = () => {
             
             <div className="flex items-center space-x-4">
               <button 
-                onClick={scrollToConsultation}
+                onClick={openCalendly}
                 className="inline-flex items-center bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-md transition-colors font-semibold"
               >
-                <i className="fas fa-calendar-check mr-2"></i> Book a Consultation
+                <i className="fas fa-calendar-check mr-2"></i> Schedule Time With Me
               </button>
             </div>
           </div>

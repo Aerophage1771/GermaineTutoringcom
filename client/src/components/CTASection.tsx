@@ -1,61 +1,50 @@
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
-import { apiRequest } from '@/lib/queryClient';
-import { useToast } from '@/hooks/use-toast';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 
-const consultationSchema = z.object({
-  name: z.string().min(2, { message: "Name must be at least 2 characters" }),
-  email: z.string().email({ message: "Please enter a valid email address" }),
-  phone: z.string().min(10, { message: "Please enter a valid phone number" }),
-  currentScore: z.string().optional(),
-  goalScore: z.string().min(1, { message: "Please enter your target score" }),
-  testDate: z.string().optional()
-});
-
-type ConsultationFormData = z.infer<typeof consultationSchema>;
+// Define Calendly types to avoid TypeScript errors
+declare global {
+  interface Window {
+    Calendly?: {
+      initPopupWidget: (options: { url: string }) => void;
+    }
+  }
+}
 
 const CTASection = () => {
-  const { toast } = useToast();
+  // Add Calendly script to the document when component mounts
+  useEffect(() => {
+    // Check if Calendly script already exists
+    if (!document.getElementById('calendly-script')) {
+      // Add Calendly CSS
+      const link = document.createElement('link');
+      link.href = 'https://assets.calendly.com/assets/external/widget.css';
+      link.rel = 'stylesheet';
+      document.head.appendChild(link);
+      
+      // Add Calendly JS
+      const script = document.createElement('script');
+      script.id = 'calendly-script';
+      script.src = 'https://assets.calendly.com/assets/external/widget.js';
+      script.async = true;
+      document.body.appendChild(script);
+    }
+    
+    // We don't need to remove the script on unmount as it might be needed elsewhere
+    return () => {};
+  }, []);
   
-  const form = useForm<ConsultationFormData>({
-    resolver: zodResolver(consultationSchema),
-    defaultValues: {
-      name: '',
-      email: '',
-      phone: '',
-      currentScore: '',
-      goalScore: '',
-      testDate: ''
-    }
-  });
-
-  const consultationMutation = useMutation({
-    mutationFn: (data: ConsultationFormData) => {
-      return apiRequest('POST', '/api/consultation', data);
-    },
-    onSuccess: () => {
-      toast({
-        title: "Consultation Requested",
-        description: "Thank you for requesting a consultation! Germaine will contact you shortly to schedule your session.",
+  const openCalendly = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Check if Calendly is loaded
+    if (window.Calendly) {
+      window.Calendly.initPopupWidget({
+        url: 'https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=d39e17'
       });
-      form.reset();
-    },
-    onError: (error) => {
-      toast({
-        title: "Error",
-        description: error.message || "Failed to request consultation. Please try again later.",
-        variant: "destructive"
-      });
+    } else {
+      console.error('Calendly not loaded yet');
+      // Fallback - open directly
+      window.open('https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=d39e17', '_blank');
     }
-  });
-
-  const onSubmit = (data: ConsultationFormData) => {
-    consultationMutation.mutate(data);
   };
 
   return (
@@ -82,129 +71,16 @@ const CTASection = () => {
                 and how my methodology can help you achieve your goals.
               </p>
               
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Your Name</FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder="Enter your name" 
-                              className="w-full px-4 py-3 rounded-lg border border-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
-                              {...field} 
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Email Address</FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder="Enter your email" 
-                              type="email"
-                              className="w-full px-4 py-3 rounded-lg border border-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
-                              {...field} 
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  
-                  <FormField
-                    control={form.control}
-                    name="phone"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Phone Number</FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="Enter your phone number" 
-                            type="tel"
-                            className="w-full px-4 py-3 rounded-lg border border-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
-                            {...field} 
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="currentScore"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Current LSAT Score (or Diagnostic)</FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="If you've taken the LSAT or a practice test" 
-                            className="w-full px-4 py-3 rounded-lg border border-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
-                            {...field} 
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="goalScore"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Target LSAT Score</FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="What score are you aiming for?" 
-                            className="w-full px-4 py-3 rounded-lg border border-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
-                            {...field} 
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <FormField
-                    control={form.control}
-                    name="testDate"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Planned Test Date (if known)</FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="When do you plan to take the LSAT?" 
-                            className="w-full px-4 py-3 rounded-lg border border-muted focus:outline-none focus:ring-2 focus:ring-primary/50"
-                            {...field} 
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  
-                  <Button 
-                    type="submit" 
-                    disabled={consultationMutation.isPending}
-                    className="w-full bg-accent hover:bg-accent/90 text-primary font-bold py-3 px-6 rounded-lg transition-colors"
-                  >
-                    {consultationMutation.isPending ? 'Submitting...' : 'Book Your Free Consultation Now'}
-                  </Button>
-                </form>
-              </Form>
+              <Button 
+                onClick={openCalendly}
+                className="w-full bg-accent hover:bg-accent/90 text-primary font-bold py-5 px-6 rounded-lg transition-colors text-lg"
+              >
+                Schedule Time With Me
+              </Button>
+              
+              <p className="mt-4 text-sm text-foreground/70 text-center">
+                Click the button above to access my calendar and select a time that works for you.
+              </p>
             </div>
           </div>
         </div>
