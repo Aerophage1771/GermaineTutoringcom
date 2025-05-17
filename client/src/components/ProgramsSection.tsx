@@ -93,7 +93,7 @@ const ProgramsSection = () => {
       highlighted: false
     },
     {
-      title: "24-Hour Premium Mastery Program",
+      title: "24-Hour LSAT Mastery Program",
       description: "For 10+ point improvements or 170+ goals. Intensive coaching, advanced strategy, and full-section mastery.",
       price: "$1,799",
       duration: "24 hours",
@@ -110,7 +110,7 @@ const ProgramsSection = () => {
         { included: true, text: "Email & Text Support" },
         { included: true, text: "Priority in New Material Creation/Selection" }
       ],
-      buttonText: "Enroll in Premium",
+      buttonText: "Enroll in Mastery",
       highlighted: true
     }
   ];
@@ -183,7 +183,7 @@ const ProgramsSection = () => {
       openTwoHourCalendly(new MouseEvent('click') as any);
     } else if (programTitle === "8-Hour LSAT Elevation Course") {
       open8HourCalendly(new MouseEvent('click') as any);
-    } else if (programTitle === "24-Hour Premium Mastery Program") {
+    } else if (programTitle === "24-Hour LSAT Mastery Program") {
       open24HourCalendly(new MouseEvent('click') as any);
     }
   };
