@@ -46,15 +46,34 @@ const ResultsSection = () => {
   return (
     <section id="results" className="py-20 bg-primary">
       <div className="container mx-auto px-4">
-        <div className="mx-auto mb-16">
-          <h2 className="font-heading font-bold text-white text-3xl md:text-4xl mb-4 text-center">Student Results</h2>
+        {/* Testimonials - Now First */}
+        <div className="max-w-6xl mx-auto mb-16">
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <div key={index} className="bg-white rounded-xl shadow-lg p-6 transform transition-transform hover:scale-105">
+                <div className="flex items-center mb-4">
+                  <div className="bg-accent rounded-full w-16 h-16 flex items-center justify-center text-primary font-bold text-xl">
+                    {testimonial.improvement}
+                  </div>
+                  <div className="ml-4">
+                    <h4 className="font-heading font-bold text-primary text-lg">{testimonial.name}</h4>
+                    <p className="text-foreground/70">{testimonial.scoreBefore} → {testimonial.scoreAfter}</p>
+                  </div>
+                </div>
+                <p className="text-foreground leading-relaxed">
+                  "{testimonial.text}"
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
         
-        <div className="max-w-6xl mx-auto mb-16">
-          <div className="bg-primary-dark bg-opacity-30 rounded-xl shadow-xl p-8 md:p-10">
-            <div className="grid md:grid-cols-2 gap-8 md:gap-12">
+        {/* Stats Box - Now with Inverted Colors & More Distinctive */}
+        <div className="max-w-6xl mx-auto">
+          <div className="bg-white rounded-xl shadow-xl overflow-hidden">
+            <div className="grid md:grid-cols-2">
               {/* Left side - Score Improvements */}
-              <div>
+              <div className="bg-primary p-8 md:p-10">
                 <h3 className="font-heading font-bold text-white text-2xl mb-4">Score Improvements</h3>
                 <p className="text-white/90 mb-6">
                   My students see an average improvement of 14+ points. Many achieve 170+ scores that open doors to top law schools.
@@ -94,44 +113,21 @@ const ResultsSection = () => {
               </div>
               
               {/* Right side - Law School Acceptances */}
-              <div>
-                <h3 className="font-heading font-bold text-white text-2xl mb-4">Law School Acceptances</h3>
-                <p className="text-white/90 mb-6">
+              <div className="bg-white p-8 md:p-10">
+                <h3 className="font-heading font-bold text-primary text-2xl mb-4">Law School Acceptances</h3>
+                <p className="text-foreground/80 mb-6">
                   My students have been accepted to every T14 law school in the United States.
                 </p>
                 
                 <div className="grid grid-cols-2 gap-3">
                   {lawSchools.map((school, index) => (
-                    <div key={index} className="bg-white/10 hover:bg-white/20 transition-colors rounded-lg p-3 text-center">
-                      <p className="text-white font-medium">{school}</p>
+                    <div key={index} className="bg-primary/5 hover:bg-primary/10 transition-colors rounded-lg p-3 text-center">
+                      <p className="text-primary font-medium">{school}</p>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-        
-        {/* Testimonials */}
-        <div className="mb-10">
-          <h3 className="font-heading font-bold text-white text-2xl mb-8 text-center">Student Testimonials</h3>
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <div key={index} className="bg-white rounded-xl shadow-lg p-6">
-                <div className="flex items-center mb-4">
-                  <div className="bg-accent rounded-full w-16 h-16 flex items-center justify-center text-primary font-bold text-xl">
-                    {testimonial.improvement}
-                  </div>
-                  <div className="ml-4">
-                    <h4 className="font-heading font-bold text-primary text-lg">{testimonial.name}</h4>
-                    <p className="text-foreground/70">{testimonial.scoreBefore} → {testimonial.scoreAfter}</p>
-                  </div>
-                </div>
-                <p className="text-foreground leading-relaxed">
-                  "{testimonial.text}"
-                </p>
-              </div>
-            ))}
           </div>
         </div>
       </div>
