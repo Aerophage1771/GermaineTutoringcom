@@ -89,7 +89,7 @@ const ProgramsSection = () => {
         { included: true, text: "Email & Text Support" },
         { included: false, text: "Priority in New Material Creation/Selection" }
       ],
-      buttonText: "Enroll in Program",
+      buttonText: "Enroll in Course",
       highlighted: false
     },
     {
