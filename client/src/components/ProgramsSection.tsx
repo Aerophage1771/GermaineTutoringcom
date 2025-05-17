@@ -46,6 +46,7 @@ const ProgramsSection = () => {
       document.body.appendChild(script);
     }
     
+    // We don't need to remove the script on unmount as it might be needed elsewhere
     return () => {};
   }, []);
   const programs: Program[] = [
@@ -149,8 +150,6 @@ const ProgramsSection = () => {
     }
   };
   
-
-  
   // Handler for program buttons
   const handleProgramButtonClick = (programTitle: string) => {
     console.log(`Button clicked for: ${programTitle}`);
@@ -159,11 +158,9 @@ const ProgramsSection = () => {
     if (programTitle === "2-Hour LSAT Acceleration Session") {
       openTwoHourCalendly(new MouseEvent('click') as any);
     } else if (programTitle === "8-Hour LSAT Elevation Course") {
-      // Direct link to Shopify checkout for 8-Hour program
-      window.open('https://gbjrnw-k7.myshopify.com/cart/7563837931585:1?channel=buy_button', '_blank');
+      window.open('https://shop.germainetutoring.com/cart/42161250533441:1?channel=buy_button', '_blank');
     } else if (programTitle === "24-Hour Premium Mastery Program") {
-      // Direct link to Shopify checkout for Premium program
-      window.open('https://gbjrnw-k7.myshopify.com/cart/7563883905089:1?channel=buy_button', '_blank');
+      window.open('https://shop.germainetutoring.com/cart/42161421221953:1?channel=buy_button', '_blank');
     }
   };
 
