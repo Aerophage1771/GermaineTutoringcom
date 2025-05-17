@@ -158,9 +158,9 @@ const ProgramsSection = () => {
     if (programTitle === "2-Hour LSAT Acceleration Session") {
       openTwoHourCalendly(new MouseEvent('click') as any);
     } else if (programTitle === "8-Hour LSAT Elevation Course") {
-      window.open('https://gbjrnw-k7.myshopify.com/cart/42161250533441:1?channel=buy_button', '_blank');
+      window.open('https://shop.germainetutoring.com/cart/42161250533441:1?channel=buy_button', '_blank');
     } else if (programTitle === "24-Hour Premium Mastery Program") {
-      window.open('https://gbjrnw-k7.myshopify.com/cart/42161421221953:1?channel=buy_button', '_blank');
+      window.open('https://shop.germainetutoring.com/cart/42161421221953:1?channel=buy_button', '_blank');
     }
   };
 
