@@ -80,10 +80,10 @@ const ProgramsSection = () => {
       savings: "(12.5% savings)",
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 8 Hours" },
-        { included: true, text: "Focused Diagnostic & Strategy Call" },
+        { included: true, text: "Free: Initial Diagnostic Call" },
         { included: true, text: "Section-Specific Strategy Discussion" },
         { included: true, text: "Personalized Study Plan Outline" },
-        { included: true, text: "One Free Practice Test Review Session", bonus: true },
+        { included: true, text: "Free: 1-Hour Practice Test Review Session", bonus: true },
         { included: true, text: "Permanent Question Explanation Database Access", bonus: true },
         { included: true, text: "Custom Strategy Materials" },
         { included: true, text: "Email & Text Support" },
@@ -101,16 +101,16 @@ const ProgramsSection = () => {
       savings: "(25% savings)",
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 24 Hours" },
-        { included: true, text: "Focused Diagnostic & Initial Strategy Session" },
+        { included: true, text: "Free: Complete 90-Minute Initial Diagnostic Session", bonus: true },
         { included: true, text: "Section-Specific Strategy Discussion" },
         { included: true, text: "Personalized Study Plan Outline" },
-        { included: true, text: "Three One-Hour Free Practice Test Review Sessions", bonus: true },
+        { included: true, text: "Free: Three 1-Hour Practice Test Review Sessions", bonus: true },
         { included: true, text: "Permanent Full Question Explanation Database Access", bonus: true },
         { included: true, text: "Custom Strategy Materials" },
         { included: true, text: "Email & Text Support" },
-        { included: true, text: "Priority in New Material Creation/Selection" }
+        { included: true, text: "Priority in New Material Creation/Selection", bonus: true }
       ],
-      buttonText: "Enroll in Mastery",
+      buttonText: "Enroll in Mastery Program",
       highlighted: true
     }
   ];
