@@ -48,6 +48,7 @@ const ResultsSection = () => {
       <div className="container mx-auto px-4">
         {/* Testimonials - Now First */}
         <div className="max-w-6xl mx-auto mb-16">
+          <h3 className="font-heading font-bold text-white text-2xl md:text-3xl mb-8 text-center">Student Testimonials</h3>
           <div className="grid md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
               <div key={index} className="bg-white rounded-xl shadow-lg p-6 transform transition-transform hover:scale-105">
@@ -73,39 +74,39 @@ const ResultsSection = () => {
           <div className="bg-white rounded-xl shadow-xl overflow-hidden">
             <div className="grid md:grid-cols-2">
               {/* Left side - Score Improvements */}
-              <div className="bg-primary p-8 md:p-10">
+              <div className="bg-primary-dark p-8 md:p-10" style={{ backgroundColor: "#0a1a35" }}>
                 <h3 className="font-heading font-bold text-white text-2xl mb-4">Score Improvements</h3>
                 <p className="text-white/90 mb-6">
                   My students see an average improvement of 14+ points. Many achieve 170+ scores that open doors to top law schools.
                 </p>
                 
                 <div className="space-y-6">
-                  <div>
+                  <div className="bg-primary p-4 rounded-lg shadow-inner">
                     <div className="flex justify-between mb-1">
                       <p className="text-white font-medium">5+ Point Improvement</p>
                       <p className="text-accent font-bold">91% of students</p>
                     </div>
-                    <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden">
+                    <div className="h-4 w-full bg-white/20 rounded-full overflow-hidden">
                       <div className="h-full bg-accent rounded-full" style={{ width: "91%" }}></div>
                     </div>
                   </div>
                   
-                  <div>
+                  <div className="bg-primary p-4 rounded-lg shadow-inner">
                     <div className="flex justify-between mb-1">
                       <p className="text-white font-medium">10+ Point Improvement</p>
                       <p className="text-accent font-bold">73% of students</p>
                     </div>
-                    <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden">
+                    <div className="h-4 w-full bg-white/20 rounded-full overflow-hidden">
                       <div className="h-full bg-accent rounded-full" style={{ width: "73%" }}></div>
                     </div>
                   </div>
                   
-                  <div>
+                  <div className="bg-primary p-4 rounded-lg shadow-inner">
                     <div className="flex justify-between mb-1">
                       <p className="text-white font-medium">15+ Point Improvement</p>
                       <p className="text-accent font-bold">42% of students</p>
                     </div>
-                    <div className="h-3 w-full bg-white/20 rounded-full overflow-hidden">
+                    <div className="h-4 w-full bg-white/20 rounded-full overflow-hidden">
                       <div className="h-full bg-accent rounded-full" style={{ width: "42%" }}></div>
                     </div>
                   </div>
