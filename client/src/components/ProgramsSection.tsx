@@ -1,12 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
-// Define Calendly and Shopify types to avoid TypeScript errors
+// Define Calendly types to avoid TypeScript errors
 declare global {
   interface Window {
     Calendly?: {
       initPopupWidget: (options: { url: string }) => void;
-    },
-    ShopifyBuy?: any;
+    }
   }
 }
 
@@ -29,11 +28,7 @@ interface Program {
 }
 
 const ProgramsSection = () => {
-  // References for Shopify Buy Button containers
-  const eightHourRef = useRef<HTMLDivElement>(null);
-  const premiumRef = useRef<HTMLDivElement>(null);
-  
-  // Add Calendly and Shopify Buy Button scripts to the document when component mounts
+  // Add Calendly script to the document when component mounts
   useEffect(() => {
     // Check if Calendly script already exists
     if (!document.getElementById('calendly-script')) {
@@ -51,144 +46,8 @@ const ProgramsSection = () => {
       document.body.appendChild(script);
     }
     
-    // Add Shopify Buy Button script
-    const loadShopifyScript = () => {
-      if (!document.getElementById('shopify-buy-button-script')) {
-        const script = document.createElement('script');
-        script.id = 'shopify-buy-button-script';
-        script.async = true;
-        script.src = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
-        script.onload = initShopifyBuyButtons;
-        document.body.appendChild(script);
-      } else if (window.ShopifyBuy) {
-        initShopifyBuyButtons();
-      }
-    };
-    
-    loadShopifyScript();
-    
     return () => {};
   }, []);
-  
-  // Initialize Shopify Buy Buttons
-  const initShopifyBuyButtons = () => {
-    if (!window.ShopifyBuy || !window.ShopifyBuy.UI) return;
-    
-    const client = window.ShopifyBuy.buildClient({
-      domain: 'gbjrnw-k7.myshopify.com',
-      storefrontAccessToken: '98d81682a2e4814b55038f26aaca030b',
-    });
-    
-    // Create 8-hour program buy button (hidden)
-    window.ShopifyBuy.UI.onReady(client).then((ui: any) => {
-      ui.createComponent('product', {
-        id: '7563837931585',
-        node: document.getElementById('eight-hour-buy-button-container'),
-        moneyFormat: '%24%7B%7Bamount%7D%7D',
-        options: {
-          "product": {
-            "styles": {
-              "product": {
-                "@media (min-width: 601px)": {
-                  "max-width": "calc(25% - 20px)",
-                  "margin-left": "20px",
-                  "margin-bottom": "50px"
-                }
-              },
-              "button": {
-                "font-weight": "bold",
-                ":hover": {
-                  "background-color": "#000000"
-                },
-                "background-color": "#000000",
-                ":focus": {
-                  "background-color": "#000000"
-                }
-              }
-            },
-            "buttonDestination": "checkout",
-            "contents": {
-              "img": false,
-              "title": false,
-              "price": false
-            },
-            "text": {
-              "button": "Buy now"
-            }
-          },
-          "toggle": {
-            "styles": {
-              "toggle": {
-                "font-weight": "bold",
-                "background-color": "#000000",
-                ":hover": {
-                  "background-color": "#000000"
-                },
-                ":focus": {
-                  "background-color": "#000000"
-                }
-              }
-            }
-          }
-        },
-      });
-    });
-    
-    // Create premium program buy button (hidden)
-    window.ShopifyBuy.UI.onReady(client).then((ui: any) => {
-      ui.createComponent('product', {
-        id: '7563883905089',
-        node: document.getElementById('premium-buy-button-container'),
-        moneyFormat: '%24%7B%7Bamount%7D%7D',
-        options: {
-          "product": {
-            "styles": {
-              "product": {
-                "@media (min-width: 601px)": {
-                  "max-width": "calc(25% - 20px)",
-                  "margin-left": "20px",
-                  "margin-bottom": "50px"
-                }
-              },
-              "button": {
-                "font-weight": "bold",
-                ":hover": {
-                  "background-color": "#000000"
-                },
-                "background-color": "#000000",
-                ":focus": {
-                  "background-color": "#000000"
-                }
-              }
-            },
-            "buttonDestination": "checkout",
-            "contents": {
-              "img": false,
-              "title": false,
-              "price": false
-            },
-            "text": {
-              "button": "Buy now"
-            }
-          },
-          "toggle": {
-            "styles": {
-              "toggle": {
-                "font-weight": "bold",
-                "background-color": "#000000",
-                ":hover": {
-                  "background-color": "#000000"
-                },
-                ":focus": {
-                  "background-color": "#000000"
-                }
-              }
-            }
-          }
-        },
-      });
-    });
-  };
   const programs: Program[] = [
     {
       title: "2-Hour LSAT Acceleration Session",
@@ -290,125 +149,7 @@ const ProgramsSection = () => {
     }
   };
   
-  // Create Shopify Buy Buttons
-  const createShopifyBuyButtons = () => {
-    if (!window.ShopifyBuy || !window.ShopifyBuy.UI) return;
-    
-    const client = window.ShopifyBuy.buildClient({
-      domain: 'gbjrnw-k7.myshopify.com',
-      storefrontAccessToken: '98d81682a2e4814b55038f26aaca030b',
-    });
-    
-    // Create 8-hour program buy button (hidden)
-    window.ShopifyBuy.UI.onReady(client).then(function (ui) {
-      ui.createComponent('product', {
-        id: '7563837931585',
-        node: document.getElementById('eight-hour-buy-button-container'),
-        moneyFormat: '%24%7B%7Bamount%7D%7D',
-        options: {
-          "product": {
-            "styles": {
-              "product": {
-                "@media (min-width: 601px)": {
-                  "max-width": "calc(25% - 20px)",
-                  "margin-left": "20px",
-                  "margin-bottom": "50px"
-                }
-              },
-              "button": {
-                "font-weight": "bold",
-                ":hover": {
-                  "background-color": "#000000"
-                },
-                "background-color": "#000000",
-                ":focus": {
-                  "background-color": "#000000"
-                }
-              }
-            },
-            "buttonDestination": "checkout",
-            "contents": {
-              "img": false,
-              "title": false,
-              "price": false
-            },
-            "text": {
-              "button": "Buy now"
-            }
-          },
-          "toggle": {
-            "styles": {
-              "toggle": {
-                "font-weight": "bold",
-                "background-color": "#000000",
-                ":hover": {
-                  "background-color": "#000000"
-                },
-                ":focus": {
-                  "background-color": "#000000"
-                }
-              }
-            }
-          }
-        },
-      });
-    });
-    
-    // Create premium program buy button (hidden)
-    window.ShopifyBuy.UI.onReady(client).then(function (ui) {
-      ui.createComponent('product', {
-        id: '7563883905089',
-        node: document.getElementById('premium-buy-button-container'),
-        moneyFormat: '%24%7B%7Bamount%7D%7D',
-        options: {
-          "product": {
-            "styles": {
-              "product": {
-                "@media (min-width: 601px)": {
-                  "max-width": "calc(25% - 20px)",
-                  "margin-left": "20px",
-                  "margin-bottom": "50px"
-                }
-              },
-              "button": {
-                "font-weight": "bold",
-                ":hover": {
-                  "background-color": "#000000"
-                },
-                "background-color": "#000000",
-                ":focus": {
-                  "background-color": "#000000"
-                }
-              }
-            },
-            "buttonDestination": "checkout",
-            "contents": {
-              "img": false,
-              "title": false,
-              "price": false
-            },
-            "text": {
-              "button": "Buy now"
-            }
-          },
-          "toggle": {
-            "styles": {
-              "toggle": {
-                "font-weight": "bold",
-                "background-color": "#000000",
-                ":hover": {
-                  "background-color": "#000000"
-                },
-                ":focus": {
-                  "background-color": "#000000"
-                }
-              }
-            }
-          }
-        },
-      });
-    });
-  };
+
   
   // Handler for program buttons
   const handleProgramButtonClick = (programTitle: string) => {
@@ -418,23 +159,11 @@ const ProgramsSection = () => {
     if (programTitle === "2-Hour LSAT Acceleration Session") {
       openTwoHourCalendly(new MouseEvent('click') as any);
     } else if (programTitle === "8-Hour LSAT Elevation Course") {
-      // Click the Shopify buy button
-      const buyButton = document.querySelector('#eight-hour-buy-button-container .shopify-buy__btn');
-      if (buyButton) {
-        (buyButton as HTMLElement).click();
-      } else {
-        // Fallback to old method if button not found
-        window.open('https://gbjrnw-k7.myshopify.com/cart/7563837931585:1?channel=buy_button', '_blank');
-      }
+      // Direct link to Shopify checkout for 8-Hour program
+      window.open('https://gbjrnw-k7.myshopify.com/cart/7563837931585:1?channel=buy_button', '_blank');
     } else if (programTitle === "24-Hour Premium Mastery Program") {
-      // Click the Shopify buy button
-      const buyButton = document.querySelector('#premium-buy-button-container .shopify-buy__btn');
-      if (buyButton) {
-        (buyButton as HTMLElement).click();
-      } else {
-        // Fallback to old method if button not found
-        window.open('https://gbjrnw-k7.myshopify.com/cart/7563883905089:1?channel=buy_button', '_blank');
-      }
+      // Direct link to Shopify checkout for Premium program
+      window.open('https://gbjrnw-k7.myshopify.com/cart/7563883905089:1?channel=buy_button', '_blank');
     }
   };
 
