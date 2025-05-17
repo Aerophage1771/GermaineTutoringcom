@@ -1,3 +1,6 @@
+// Import profile photo
+const germainePhoto = "/germaine_photo.webp";
+
 const AboutSection = () => {
   const scrollToConsultation = () => {
     const element = document.getElementById('consultation');
@@ -16,29 +19,21 @@ const AboutSection = () => {
           {/* Professional headshot of male LSAT tutor */}
           <div className="md:w-5/12">
             <img 
-              src="https://images.unsplash.com/photo-1556157382-97eda2d62296?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=700&q=80" 
+              src={germainePhoto} 
               alt="Germaine Washington, LSAT Tutor" 
               className="rounded-xl shadow-lg w-full h-auto object-cover" 
             />
           </div>
           
           <div className="md:w-7/12">
-            <h2 className="font-heading font-bold text-primary text-3xl md:text-4xl mb-6">Meet Germaine Washington</h2>
+            <h2 className="font-heading font-bold text-primary text-3xl md:text-4xl mb-6">Hi, I'm Germaine Washington.</h2>
             
             <p className="text-foreground leading-relaxed mb-6">
-              With a perfect 180 LSAT score and a degree in Philosophy of Logic from Princeton University, 
-              I've developed a systematic, rule-based approach to the LSAT that transforms how students engage with the test.
+              When I was studying for the LSAT, I fell into the trap that so many students do: trying to juggle dozens of disconnected strategies. My breakthrough came when I shifted focus, moving away from memorization and toward understanding how arguments actually work. That mindset shift led to my perfect 180 score in 2020.
             </p>
             
             <p className="text-foreground leading-relaxed mb-6">
-              Over the past 5+ years, I've guided more than 500 students to significant score improvements, 
-              with those on my Premium Mastery Program seeing an average increase of 12+ points. 
-              My approach isn't about memorization or tricks—it's about developing the fundamental logical reasoning skills that the LSAT rewards.
-            </p>
-            
-            <p className="text-foreground leading-relaxed mb-8">
-              I'm passionate about breaking down complex logical concepts into accessible frameworks that allow you to see the LSAT with complete clarity. 
-              My students don't just improve their scores—they develop problem-solving abilities that serve them throughout law school and beyond.
+              Since then, I've helped over 500 students by building a system that breaks the LSAT into fundamental reasoning tasks. My method teaches students to identify what each question truly tests, apply structured frameworks, and build those skills until they become second nature. My long-term students improve by an average of over 14 points, and that kind of score transformation is what I aim to deliver to every LSAT taker I work with.
             </p>
             
             <div className="flex items-center space-x-4">

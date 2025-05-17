@@ -30,11 +30,11 @@ const ResultsSection = () => {
 
   const statistics = [
     {
-      value: "98%",
+      value: "98%+",
       description: "of students on a program see score improvement"
     },
     {
-      value: "12+",
+      value: "14+",
       description: "average point increase on Premium Mastery Program"
     },
     {
