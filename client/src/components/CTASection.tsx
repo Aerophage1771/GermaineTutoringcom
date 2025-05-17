@@ -51,37 +51,19 @@ const CTASection = () => {
     <section id="consultation" className="py-20 bg-muted/50">
       <div className="container mx-auto px-4">
         <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-xl overflow-hidden">
-          <div className="md:flex">
-            {/* Princeton University campus image */}
-            <div className="md:w-1/2 relative">
-              <img 
-                src="https://pixabay.com/get/g472bcf764fad77edf8cc7db4eb49b01bfbe9db1b758e777f12c3fe83afff78bb94cd0acd15c834174bd368d305209e05f843aae3567ea0b454a526b63c7ad4c2_1280.jpg" 
-                alt="Princeton University campus" 
-                className="w-full h-full object-cover" 
-              />
-              <div className="absolute inset-0 bg-primary/30"></div>
-            </div>
+          <div className="p-8 md:p-12">
+            <h2 className="font-heading font-bold text-primary text-3xl md:text-4xl mb-4">
+              Ready to Transform Your LSAT Score? Let's Strategize.
+            </h2>
+            <p className="text-foreground leading-relaxed mb-8">
+              Schedule a free 20-minute consultation to discuss your current performance, target score, 
+              and how my methodology can help you achieve your goals.
+            </p>
             
-            <div className="md:w-1/2 p-8 md:p-12">
-              <h2 className="font-heading font-bold text-primary text-3xl md:text-4xl mb-4">
-                Ready to Transform Your LSAT Score? Let's Strategize.
-              </h2>
-              <p className="text-foreground leading-relaxed mb-8">
-                Schedule a free 20-minute consultation to discuss your current performance, target score, 
-                and how my methodology can help you achieve your goals.
-              </p>
-              
-              <Button 
-                onClick={openCalendly}
-                className="w-full bg-accent hover:bg-accent/90 text-primary font-bold py-5 px-6 rounded-lg transition-colors text-lg"
-              >
-                Schedule Time With Me
-              </Button>
-              
-              <p className="mt-4 text-sm text-foreground/70 text-center">
-                Click the button above to access my calendar and select a time that works for you.
-              </p>
-            </div>
+            {/* Calendly inline widget */}
+            <div className="calendly-inline-widget" 
+                 data-url="https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=1b385f" 
+                 style={{ minWidth: '320px', height: '700px' }}></div>
           </div>
         </div>
       </div>
