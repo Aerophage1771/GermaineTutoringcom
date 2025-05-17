@@ -16,7 +16,7 @@ const AboutSection = () => {
           {/* Professional headshot of male LSAT tutor */}
           <div className="md:w-5/12">
             <img 
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=600&h=700&q=80" 
+              src="/germaine_photo.jpg" 
               alt="Germaine Washington, LSAT Tutor" 
               className="rounded-xl shadow-lg w-full h-auto object-cover" 
             />
