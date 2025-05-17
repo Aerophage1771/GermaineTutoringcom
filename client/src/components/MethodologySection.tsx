@@ -1,18 +1,14 @@
 import { useState } from 'react';
 
 const MethodologySection = () => {
-  const [activeTab, setActiveTab] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<string | null>('define');
   
   const toggleTab = (tab: string) => {
-    if (activeTab === tab) {
-      setActiveTab(null);
-    } else {
-      setActiveTab(tab);
-    }
+    setActiveTab(tab);
   };
   
   const defineContent = (
-    <div className="p-5 bg-blue-50 rounded-b-lg border-t border-blue-100">
+    <div className={`p-5 bg-blue-50 rounded-lg border-t border-blue-100 ${activeTab === 'define' ? 'ring-2 ring-primary' : 'opacity-90'}`}>
       <h4 className="font-heading text-primary font-semibold mb-3">The DEFINE Process:</h4>
       <ul className="space-y-4">
         <li>
@@ -40,7 +36,7 @@ const MethodologySection = () => {
   );
   
   const demonstrateContent = (
-    <div className="p-5 bg-blue-50 rounded-b-lg border-t border-blue-100">
+    <div className={`p-5 bg-blue-50 rounded-lg border-t border-blue-100 ${activeTab === 'demonstrate' ? 'ring-2 ring-primary' : 'opacity-90'}`}>
       <h4 className="font-heading text-primary font-semibold mb-3">The DEMONSTRATE Process:</h4>
       <ul className="space-y-4">
         <li>
@@ -67,7 +63,7 @@ const MethodologySection = () => {
   );
   
   const duplicateContent = (
-    <div className="p-5 bg-blue-50 rounded-b-lg border-t border-blue-100">
+    <div className={`p-5 bg-blue-50 rounded-lg border-t border-blue-100 ${activeTab === 'duplicate' ? 'ring-2 ring-primary' : 'opacity-90'}`}>
       <h4 className="font-heading text-primary font-semibold mb-3">The DUPLICATE Process:</h4>
       <ul className="space-y-4">
         <li>
@@ -113,60 +109,35 @@ const MethodologySection = () => {
         </div>
         
         <div className="max-w-5xl mx-auto">
-          {/* Three-step approach with expandable content */}
-          <div className="bg-white rounded-xl shadow-md overflow-hidden mb-12">
-            <div className="grid md:grid-cols-3 divide-x divide-blue-100">
-              {/* DEFINE */}
-              <div>
-                <button 
-                  onClick={() => toggleTab('define')}
-                  className={`w-full p-6 md:p-8 text-left transition-colors duration-300 ${activeTab === 'define' ? 'bg-primary text-white' : 'hover:bg-blue-50'}`}
-                >
-                  <div className="flex items-center justify-between">
-                    <h3 className={`font-heading font-bold text-xl ${activeTab === 'define' ? 'text-white' : 'text-primary'}`}>DEFINE</h3>
-                    <i className={`fas ${activeTab === 'define' ? 'fa-chevron-up text-white' : 'fa-chevron-down text-primary'}`}></i>
-                  </div>
-                  <p className={`mt-2 leading-relaxed ${activeTab === 'define' ? 'text-white/90' : 'text-foreground/80'}`}>
-                    My approach begins by breaking down complex LSAT questions into clear, actionable patterns.
-                  </p>
-                </button>
-                {activeTab === 'define' && defineContent}
-              </div>
-              
-              {/* DEMONSTRATE */}
-              <div>
-                <button 
-                  onClick={() => toggleTab('demonstrate')}
-                  className={`w-full p-6 md:p-8 text-left transition-colors duration-300 ${activeTab === 'demonstrate' ? 'bg-primary text-white' : 'hover:bg-blue-50'}`}
-                >
-                  <div className="flex items-center justify-between">
-                    <h3 className={`font-heading font-bold text-xl ${activeTab === 'demonstrate' ? 'text-white' : 'text-primary'}`}>DEMONSTRATE</h3>
-                    <i className={`fas ${activeTab === 'demonstrate' ? 'fa-chevron-up text-white' : 'fa-chevron-down text-primary'}`}></i>
-                  </div>
-                  <p className={`mt-2 leading-relaxed ${activeTab === 'demonstrate' ? 'text-white/90' : 'text-foreground/80'}`}>
-                    Core strategies are demonstrated within a personalized learning path targeting your unique needs.
-                  </p>
-                </button>
-                {activeTab === 'demonstrate' && demonstrateContent}
-              </div>
-              
-              {/* DUPLICATE */}
-              <div>
-                <button 
-                  onClick={() => toggleTab('duplicate')}
-                  className={`w-full p-6 md:p-8 text-left transition-colors duration-300 ${activeTab === 'duplicate' ? 'bg-primary text-white' : 'hover:bg-blue-50'}`}
-                >
-                  <div className="flex items-center justify-between">
-                    <h3 className={`font-heading font-bold text-xl ${activeTab === 'duplicate' ? 'text-white' : 'text-primary'}`}>DUPLICATE</h3>
-                    <i className={`fas ${activeTab === 'duplicate' ? 'fa-chevron-up text-white' : 'fa-chevron-down text-primary'}`}></i>
-                  </div>
-                  <p className={`mt-2 leading-relaxed ${activeTab === 'duplicate' ? 'text-white/90' : 'text-foreground/80'}`}>
-                    The goal is for you to independently duplicate this approach for consistent success.
-                  </p>
-                </button>
-                {activeTab === 'duplicate' && duplicateContent}
-              </div>
-            </div>
+          {/* Three-step approach with tabs */}
+          <div className="grid md:grid-cols-3 gap-4 mb-6">
+            <button 
+              onClick={() => toggleTab('define')}
+              className={`p-4 rounded-t-lg text-left font-heading font-bold text-xl transition-colors duration-300 ${activeTab === 'define' ? 'bg-primary text-white' : 'bg-white hover:bg-blue-100 text-primary'}`}
+            >
+              DEFINE
+            </button>
+            
+            <button 
+              onClick={() => toggleTab('demonstrate')}
+              className={`p-4 rounded-t-lg text-left font-heading font-bold text-xl transition-colors duration-300 ${activeTab === 'demonstrate' ? 'bg-primary text-white' : 'bg-white hover:bg-blue-100 text-primary'}`}
+            >
+              DEMONSTRATE
+            </button>
+            
+            <button 
+              onClick={() => toggleTab('duplicate')}
+              className={`p-4 rounded-t-lg text-left font-heading font-bold text-xl transition-colors duration-300 ${activeTab === 'duplicate' ? 'bg-primary text-white' : 'bg-white hover:bg-blue-100 text-primary'}`}
+            >
+              DUPLICATE
+            </button>
+          </div>
+          
+          {/* Content area - all content is always shown */}
+          <div className="mb-12 space-y-6">
+            {defineContent}
+            {demonstrateContent}
+            {duplicateContent}
           </div>
           
           {/* Strategy cards */}
