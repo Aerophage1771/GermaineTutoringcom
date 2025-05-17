@@ -121,12 +121,9 @@
   min-height: 48px;
 }
 
-/* Style for the regular program button */
-.custom-shopify-button .shopify-buy__btn {
+/* Style for all Shopify buttons - base styles */
+.shopify-buy__btn {
   width: 100% !important;
-  background-color: white !important;
-  color: hsl(var(--primary)) !important;
-  border: 2px solid hsl(var(--primary)) !important;
   border-radius: 0.5rem !important;
   padding: 0.75rem 1.5rem !important;
   font-weight: 600 !important;
@@ -134,20 +131,68 @@
   transition: all 0.2s !important;
   display: block !important;
   text-align: center !important;
+  font-size: 1rem !important;
+  line-height: 1.5 !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  height: auto !important;
+  min-height: 3rem !important;
+  margin: 0 !important;
 }
 
-.custom-shopify-button .shopify-buy__btn:hover {
-  background-color: hsl(var(--primary)) !important;
+/* Regular button styles */
+.shopify-button-regular .shopify-buy__btn {
+  background-color: white !important;
+  color: hsl(215, 55%, 24%) !important;
+  border: 2px solid hsl(215, 55%, 24%) !important;
+}
+
+.shopify-button-regular .shopify-buy__btn:hover {
+  background-color: hsl(215, 55%, 24%) !important;
   color: white !important;
 }
 
-/* Style for the highlighted program button */
-.custom-shopify-button.highlighted .shopify-buy__btn {
-  background-color: hsl(var(--accent)) !important;
-  color: hsl(var(--primary)) !important;
-  border: 2px solid hsl(var(--accent)) !important;
+/* Premium button styles */
+.shopify-button-premium .shopify-buy__btn {
+  background-color: hsl(43, 80%, 46%) !important;
+  color: hsl(215, 55%, 24%) !important;
+  border: 2px solid hsl(43, 80%, 46%) !important;
 }
 
-.custom-shopify-button.highlighted .shopify-buy__btn:hover {
-  background-color: hsl(var(--accent) / 0.9) !important;
+.shopify-button-premium .shopify-buy__btn:hover {
+  background-color: hsl(43, 80%, 42%) !important;
+}
+
+/* Hide any Shopify branding or extra elements */
+.shopify-buy__quantity-container, 
+.shopify-buy__product-img-wrapper, 
+.shopify-buy__product__title, 
+.shopify-buy__product__price,
+.shopify-buy__product__variant-title,
+.shopify-buy__product__description {
+  display: none !important;
+}
+
+.shopify-buy__product {
+  margin: 0 !important;
+  padding: 0 !important;
+  min-width: 0 !important;
+}
+
+/* Ensure full width */
+.shopify-buy__layout-vertical {
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Remove any default margins or padding */
+.shopify-buy__product-description {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.shopify-buy__btn-wrapper {
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }

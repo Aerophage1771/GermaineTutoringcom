@@ -97,32 +97,42 @@ const ProgramsSection = () => {
                     "max-width": "100%",
                     "margin-left": "0",
                     "margin-bottom": "0"
-                  }
+                  },
+                  "max-width": "100%",
+                  "margin-left": "0",
+                  "margin-bottom": "0"
                 },
                 "button": {
-                  "font-weight": "bold",
-                  ":hover": {
-                    "background-color": "#1b385f"
-                  },
-                  "background-color": "#1b385f",
-                  ":focus": {
-                    "background-color": "#1b385f"
-                  },
-                  "border-radius": "8px",
-                  "padding-left": "24px",
-                  "padding-right": "24px",
+                  "font-size": "16px",
+                  "font-weight": "600",
                   "padding-top": "12px",
                   "padding-bottom": "12px",
+                  "padding-left": "24px",
+                  "padding-right": "24px"
                 }
               },
               "buttonDestination": "checkout",
               "contents": {
                 "img": false,
                 "title": false,
-                "price": false
+                "price": false,
+                "options": false,
+                "description": false,
+                "buttonWithQuantity": false
               },
               "text": {
                 "button": "Enroll in Program"
+              },
+              "width": "100%",
+              "layout": "vertical"
+            },
+            "cart": {
+              "styles": {
+                "button": {
+                  "font-size": "16px",
+                  "padding-top": "12px",
+                  "padding-bottom": "12px"
+                }
               }
             }
           }
@@ -145,33 +155,42 @@ const ProgramsSection = () => {
                     "max-width": "100%",
                     "margin-left": "0",
                     "margin-bottom": "0"
-                  }
+                  },
+                  "max-width": "100%",
+                  "margin-left": "0",
+                  "margin-bottom": "0"
                 },
                 "button": {
-                  "font-weight": "bold",
-                  ":hover": {
-                    "background-color": "#d39e17"
-                  },
-                  "background-color": "#d39e17",
-                  ":focus": {
-                    "background-color": "#d39e17"
-                  },
-                  "color": "#1b385f",
-                  "border-radius": "8px",
-                  "padding-left": "24px",
-                  "padding-right": "24px",
+                  "font-size": "16px",
+                  "font-weight": "600",
                   "padding-top": "12px",
                   "padding-bottom": "12px",
+                  "padding-left": "24px",
+                  "padding-right": "24px"
                 }
               },
               "buttonDestination": "checkout",
               "contents": {
                 "img": false,
                 "title": false,
-                "price": false
+                "price": false,
+                "options": false,
+                "description": false,
+                "buttonWithQuantity": false
               },
               "text": {
                 "button": "Enroll in Premium"
+              },
+              "width": "100%",
+              "layout": "vertical"
+            },
+            "cart": {
+              "styles": {
+                "button": {
+                  "font-size": "16px",
+                  "padding-top": "12px",
+                  "padding-bottom": "12px"
+                }
               }
             }
           }
@@ -369,15 +388,29 @@ const ProgramsSection = () => {
 
                 <div className="mt-auto"> {/* This pushes the button to the bottom */}
                   {program.title === "8-Hour LSAT Elevation Course" ? (
-                    <div 
-                      ref={eightHourButtonRef}
-                      className={`custom-shopify-button w-full ${program.highlighted ? "highlighted" : ""}`}
-                    ></div>
+                    <div className="relative">
+                      <button
+                        className={`hidden z-0 block text-center w-full py-3 px-6 rounded-lg transition-colors font-semibold bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white`}
+                      >
+                        {program.buttonText}
+                      </button>
+                      <div 
+                        ref={eightHourButtonRef}
+                        className={`custom-shopify-button w-full shopify-button-regular z-10 absolute top-0 left-0 right-0 bottom-0`}
+                      ></div>
+                    </div>
                   ) : program.title === "24-Hour Premium Mastery Program" ? (
-                    <div 
-                      ref={twentyFourHourButtonRef}
-                      className={`custom-shopify-button w-full ${program.highlighted ? "highlighted" : ""}`}
-                    ></div>
+                    <div className="relative">
+                      <button
+                        className={`hidden z-0 block text-center w-full py-3 px-6 rounded-lg transition-colors font-semibold bg-accent border-2 border-accent text-primary hover:bg-accent/90`}
+                      >
+                        {program.buttonText}
+                      </button>
+                      <div 
+                        ref={twentyFourHourButtonRef}
+                        className={`custom-shopify-button w-full shopify-button-premium z-10 absolute top-0 left-0 right-0 bottom-0`}
+                      ></div>
+                    </div>
                   ) : (
                     <button
                       onClick={() => handleProgramButtonClick(program.title)}
