@@ -1,5 +1,5 @@
 // Import profile photo
-const germainePhoto = "/germaine_photo.webp";
+const germainePhoto = "/germaine_photo.jpg";
 
 const AboutSection = () => {
   const scrollToConsultation = () => {
