@@ -1,35 +1,67 @@
+interface Feature {
+  included: boolean;
+  text: string;
+  bonus?: boolean;
+}
+
+interface Program {
+  title: string;
+  description: string;
+  price: string;
+  duration: string;
+  hourly: string;
+  savings: string | null;
+  features: Feature[];
+  buttonText: string;
+  highlighted: boolean;
+}
+
 const ProgramsSection = () => {
-  const programs = [
+  const programs: Program[] = [
     {
       title: "Targeted Strategy Session",
       description: "Focused diagnostic and initial strategy session",
-      price: "$200",
+      price: "$199.99",
       duration: "2 hours",
+      hourly: "$99.99",
+      savings: null,
       features: [
+        { included: true, text: "Comprehensive Tutoring Hours: 2 Hours" },
         { included: true, text: "Focused Diagnostic & Initial Strategy Session" },
         { included: true, text: "Section-Specific Strategy Discussion" },
         { included: true, text: "Personalized Study Plan Outline" },
-        { included: false, text: "Practice test reviews" },
-        { included: false, text: "Question database access" },
-        { included: false, text: "Email & text support" }
+        { included: false, text: "Free Practice Test Review Sessions" },
+        { included: false, text: "Permanent Question Explanation Database Access" },
+        { included: false, text: "Custom Strategy Materials" },
+        { included: true, text: "Email & Text Support" },
+        { included: false, text: "Priority in New Material Creation/Selection" },
+        { included: false, text: "Priority Email & Text Support" },
+        { included: false, text: "Free Full Test Diagnostic Assessment" }
       ],
-      buttonText: "Book a Session",
+      buttonText: "Purchase Session",
       highlighted: false
     },
     {
       title: "Standard Prep Program",
       description: "Ideal for students targeting 5-10 point improvements",
-      price: "$700",
+      price: "$699.99",
       duration: "8 hours",
+      hourly: "$87.50",
+      savings: "Save $12.49 per hour (12.5% savings)",
       features: [
-        { included: true, text: "8 Hours of Comprehensive Tutoring" },
-        { included: true, text: "Question Explanation Database Access" },
-        { included: true, text: "One Practice Test Review Session", bonus: true },
+        { included: true, text: "Comprehensive Tutoring Hours: 8 Hours" },
+        { included: true, text: "Focused Diagnostic & Initial Strategy Session (Included)" },
+        { included: true, text: "Section-Specific Strategy Discussion (Included)" },
+        { included: true, text: "Personalized Study Plan Outline (Included)" },
+        { included: true, text: "One Free Practice Test Review Session", bonus: true },
+        { included: true, text: "Permanent Question Explanation Database Access", bonus: true },
+        { included: true, text: "Custom Strategy Materials" },
         { included: true, text: "Email & Text Support" },
-        { included: true, text: "Logical Reasoning Fundamentals" },
-        { included: true, text: "Reading Comprehension Strategy" }
+        { included: false, text: "Priority in New Material Creation/Selection" },
+        { included: false, text: "Priority Email & Text Support" },
+        { included: true, text: "Free Full Test Diagnostic Assessment" }
       ],
-      buttonText: "Explore Program",
+      buttonText: "Enroll in Program",
       highlighted: false
     },
     {
@@ -37,16 +69,22 @@ const ProgramsSection = () => {
       description: "Intensive preparation for 10+ point improvements or 170+ scores",
       price: "$1,799",
       duration: "24 hours",
+      hourly: "$74.96",
+      savings: "Save $25.03 per hour (25% savings)",
       features: [
-        { included: true, text: "24 Hours of Elite Tutoring" },
-        { included: true, text: "Free Full Test Diagnostic Assessment" },
-        { included: true, text: "Three One-Hour Practice Test Review Sessions", bonus: true },
-        { included: true, text: "Full Question Explanation Database Access", bonus: true },
+        { included: true, text: "Comprehensive Tutoring Hours: 24 Hours" },
+        { included: true, text: "Focused Diagnostic & Initial Strategy Session (Included)" },
+        { included: true, text: "Section-Specific Strategy Discussion (Included)" },
+        { included: true, text: "Personalized Study Plan Outline (Included)" },
+        { included: true, text: "Three One-Hour Free Practice Test Review Sessions", bonus: true },
+        { included: true, text: "Permanent Full Question Explanation Database Access", bonus: true },
         { included: true, text: "Custom Strategy Materials" },
+        { included: true, text: "Email & Text Support" },
         { included: true, text: "Priority in New Material Creation/Selection" },
-        { included: true, text: "Priority Email & Text Support" }
+        { included: true, text: "Priority Email & Text Support" },
+        { included: true, text: "Free Full Test Diagnostic Assessment" }
       ],
-      buttonText: "Book a Consultation",
+      buttonText: "Enroll in Premium",
       highlighted: true
     }
   ];
@@ -96,18 +134,30 @@ const ProgramsSection = () => {
                   {program.description}
                 </p>
                 
-                <div className="flex items-baseline mb-6">
-                  <span className={`${program.highlighted ? "text-accent" : "text-primary"} font-heading font-bold text-4xl`}>
-                    {program.price}
-                  </span>
-                  <span className={`${program.highlighted ? "text-white/70" : "text-foreground/70"} ml-2`}>
-                    / {program.duration}
-                  </span>
+                <div className="flex flex-col mb-6">
+                  <div className="flex items-baseline">
+                    <span className={`${program.highlighted ? "text-accent" : "text-primary"} font-heading font-bold text-4xl`}>
+                      {program.price}
+                    </span>
+                    <span className={`${program.highlighted ? "text-white/70" : "text-foreground/70"} ml-2`}>
+                      / {program.duration}
+                    </span>
+                  </div>
+                  <div className="mt-1">
+                    <span className={`${program.highlighted ? "text-white/80" : "text-foreground/80"} text-sm`}>
+                      {program.hourly} per hour
+                    </span>
+                    {program.savings && (
+                      <span className={`${program.highlighted ? "text-accent" : "text-primary"} text-sm font-medium ml-2`}>
+                        {program.savings}
+                      </span>
+                    )}
+                  </div>
                 </div>
                 
                 <ul className="space-y-3 mb-8">
                   {program.features.map((feature, featureIdx) => (
-                    <li key={featureIdx} className={`flex items-start ${feature.included ? "" : "text-foreground/50"} ${program.highlighted ? "text-white" : ""}`}>
+                    <li key={featureIdx} className={`flex items-start ${feature.included ? "" : "text-foreground/50"} ${program.highlighted ? feature.included ? "text-white" : "text-white/50" : ""}`}>
                       {feature.included ? (
                         <i className="fas fa-check text-accent mt-1 mr-3"></i>
                       ) : (
@@ -115,7 +165,7 @@ const ProgramsSection = () => {
                       )}
                       <span>
                         {feature.text}
-                        {feature.bonus && <span className="ml-2 text-accent font-bold">+ BONUS</span>}
+                        {feature.bonus && <span className={`ml-2 ${program.highlighted ? "text-accent" : "text-accent"} font-bold`}>+ BONUS</span>}
                       </span>
                     </li>
                   ))}

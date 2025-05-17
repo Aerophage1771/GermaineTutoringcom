@@ -1,0 +1,115 @@
+Revised Program Details:
+
+Card 1: Targeted Strategy Session
+
+    Title: Targeted Strategy Session
+
+    Description: Focused diagnostic and initial strategy session
+
+    Price: $199.99 / 2 hours
+
+    Per Hour Cost: $99.99 / hour
+
+    Savings: N/A (Base Rate)
+
+    Features:
+
+        ✓ Comprehensive Tutoring Hours: 2 Hours
+
+        ✓ Focused Diagnostic & Initial Strategy Session
+
+        ✓ Section-Specific Strategy Discussion
+
+        ✓ Personalized Study Plan Outline
+
+        ✕ Free Practice Test Review Sessions
+
+        ✕ Permanent Question Explanation Database Access (Free)
+
+        ✕ Custom Strategy Materials
+
+        ✓ Email & Text Support
+
+        ✕ Priority in New Material Creation/Selection
+
+        ✕ Priority Email & Text Support
+
+        ✕ Free Full Test Diagnostic Assessment
+
+    Button: Purchase Session
+
+Card 2: Standard Prep Program
+
+    Title: Standard Prep Program
+
+    Description: Ideal for students targeting 5-10 point improvements
+
+    Price: $699.99 / 8 hours
+
+    Per Hour Cost: $87.50 / hour
+
+    Savings: Save $12.49 per hour (12.5% savings vs. Strategy Session)
+
+    Features:
+
+        ✓ Comprehensive Tutoring Hours: 8 Hours
+
+        ✓ Focused Diagnostic & Initial Strategy Session (Included)
+
+        ✓ Section-Specific Strategy Discussion (Included)
+
+        ✓ Personalized Study Plan Outline (Included)
+
+        ✓ One Free Practice Test Review Session + BONUS
+
+        ✓ Permanent Question Explanation Database Access (Free) + BONUS
+
+        ✓ Custom Strategy Materials
+
+        ✓ Email & Text Support
+
+        ✕ Priority in New Material Creation/Selection
+
+        ✕ Priority Email & Text Support
+
+        ✓ Free Full Test Diagnostic Assessment
+
+    Button: Enroll in Program
+
+Card 3: Premium Mastery Program MOST POPULAR (Banner)
+
+    Title: Premium Mastery Program
+
+    Description: Intensive preparation for 10+ point improvements or 170+ scores
+
+    Price: $1,799 / 24 hours
+
+    Per Hour Cost: $74.96 / hour
+
+    Savings: Save $25.03 per hour (25% savings vs. Strategy Session)
+
+    Features:
+
+        ✓ Comprehensive Tutoring Hours: 24 Hours
+
+        ✓ Focused Diagnostic & Initial Strategy Session (Included)
+
+        ✓ Section-Specific Strategy Discussion (Included)
+
+        ✓ Personalized Study Plan Outline (Included)
+
+        ✓ Three One-Hour Free Practice Test Review Sessions + BONUS
+
+        ✓ Permanent Full Question Explanation Database Access (Free) + BONUS
+
+        ✓ Custom Strategy Materials
+
+        ✓ Email & Text Support
+
+        ✓ Priority in New Material Creation/Selection
+
+        ✓ Priority Email & Text Support
+
+        ✓ Free Full Test Diagnostic Assessment
+
+    Button: Enroll in Premium (Or "Book Consultation & Enroll" if consultation is a mandatory first step to purchase)
