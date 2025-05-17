@@ -63,7 +63,7 @@ const CTASection = () => {
             {/* Calendly inline widget */}
             <div className="calendly-inline-widget" 
                  data-url="https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=1b385f" 
-                 style={{ minWidth: '320px', height: '700px' }}></div>
+                 style={{ minWidth: '320px', height: '900px' }}></div>
           </div>
         </div>
       </div>
