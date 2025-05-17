@@ -114,3 +114,40 @@
     font-family: 'Open Sans', sans-serif;
   }
 }
+
+/* Custom styles for Shopify Buy buttons */
+.custom-shopify-button {
+  width: 100%;
+  min-height: 48px;
+}
+
+/* Style for the regular program button */
+.custom-shopify-button .shopify-buy__btn {
+  width: 100% !important;
+  background-color: white !important;
+  color: hsl(var(--primary)) !important;
+  border: 2px solid hsl(var(--primary)) !important;
+  border-radius: 0.5rem !important;
+  padding: 0.75rem 1.5rem !important;
+  font-weight: 600 !important;
+  font-family: 'Open Sans', sans-serif !important;
+  transition: all 0.2s !important;
+  display: block !important;
+  text-align: center !important;
+}
+
+.custom-shopify-button .shopify-buy__btn:hover {
+  background-color: hsl(var(--primary)) !important;
+  color: white !important;
+}
+
+/* Style for the highlighted program button */
+.custom-shopify-button.highlighted .shopify-buy__btn {
+  background-color: hsl(var(--accent)) !important;
+  color: hsl(var(--primary)) !important;
+  border: 2px solid hsl(var(--accent)) !important;
+}
+
+.custom-shopify-button.highlighted .shopify-buy__btn:hover {
+  background-color: hsl(var(--accent) / 0.9) !important;
+}

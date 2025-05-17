@@ -1,10 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
-// Define Calendly types to avoid TypeScript errors
+// Define Calendly and Shopify types to avoid TypeScript errors
 declare global {
   interface Window {
     Calendly?: {
       initPopupWidget: (options: { url: string }) => void;
+    },
+    ShopifyBuy?: {
+      buildClient: (options: { domain: string, storefrontAccessToken: string }) => any;
+      UI: {
+        onReady: (client: any) => Promise<any>;
+      }
     }
   }
 }
@@ -28,7 +34,11 @@ interface Program {
 }
 
 const ProgramsSection = () => {
-  // Add Calendly script to the document when component mounts
+  // References for Shopify Buy button containers
+  const eightHourButtonRef = useRef<HTMLDivElement>(null);
+  const twentyFourHourButtonRef = useRef<HTMLDivElement>(null);
+
+  // Add Calendly and Shopify Buy scripts to the document when component mounts
   useEffect(() => {
     // Check if Calendly script already exists
     if (!document.getElementById('calendly-script')) {
@@ -46,9 +56,129 @@ const ProgramsSection = () => {
       document.body.appendChild(script);
     }
     
+    // Check if Shopify Buy script already exists
+    if (!document.getElementById('shopify-buy-script')) {
+      const script = document.createElement('script');
+      script.id = 'shopify-buy-script';
+      script.src = 'https://sdks.shopifycdn.com/buy-button/latest/buy-button-storefront.min.js';
+      script.async = true;
+      script.onload = initShopifyButtons;
+      document.body.appendChild(script);
+    } else if (window.ShopifyBuy && window.ShopifyBuy.UI) {
+      // If the script is already loaded, initialize buttons
+      initShopifyButtons();
+    }
+    
     // We don't need to remove the script on unmount as it might be needed elsewhere
     return () => {};
   }, []);
+  
+  // Initialize Shopify Buy buttons
+  const initShopifyButtons = () => {
+    if (!window.ShopifyBuy) return;
+    
+    const client = window.ShopifyBuy.buildClient({
+      domain: 'gbjrnw-k7.myshopify.com',
+      storefrontAccessToken: '98d81682a2e4814b55038f26aaca030b',
+    });
+
+    // Initialize 8-hour button
+    if (eightHourButtonRef.current) {
+      window.ShopifyBuy.UI.onReady(client).then(function (ui) {
+        ui.createComponent('product', {
+          id: '7563837931585',
+          node: eightHourButtonRef.current,
+          moneyFormat: '%24%7B%7Bamount%7D%7D',
+          options: {
+            "product": {
+              "styles": {
+                "product": {
+                  "@media (min-width: 601px)": {
+                    "max-width": "100%",
+                    "margin-left": "0",
+                    "margin-bottom": "0"
+                  }
+                },
+                "button": {
+                  "font-weight": "bold",
+                  ":hover": {
+                    "background-color": "#1b385f"
+                  },
+                  "background-color": "#1b385f",
+                  ":focus": {
+                    "background-color": "#1b385f"
+                  },
+                  "border-radius": "8px",
+                  "padding-left": "24px",
+                  "padding-right": "24px",
+                  "padding-top": "12px",
+                  "padding-bottom": "12px",
+                }
+              },
+              "buttonDestination": "checkout",
+              "contents": {
+                "img": false,
+                "title": false,
+                "price": false
+              },
+              "text": {
+                "button": "Enroll in Program"
+              }
+            }
+          }
+        });
+      });
+    }
+
+    // Initialize 24-hour button
+    if (twentyFourHourButtonRef.current) {
+      window.ShopifyBuy.UI.onReady(client).then(function (ui) {
+        ui.createComponent('product', {
+          id: '7563883905089',
+          node: twentyFourHourButtonRef.current,
+          moneyFormat: '%24%7B%7Bamount%7D%7D',
+          options: {
+            "product": {
+              "styles": {
+                "product": {
+                  "@media (min-width: 601px)": {
+                    "max-width": "100%",
+                    "margin-left": "0",
+                    "margin-bottom": "0"
+                  }
+                },
+                "button": {
+                  "font-weight": "bold",
+                  ":hover": {
+                    "background-color": "#d39e17"
+                  },
+                  "background-color": "#d39e17",
+                  ":focus": {
+                    "background-color": "#d39e17"
+                  },
+                  "color": "#1b385f",
+                  "border-radius": "8px",
+                  "padding-left": "24px",
+                  "padding-right": "24px",
+                  "padding-top": "12px",
+                  "padding-bottom": "12px",
+                }
+              },
+              "buttonDestination": "checkout",
+              "contents": {
+                "img": false,
+                "title": false,
+                "price": false
+              },
+              "text": {
+                "button": "Enroll in Premium"
+              }
+            }
+          }
+        });
+      });
+    }
+  };
   const programs: Program[] = [
     {
       title: "2-Hour LSAT Acceleration Session",
@@ -238,16 +368,28 @@ const ProgramsSection = () => {
                 </ul>
 
                 <div className="mt-auto"> {/* This pushes the button to the bottom */}
-                  <button
-                    onClick={() => handleProgramButtonClick(program.title)} // Changed to more generic handler
-                    className={`block text-center w-full py-3 px-6 rounded-lg transition-colors font-semibold ${
-                      program.highlighted
-                        ? "bg-accent border-2 border-accent text-primary hover:bg-accent/90"
-                        : "bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white"
-                    }`}
-                  >
-                    {program.buttonText}
-                  </button>
+                  {program.title === "8-Hour LSAT Elevation Course" ? (
+                    <div 
+                      ref={eightHourButtonRef}
+                      className={`custom-shopify-button w-full ${program.highlighted ? "highlighted" : ""}`}
+                    ></div>
+                  ) : program.title === "24-Hour Premium Mastery Program" ? (
+                    <div 
+                      ref={twentyFourHourButtonRef}
+                      className={`custom-shopify-button w-full ${program.highlighted ? "highlighted" : ""}`}
+                    ></div>
+                  ) : (
+                    <button
+                      onClick={() => handleProgramButtonClick(program.title)}
+                      className={`block text-center w-full py-3 px-6 rounded-lg transition-colors font-semibold ${
+                        program.highlighted
+                          ? "bg-accent border-2 border-accent text-primary hover:bg-accent/90"
+                          : "bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white"
+                      }`}
+                    >
+                      {program.buttonText}
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
