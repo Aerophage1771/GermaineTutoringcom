@@ -98,12 +98,7 @@ const Header = () => {
           >
             Student Results
           </button>
-          <button 
-            onClick={() => scrollToSection('guides')} 
-            className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors"
-          >
-            Free LSAT Guides
-          </button>
+
           <button 
             onClick={openCalendly} 
             className="bg-accent hover:bg-accent/90 text-white px-5 py-2 rounded font-semibold text-sm lg:text-base transition-colors"
@@ -134,12 +129,7 @@ const Header = () => {
           >
             Student Results
           </button>
-          <button 
-            onClick={() => scrollToSection('guides')} 
-            className="text-foreground hover:text-primary font-medium transition-colors text-left"
-          >
-            Free LSAT Guides
-          </button>
+
           <button 
             onClick={openCalendly} 
             className="bg-accent hover:bg-accent/90 text-white px-4 py-2 rounded font-semibold text-center transition-colors"

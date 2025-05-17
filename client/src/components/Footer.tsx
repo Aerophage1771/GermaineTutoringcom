@@ -77,12 +77,7 @@ const Footer = () => {
               >
                 Student Results
               </button>
-              <button 
-                onClick={() => document.getElementById('guides')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                className="text-white/70 hover:text-accent transition-colors text-left"
-              >
-                Free LSAT Guides
-              </button>
+
               <button 
                 onClick={openCalendly}
                 className="text-white/70 hover:text-accent transition-colors text-left"

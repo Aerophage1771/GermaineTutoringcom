@@ -51,8 +51,8 @@ const ProgramsSection = () => {
   }, []);
   const programs: Program[] = [
     {
-      title: "Two-Hour LSAT Tune-Up",
-      description: "Focused diagnostic and initial strategy session",
+      title: "2-Hour LSAT Acceleration Session",
+      description: "Strategic session focused on rapidly improving performance and uncovering opportunities for growth on the LSAT",
       price: "$199",
       duration: "2 hours",
       hourly: "$99.50",
@@ -75,7 +75,7 @@ const ProgramsSection = () => {
     },
     {
       title: "8-Hour LSAT Elevation Course",
-      description: "Ideal for students targeting 5-10 point improvements",
+      description: "For students targeting a 5–10 point gain. Focused section work, strategy drills, and a custom study plan.",
       price: "$699",
       duration: "8 hours",
       hourly: "$87.38",
@@ -98,7 +98,7 @@ const ProgramsSection = () => {
     },
     {
       title: "24-Hour Premium Mastery Program",
-      description: "Intensive preparation for 10+ point improvements or 170+ scores",
+      description: "For 10+ point improvements or 170+ goals. Intensive coaching, advanced strategy, and full-section mastery.",
       price: "$1,799",
       duration: "24 hours",
       hourly: "$74.96",
@@ -155,7 +155,7 @@ const ProgramsSection = () => {
     console.log(`Button clicked for: ${programTitle}`);
     
     // Different actions based on program title
-    if (programTitle === "Two-Hour LSAT Tune-Up") {
+    if (programTitle === "2-Hour LSAT Acceleration Session") {
       openTwoHourCalendly(new MouseEvent('click') as any);
     } else if (programTitle === "8-Hour LSAT Elevation Course") {
       window.open('https://gbjrnw-k7.myshopify.com/cart/42161250533441:1?channel=buy_button', '_blank');
