@@ -231,12 +231,29 @@ const GuidesSection = () => {
         <div className="bg-white border border-muted/50 rounded-xl shadow-md p-8 md:p-12">
           <div className="text-center mb-8">
             <h3 className="font-heading font-bold text-primary text-2xl md:text-3xl mb-4">Initial Consultation Call</h3>
-            <p className="text-foreground/80 leading-relaxed max-w-3xl mx-auto">
+            <p className="text-foreground/80 leading-relaxed max-w-3xl mx-auto mb-8">
               Not sure where to start? Book a free consultation call to discuss your LSAT goals and how my tutoring approach can help you succeed.
             </p>
+            
+            <Button 
+              className="bg-primary hover:bg-primary/90 text-white font-bold py-3 px-8 rounded-lg transition-colors text-lg mx-auto"
+              onClick={() => {
+                // @ts-ignore
+                window.Calendly?.initInlineWidget({
+                  url: 'https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=d39e17',
+                  parentElement: document.getElementById('calendly-consultation-container'),
+                  prefill: {},
+                  styles: {
+                    height: '700px'
+                  }
+                });
+              }}
+            >
+              Schedule Initial Consultation
+            </Button>
           </div>
           
-          <div className="calendly-inline-widget" data-url="https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=d39e17" style={{ minWidth: "320px", height: "700px" }}></div>
+          <div id="calendly-consultation-container"></div>
         </div>
       </div>
     </section>
