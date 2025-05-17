@@ -205,40 +205,38 @@ const GuidesSection = () => {
           </DialogContent>
         </Dialog>
         
-        {/* Information Section */}
-        <div className="bg-primary rounded-xl shadow-lg p-8 md:p-12">
-          <div className="md:flex items-center">
-            <div className="md:w-7/12 mb-8 md:mb-0 md:pr-8">
-              <h3 className="font-heading font-bold text-white text-2xl md:text-3xl mb-4">Why Join Our LSAT Community?</h3>
-              <p className="text-white/90 leading-relaxed">
-                Subscribe today and gain immediate access to our collection of free LSAT guides, plus receive regular tips, strategy updates, and exclusive content to support your preparation journey.
-              </p>
-              <ul className="text-white/90 mt-4 space-y-2">
-                <li className="flex items-center">
-                  <span className="mr-2">✓</span> Exclusive LSAT preparation materials
-                </li>
-                <li className="flex items-center">
-                  <span className="mr-2">✓</span> Regular tips and strategy updates
-                </li>
-                <li className="flex items-center">
-                  <span className="mr-2">✓</span> Priority notification for new content
-                </li>
-              </ul>
-            </div>
-            
-            <div className="md:w-5/12 bg-white rounded-xl p-6">
-              <h4 className="font-heading font-bold text-primary text-xl mb-4">Get Started Today</h4>
-              <p className="text-foreground/80 mb-4">
-                Click on any guide above to subscribe and get immediate access to high-quality LSAT preparation materials.
-              </p>
-              <Button 
-                onClick={() => handleGuideClick(0)}
-                className="w-full bg-accent hover:bg-accent/90 text-primary font-bold py-3 px-6 rounded-lg transition-colors"
-              >
-                Unlock All Free Guides
-              </Button>
-            </div>
+        {/* Targeted Strategy Session Booking */}
+        <div className="bg-primary rounded-xl shadow-lg p-8 md:p-12 mb-16">
+          <div className="text-center mb-8">
+            <h3 className="font-heading font-bold text-white text-2xl md:text-3xl mb-4">Book a Targeted Strategy Session</h3>
+            <p className="text-white/90 leading-relaxed max-w-3xl mx-auto">
+              Ready to take your LSAT preparation to the next level? Schedule a 2-hour targeted strategy session focused on your specific needs.
+            </p>
           </div>
+          
+          <div className="flex justify-center">
+            <Button 
+              className="bg-accent hover:bg-accent/90 text-primary font-bold py-3 px-8 rounded-lg transition-colors text-lg"
+              onClick={() => {
+                // @ts-ignore
+                window.Calendly?.initPopupWidget({url: 'https://calendly.com/germaine-washington-tutoring/2-hour-lsat-tutoring'});
+              }}
+            >
+              Schedule Your Strategy Session
+            </Button>
+          </div>
+        </div>
+        
+        {/* Initial Consultation Booking */}
+        <div className="bg-white border border-muted/50 rounded-xl shadow-md p-8 md:p-12">
+          <div className="text-center mb-8">
+            <h3 className="font-heading font-bold text-primary text-2xl md:text-3xl mb-4">Initial Consultation Call</h3>
+            <p className="text-foreground/80 leading-relaxed max-w-3xl mx-auto">
+              Not sure where to start? Book a free consultation call to discuss your LSAT goals and how my tutoring approach can help you succeed.
+            </p>
+          </div>
+          
+          <div className="calendly-inline-widget" data-url="https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=d39e17" style={{ minWidth: "320px", height: "700px" }}></div>
         </div>
       </div>
     </section>
