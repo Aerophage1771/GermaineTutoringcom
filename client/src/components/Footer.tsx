@@ -53,20 +53,7 @@ const Footer = () => {
               Expert LSAT tutoring from a Princeton Logic graduate and perfect scorer. 
               Helping students achieve their target scores through proven, systematic methods.
             </p>
-            <div className="flex space-x-4">
-              <a href="#" className="text-white/70 hover:text-accent transition-colors" aria-label="Facebook">
-                <i className="fab fa-facebook-f"></i>
-              </a>
-              <a href="#" className="text-white/70 hover:text-accent transition-colors" aria-label="Twitter">
-                <i className="fab fa-twitter"></i>
-              </a>
-              <a href="#" className="text-white/70 hover:text-accent transition-colors" aria-label="Instagram">
-                <i className="fab fa-instagram"></i>
-              </a>
-              <a href="#" className="text-white/70 hover:text-accent transition-colors" aria-label="Reddit">
-                <i className="fab fa-reddit-alien"></i>
-              </a>
-            </div>
+            {/* Social media buttons removed as requested */}
           </div>
           
           {/* Column 2: Quick Links */}

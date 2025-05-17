@@ -51,7 +51,7 @@ const ProgramsSection = () => {
   }, []);
   const programs: Program[] = [
     {
-      title: "Targeted Strategy Session",
+      title: "Two-Hour LSAT Tune-Up",
       description: "Focused diagnostic and initial strategy session",
       price: "$199",
       duration: "2 hours",
@@ -74,7 +74,7 @@ const ProgramsSection = () => {
       highlighted: false
     },
     {
-      title: "Standard Prep Program",
+      title: "8-Hour LSAT Elevation Course",
       description: "Ideal for students targeting 5-10 point improvements",
       price: "$699",
       duration: "8 hours",
@@ -135,11 +135,33 @@ const ProgramsSection = () => {
     }
   };
 
+  // Open Calendly for the 2-hour program
+  const openTwoHourCalendly = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Check if Calendly is loaded
+    if (window.Calendly) {
+      window.Calendly.initPopupWidget({
+        url: 'https://calendly.com/germaine-washington-tutoring/2-hour-lsat-tutoring'
+      });
+    } else {
+      console.error('Calendly not loaded yet');
+      // Fallback - open directly
+      window.open('https://calendly.com/germaine-washington-tutoring/2-hour-lsat-tutoring', '_blank');
+    }
+  };
+  
   // Handler for program buttons
   const handleProgramButtonClick = (programTitle: string) => {
     console.log(`Button clicked for: ${programTitle}`);
-    // Open Calendly widget for all buttons
-    openCalendly(new MouseEvent('click') as any);
+    
+    // Different actions based on program title
+    if (programTitle === "Two-Hour LSAT Tune-Up") {
+      openTwoHourCalendly(new MouseEvent('click') as any);
+    } else if (programTitle === "8-Hour LSAT Elevation Course") {
+      window.open('https://gbjrnw-k7.myshopify.com/cart/42161250533441:1?channel=buy_button', '_blank');
+    } else if (programTitle === "Premium Mastery Program") {
+      window.open('https://gbjrnw-k7.myshopify.com/cart/42161421221953:1?channel=buy_button', '_blank');
+    }
   };
 
 
