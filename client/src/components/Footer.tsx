@@ -1,4 +1,47 @@
+import { useEffect } from 'react';
+
+// Define Calendly types
+declare global {
+  interface Window {
+    Calendly?: {
+      initPopupWidget: (options: { url: string }) => void;
+    }
+  }
+}
+
 const Footer = () => {
+  // Add Calendly script to the document when component mounts
+  useEffect(() => {
+    // Check if Calendly script already exists
+    if (!document.getElementById('calendly-script')) {
+      // Add Calendly CSS
+      const link = document.createElement('link');
+      link.href = 'https://assets.calendly.com/assets/external/widget.css';
+      link.rel = 'stylesheet';
+      document.head.appendChild(link);
+      
+      // Add Calendly JS
+      const script = document.createElement('script');
+      script.id = 'calendly-script';
+      script.src = 'https://assets.calendly.com/assets/external/widget.js';
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
+  
+  const openCalendly = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Check if Calendly is loaded
+    if (window.Calendly) {
+      window.Calendly.initPopupWidget({
+        url: 'https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=d39e17'
+      });
+    } else {
+      console.error('Calendly not loaded yet');
+      // Fallback - open directly
+      window.open('https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=d39e17', '_blank');
+    }
+  };
   return (
     <footer className="bg-primary text-white py-12">
       <div className="container mx-auto px-4">
@@ -55,7 +98,7 @@ const Footer = () => {
                 Free LSAT Guides
               </button>
               <button 
-                onClick={() => document.getElementById('consultation')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                onClick={openCalendly}
                 className="text-white/70 hover:text-accent transition-colors text-left"
               >
                 Book Consultation
