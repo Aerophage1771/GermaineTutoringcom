@@ -183,7 +183,7 @@ const ProgramsSection = () => {
     });
 
     // 8-Hour LSAT Elevation Course
-    window.ShopifyBuy.UI.onReady(client).then(function (ui) {
+    window.ShopifyBuy.UI.onReady(client).then(function (ui: any) {
       ui.createComponent('product', {
         id: '7563837931585',
         node: document.getElementById('product-component-1747461513439'),
@@ -224,7 +224,7 @@ const ProgramsSection = () => {
     });
 
     // Premium Mastery Program
-    window.ShopifyBuy.UI.onReady(client).then(function (ui) {
+    window.ShopifyBuy.UI.onReady(client).then(function (ui: any) {
       ui.createComponent('product', {
         id: '7563883905089',
         node: document.getElementById('product-component-1747460463644'),
@@ -352,16 +352,22 @@ const ProgramsSection = () => {
                 </ul>
 
                 <div className="mt-auto"> {/* This pushes the button to the bottom */}
-                  <button
-                    onClick={() => handleProgramButtonClick(program.title)} // Changed to more generic handler
-                    className={`block text-center w-full py-3 px-6 rounded-lg transition-colors font-semibold ${
-                      program.highlighted
-                        ? "bg-accent border-2 border-accent text-primary hover:bg-accent/90"
-                        : "bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white"
-                    }`}
-                  >
-                    {program.buttonText}
-                  </button>
+                  {program.title === "Two-Hour LSAT Tune-Up" ? (
+                    <button
+                      onClick={() => openTwoHourCalendly(new MouseEvent('click') as any)}
+                      className={`block text-center w-full py-3 px-6 rounded-lg transition-colors font-semibold ${
+                        program.highlighted
+                          ? "bg-accent border-2 border-accent text-primary hover:bg-accent/90"
+                          : "bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white"
+                      }`}
+                    >
+                      Schedule Session
+                    </button>
+                  ) : program.title === "8-Hour LSAT Elevation Course" ? (
+                    <div id="product-component-1747461513439" className="w-full"></div>
+                  ) : (
+                    <div id="product-component-1747460463644" className="w-full"></div>
+                  )}
                 </div>
               </div>
             </div>
