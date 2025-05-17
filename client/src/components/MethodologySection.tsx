@@ -24,25 +24,25 @@ const MethodologySection = () => {
             {/* Top row with three sections */}
             <div className="grid md:grid-cols-3 divide-x divide-blue-100">
               {/* DEFINE */}
-              <div className="p-6 md:p-8 hover:bg-blue-50/50 transition-colors duration-300">
-                <h3 className="font-heading font-bold text-xl text-primary text-center">DEFINE</h3>
-                <p className="mt-3 text-foreground/80 leading-relaxed text-center">
+              <div className="p-8 hover:bg-blue-50/50 transition-colors duration-300">
+                <h3 className="font-heading font-bold text-xl text-primary text-center mb-4">DEFINE</h3>
+                <p className="text-foreground/80 leading-relaxed text-center">
                   Breaking down complex LSAT questions into clear, actionable patterns.
                 </p>
               </div>
               
               {/* DEMONSTRATE */}
-              <div className="p-6 md:p-8 hover:bg-blue-50/50 transition-colors duration-300">
-                <h3 className="font-heading font-bold text-xl text-primary text-center">DEMONSTRATE</h3>
-                <p className="mt-3 text-foreground/80 leading-relaxed text-center">
+              <div className="p-8 hover:bg-blue-50/50 transition-colors duration-300">
+                <h3 className="font-heading font-bold text-xl text-primary text-center mb-4">DEMONSTRATE</h3>
+                <p className="text-foreground/80 leading-relaxed text-center">
                   Showing strategies within a personalized learning path targeting your unique needs.
                 </p>
               </div>
               
               {/* DUPLICATE */}
-              <div className="p-6 md:p-8 hover:bg-blue-50/50 transition-colors duration-300">
-                <h3 className="font-heading font-bold text-xl text-primary text-center">DUPLICATE</h3>
-                <p className="mt-3 text-foreground/80 leading-relaxed text-center">
+              <div className="p-8 hover:bg-blue-50/50 transition-colors duration-300">
+                <h3 className="font-heading font-bold text-xl text-primary text-center mb-4">DUPLICATE</h3>
+                <p className="text-foreground/80 leading-relaxed text-center">
                   Empowering you to independently use this approach for consistent success.
                 </p>
               </div>
@@ -65,110 +65,89 @@ const MethodologySection = () => {
             {isExpanded && (
               <div className="grid md:grid-cols-3 divide-x divide-blue-100 border-t border-blue-100">
                 {/* DEFINE content */}
-                <div className="p-6 md:p-8 bg-blue-50/30">
-                  <h4 className="font-heading text-primary font-semibold mb-5 text-center">The DEFINE Process</h4>
+                <div className="p-8">
+                  <h4 className="font-heading text-primary font-semibold mb-6 text-center">The DEFINE Process</h4>
                   
-                  <ul className="space-y-4">
-                    <li className="flex">
-                      <span className="font-semibold mr-2 text-primary">Name it</span>
-                      <span>– Clearly label the concept/technique.</span>
-                    </li>
-                    <li className="flex">
-                      <span className="font-semibold mr-2 text-primary">Describe it</span>
-                      <span>– Offer a concise, jargon-free explanation.</span>
-                    </li>
-                    <li className="flex">
-                      <span className="font-semibold mr-2 text-primary">Contextualize it</span>
-                      <span>– Explain when/why it matters or appears.</span>
-                    </li>
-                    <li className="flex">
-                      <span className="font-semibold mr-2 text-primary">Deconstruct it</span>
-                      <span>– Break it into essential features or steps.</span>
-                    </li>
-                  </ul>
+                  <div className="grid grid-cols-[100px_1fr] gap-y-4">
+                    <div className="font-semibold text-primary">Name it</div>
+                    <div>– Clearly label the concept/technique.</div>
+                    
+                    <div className="font-semibold text-primary">Describe it</div>
+                    <div>– Offer a concise, jargon-free explanation.</div>
+                    
+                    <div className="font-semibold text-primary">Contextualize it</div>
+                    <div>– Explain when/why it matters or appears.</div>
+                    
+                    <div className="font-semibold text-primary">Deconstruct it</div>
+                    <div>– Break it into essential features or steps.</div>
+                  </div>
                   
-                  <div className="mt-8 bg-white p-5 rounded-lg border border-blue-100 h-48 flex flex-col justify-between">
-                    <div>
-                      <p className="font-semibold text-primary mb-2">Example:</p>
-                      <p className="mb-1"><span className="font-semibold">Name:</span> Flaw Questions</p>
-                      <p className="mb-1"><span className="font-semibold">Describe:</span> These ask what mistake an argument makes.</p>
-                      <p className="mb-1"><span className="font-semibold">Context:</span> Common in Logical Reasoning, tests critical reading.</p>
-                      <p><span className="font-semibold">Deconstruct:</span> Flaws include equivocation, correlation-causation, etc.</p>
-                    </div>
+                  <div className="mt-6 bg-white p-5 rounded-lg border border-blue-100 h-[200px]">
+                    <p className="font-semibold text-primary mb-3">Example:</p>
+                    <p className="mb-2"><span className="font-semibold">Name:</span> Flaw Questions</p>
+                    <p className="mb-2"><span className="font-semibold">Describe:</span> These ask what mistake an argument makes.</p>
+                    <p className="mb-2"><span className="font-semibold">Context:</span> Common in Logical Reasoning, tests critical reading.</p>
+                    <p><span className="font-semibold">Deconstruct:</span> Flaws include equivocation, correlation-causation, etc.</p>
                   </div>
                 </div>
                 
                 {/* DEMONSTRATE content */}
-                <div className="p-6 md:p-8 bg-blue-50/30">
-                  <h4 className="font-heading text-primary font-semibold mb-5 text-center">The DEMONSTRATE Process</h4>
+                <div className="p-8">
+                  <h4 className="font-heading text-primary font-semibold mb-6 text-center">The DEMONSTRATE Process</h4>
                   
-                  <ul className="space-y-4">
-                    <li className="flex">
-                      <span className="font-semibold mr-2 text-primary">Walkthrough</span>
-                      <span>– Apply the concept with full narration of thought process.</span>
-                    </li>
-                    <li className="flex">
-                      <span className="font-semibold mr-2 text-primary">Highlight decision points</span>
-                      <span>– Show when and why key choices are made.</span>
-                    </li>
-                    <li className="flex">
-                      <span className="font-semibold mr-2 text-primary">Compare with errors</span>
-                      <span>– Show "bad" approaches to reinforce correct ones.</span>
-                    </li>
-                    <li className="flex">
-                      <span className="font-semibold mr-2 text-primary">Encourage observation</span>
-                      <span>– Ask you to watch for specific markers as we go.</span>
-                    </li>
-                  </ul>
+                  <div className="grid grid-cols-[100px_1fr] gap-y-4">
+                    <div className="font-semibold text-primary">Walkthrough</div>
+                    <div>– Apply the concept with full narration of thought process.</div>
+                    
+                    <div className="font-semibold text-primary">Highlight decision points</div>
+                    <div>– Show when and why key choices are made.</div>
+                    
+                    <div className="font-semibold text-primary">Compare with errors</div>
+                    <div>– Show "bad" approaches to reinforce correct ones.</div>
+                    
+                    <div className="font-semibold text-primary">Encourage observation</div>
+                    <div>– Ask you to watch for specific markers as we go.</div>
+                  </div>
                   
-                  <div className="mt-8 bg-white p-5 rounded-lg border border-blue-100 h-48 flex flex-col justify-between">
-                    <div>
-                      <p className="font-semibold text-primary mb-2">Example:</p>
-                      <p>
-                        Walk through a Flaw Question: read the stimulus, identify conclusion/premise, flag reasoning gap, name the flaw, explain why each wrong answer fails, and provide clear justification for the correct one.
-                      </p>
-                    </div>
+                  <div className="mt-6 bg-white p-5 rounded-lg border border-blue-100 h-[200px]">
+                    <p className="font-semibold text-primary mb-3">Example:</p>
+                    <p>
+                      Walk through a Flaw Question: read the stimulus, identify conclusion/premise, flag reasoning gap, name the flaw, explain why each wrong answer fails, and provide clear justification for the correct one.
+                    </p>
                   </div>
                 </div>
                 
                 {/* DUPLICATE content */}
-                <div className="p-6 md:p-8 bg-blue-50/30">
-                  <h4 className="font-heading text-primary font-semibold mb-5 text-center">The DUPLICATE Process</h4>
+                <div className="p-8">
+                  <h4 className="font-heading text-primary font-semibold mb-6 text-center">The DUPLICATE Process</h4>
                   
-                  <ul className="space-y-4">
-                    <li className="flex">
-                      <span className="font-semibold mr-2 text-primary">Guided repetition</span>
-                      <span>– Start with scaffolding: hints and checklists.</span>
-                    </li>
-                    <li className="flex">
-                      <span className="font-semibold mr-2 text-primary">Independent attempt</span>
-                      <span>– You complete the full task solo.</span>
-                    </li>
-                    <li className="flex">
-                      <span className="font-semibold mr-2 text-primary">Feedback loop</span>
-                      <span>– Review process and identify correct moves/missteps.</span>
-                    </li>
-                    <li className="flex">
-                      <span className="font-semibold mr-2 text-primary">Refine and repeat</span>
-                      <span>– Target weak points and reinforce strengths.</span>
-                    </li>
-                  </ul>
+                  <div className="grid grid-cols-[100px_1fr] gap-y-4">
+                    <div className="font-semibold text-primary">Guided repetition</div>
+                    <div>– Start with scaffolding: hints and checklists.</div>
+                    
+                    <div className="font-semibold text-primary">Independent attempt</div>
+                    <div>– You complete the full task solo.</div>
+                    
+                    <div className="font-semibold text-primary">Feedback loop</div>
+                    <div>– Review process and identify correct moves/missteps.</div>
+                    
+                    <div className="font-semibold text-primary">Refine and repeat</div>
+                    <div>– Target weak points and reinforce strengths.</div>
+                  </div>
                   
-                  <div className="mt-8 bg-white p-5 rounded-lg border border-blue-100 h-48 flex flex-col justify-between">
-                    <div>
-                      <p className="font-semibold text-primary mb-2">Example:</p>
-                      <p>
-                        You do 3 Flaw questions in front of me. Then we review:
-                      </p>
-                      <ul className="list-disc pl-5 mt-2">
-                        <li>Did you label conclusion/premise?</li>
-                        <li>Did you correctly name the flaw?</li>
-                        <li>Did you effectively remove incorrect answers?</li>
-                      </ul>
-                      <p className="mt-2">
-                        Then we use the feedback to guide your upcoming practice.
-                      </p>
-                    </div>
+                  <div className="mt-6 bg-white p-5 rounded-lg border border-blue-100 h-[200px] flex flex-col">
+                    <p className="font-semibold text-primary mb-3">Example:</p>
+                    <p>
+                      You do 3 Flaw questions in front of me. Then we review:
+                    </p>
+                    <ul className="list-disc pl-5 mt-2 mb-2">
+                      <li>Did you label conclusion/premise?</li>
+                      <li>Did you correctly name the flaw?</li>
+                      <li>Did you effectively remove incorrect answers?</li>
+                    </ul>
+                    <p>
+                      Then we use the feedback to guide your upcoming practice.
+                    </p>
                   </div>
                 </div>
               </div>
