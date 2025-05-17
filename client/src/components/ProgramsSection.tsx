@@ -2,50 +2,49 @@ const ProgramsSection = () => {
   const programs = [
     {
       title: "Targeted Strategy Session",
-      description: "Focus on specific sections or question types causing difficulty",
-      price: "$299",
+      description: "Focused diagnostic and initial strategy session",
+      price: "$200",
       duration: "2 hours",
       features: [
-        { included: true, text: "2 hours of 1-on-1 instruction" },
-        { included: true, text: "Targeted diagnostic assessment" },
-        { included: true, text: "Section-specific strategy guide" },
-        { included: true, text: "48-hour follow-up email support" },
-        { included: false, text: "Comprehensive study plan" },
-        { included: false, text: "Practice test reviews" }
+        { included: true, text: "Focused Diagnostic & Initial Strategy Session" },
+        { included: true, text: "Section-Specific Strategy Discussion" },
+        { included: true, text: "Personalized Study Plan Outline" },
+        { included: false, text: "Practice test reviews" },
+        { included: false, text: "Question database access" },
+        { included: false, text: "Email & text support" }
       ],
       buttonText: "Book a Session",
       highlighted: false
     },
     {
       title: "Standard Prep Program",
-      description: "Comprehensive preparation for 5-15 point improvements",
-      price: "$1,199",
+      description: "Ideal for students targeting 5-10 point improvements",
+      price: "$700",
       duration: "8 hours",
       features: [
-        { included: true, text: "8 hours of 1-on-1 instruction" },
-        { included: true, text: "Full diagnostic assessment" },
-        { included: true, text: "Personalized study plan" },
-        { included: true, text: "1 full practice test review" },
-        { included: true, text: "Question database access" },
-        { included: true, text: "Email support between sessions" }
+        { included: true, text: "8 Hours of Comprehensive Tutoring" },
+        { included: true, text: "Question Explanation Database Access" },
+        { included: true, text: "One Practice Test Review Session", bonus: true },
+        { included: true, text: "Email & Text Support" },
+        { included: true, text: "Logical Reasoning Fundamentals" },
+        { included: true, text: "Reading Comprehension Strategy" }
       ],
       buttonText: "Explore Program",
       highlighted: false
     },
     {
       title: "Premium Mastery Program",
-      description: "Intensive preparation for 12+ point improvements or 170+ scores",
-      price: "$3,599",
+      description: "Intensive preparation for 10+ point improvements or 170+ scores",
+      price: "$1,799",
       duration: "24 hours",
       features: [
-        { included: true, text: "24 hours of 1-on-1 instruction" },
-        { included: true, text: "Advanced diagnostic assessment" },
-        { included: true, text: "Comprehensive custom study plan" },
-        { included: true, text: "3 full practice test reviews" },
-        { included: true, text: "Premium question database access" },
-        { included: true, text: "Priority email & text support" },
-        { included: true, text: "Advanced strategy materials" },
-        { included: true, text: "Application guidance session" }
+        { included: true, text: "24 Hours of Elite Tutoring" },
+        { included: true, text: "Free Full Test Diagnostic Assessment" },
+        { included: true, text: "Three One-Hour Practice Test Review Sessions", bonus: true },
+        { included: true, text: "Full Question Explanation Database Access", bonus: true },
+        { included: true, text: "Custom Strategy Materials" },
+        { included: true, text: "Priority in New Material Creation/Selection" },
+        { included: true, text: "Priority Email & Text Support" }
       ],
       buttonText: "Book a Consultation",
       highlighted: true
@@ -114,7 +113,10 @@ const ProgramsSection = () => {
                       ) : (
                         <i className="fas fa-times mt-1 mr-3"></i>
                       )}
-                      <span>{feature.text}</span>
+                      <span>
+                        {feature.text}
+                        {feature.bonus && <span className="ml-2 text-accent font-bold">+ BONUS</span>}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -137,11 +139,14 @@ const ProgramsSection = () => {
         <div className="text-center bg-muted/50 rounded-lg p-6 max-w-2xl mx-auto">
           <p className="text-foreground mb-2">
             <i className="fas fa-info-circle mr-2 text-primary"></i> 
-            <span className="font-semibold">Financing options available.</span> Spread program costs over multiple payments.
+            <span className="font-semibold">Financing options available during checkout.</span>
           </p>
-          <a href="#" className="text-primary hover:text-accent font-semibold underline">
-            Learn more about payment plans
-          </a>
+          <button 
+            onClick={scrollToConsultation}
+            className="text-primary hover:text-accent font-semibold underline"
+          >
+            To learn more about custom plans, please contact me.
+          </button>
         </div>
       </div>
     </section>

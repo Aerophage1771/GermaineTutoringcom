@@ -1,0 +1,87 @@
+I. Targeted Strategy Session
+
+    Price: $200
+
+    Duration: 2 Hours
+
+    Features to Update/Add:
+
+        Focused Diagnostic & Initial Strategy Session 
+
+        Section-Specific Strategy Discussion
+
+        Personalized Study Plan Outline
+
+II. Standard Prep Program
+
+    Price: $700
+
+    Duration: 8 Hours
+
+    Target Audience Description: Ideal for students targeting 5-10 point improvements.
+
+    Features to Update/Add:
+
+        8 Hours of Comprehensive Tutoring
+
+        Question Explanation Database Access
+
+        One Additional Practice Test Review Session (+ BONUS)
+
+        Email & Text Support
+
+        (Keep relevant core features like "Reading Comprehension Strategy," "Logical Reasoning Fundamentals," "Access to Proprietary Drills" if still applicable, or update their names based on previous "Why My Method Works" revisions)
+
+III. Premium Mastery Program
+
+    Price: $1799
+
+    Duration: 24 Hours
+
+    Target Audience Description: Intensive preparation for those targeting 10+ point improvements or 170+ scores.
+
+    Features to Update/Add:
+
+        24 Hours of Elite Tutoring
+
+        Free Full Test Diagnostic Assessment (As specified)
+
+        Three Free One-Hour Practice Test Review Sessions (+ BONUS)
+
+        Full Question Explanation Database Access (+ BONUS)
+
+        Custom Strategy Materials
+
+        Priority in New Material Creation/Selection
+
+        Email & Text Support
+
+        (Remove: Application Guidance Session)
+
+        (Remove: "Advanced Strategy Materials" - replaced by "Custom...")
+
+        (Keep relevant core features if still applicable, or update their names)
+
+IV. Note Below Pricing Section
+
+    Replace current text with:
+    "Financing options available during checkout.
+    To learn more about custom plans, please contact me."
+    (The "contact me" should link to your contact form/section).
+
+Summary of Key Changes & Considerations:
+
+    Pricing: Updated for all three tiers.
+
+    Free Diagnostic: The "free breakdown for all those" is interpreted as the "Targeted Strategy Session" being the initial paid diagnostic deep-dive, while the "Premium Mastery Program" also explicitly includes a "Free Full Test Diagnostic Assessment" as a listed feature. If you offer a completely free (no charge) initial consultation before any package, that should be a separate call to action on the site (e.g., "Book a Free Consultation").
+
+    Bonus Indicators: Added (+ BONUS) where requested. This can be implemented visually with an icon or distinct text styling.
+
+    Target Audience: Clarified for Standard and Premium programs.
+
+    Email/Text Support: Standardized to "Email & Text Support" for both Standard and Premium, without specific time restrictions mentioned.
+
+    Materials for Premium: Changed to "Custom Strategy Materials" and "Priority in New Material Creation/Selection."
+
+    Removed Features: Application Guidance Session from Premium.
+
