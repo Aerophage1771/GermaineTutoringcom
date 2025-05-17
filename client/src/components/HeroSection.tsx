@@ -1,11 +1,45 @@
+import { useEffect } from 'react';
+
+// Define Calendly types 
+declare global {
+  interface Window {
+    Calendly?: {
+      initPopupWidget: (options: { url: string }) => void;
+    }
+  }
+}
+
 const HeroSection = () => {
-  const scrollToConsultation = () => {
-    const element = document.getElementById('consultation');
-    if (element) {
-      window.scrollTo({
-        top: element.offsetTop - 80,
-        behavior: 'smooth'
+  // Add Calendly script to the document when component mounts
+  useEffect(() => {
+    // Check if Calendly script already exists
+    if (!document.getElementById('calendly-script')) {
+      // Add Calendly CSS
+      const link = document.createElement('link');
+      link.href = 'https://assets.calendly.com/assets/external/widget.css';
+      link.rel = 'stylesheet';
+      document.head.appendChild(link);
+      
+      // Add Calendly JS
+      const script = document.createElement('script');
+      script.id = 'calendly-script';
+      script.src = 'https://assets.calendly.com/assets/external/widget.js';
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
+  
+  const openCalendly = (e: React.MouseEvent) => {
+    e.preventDefault();
+    // Check if Calendly is loaded
+    if (window.Calendly) {
+      window.Calendly.initPopupWidget({
+        url: 'https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=d39e17'
       });
+    } else {
+      console.error('Calendly not loaded yet');
+      // Fallback - open directly
+      window.open('https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=d39e17', '_blank');
     }
   };
 
@@ -20,7 +54,7 @@ const HeroSection = () => {
             Navigate the LSAT with confidence using straightforward techniques designed for every learning style.
           </p>
           <button 
-            onClick={scrollToConsultation}
+            onClick={openCalendly}
             className="inline-block bg-accent hover:bg-accent/90 text-primary font-bold text-lg px-8 py-4 rounded-md shadow-lg transition-all transform hover:scale-105"
           >
             Schedule Your Free Consultation
