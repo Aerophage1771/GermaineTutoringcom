@@ -52,11 +52,11 @@ const ProgramsSection = () => {
   const programs: Program[] = [
     {
       title: "2-Hour LSAT Trial Session",
-      description: "Discounted first session from our 24-Hour LSAT Mastery Program. Experience our methodology at half price.",
+      description: "Discounted first session from our 24-Hour LSAT Mastery Program. Experience our methodology at a special introductory rate.",
       price: "$75",
       duration: "2 hours",
       hourly: "$37.50",
-      savings: "(50% off)",
+      savings: "(62.5% off $200)",
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 2 Hours" },
         { included: false, text: "Focused Diagnostic & Initial Strategy Session" },
