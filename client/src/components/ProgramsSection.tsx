@@ -51,12 +51,12 @@ const ProgramsSection = () => {
   }, []);
   const programs: Program[] = [
     {
-      title: "2-Hour LSAT Acceleration Session",
-      description: "Strategic session focused on rapidly improving performance and uncovering opportunities for growth on the LSAT",
-      price: "$199",
+      title: "2-Hour LSAT Trial Session",
+      description: "Discounted first session from our 24-Hour LSAT Mastery Program. Experience our methodology at half price.",
+      price: "$75",
       duration: "2 hours",
-      hourly: "$99.50",
-      savings: null,
+      hourly: "$37.50",
+      savings: "(50% off)",
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 2 Hours" },
         { included: false, text: "Focused Diagnostic & Initial Strategy Session" },
@@ -68,7 +68,7 @@ const ProgramsSection = () => {
         { included: true, text: "Email & Text Support" },
         { included: false, text: "Priority in New Material Creation/Selection" }
       ],
-      buttonText: "Purchase Session",
+      buttonText: "Start Trial",
       highlighted: false
     },
     {
@@ -179,7 +179,7 @@ const ProgramsSection = () => {
     console.log(`Button clicked for: ${programTitle}`);
     
     // Different actions based on program title
-    if (programTitle === "2-Hour LSAT Acceleration Session") {
+    if (programTitle === "2-Hour LSAT Trial Session") {
       openTwoHourCalendly(new MouseEvent('click') as any);
     } else if (programTitle === "8-Hour LSAT Elevation Course") {
       open8HourCalendly(new MouseEvent('click') as any);
