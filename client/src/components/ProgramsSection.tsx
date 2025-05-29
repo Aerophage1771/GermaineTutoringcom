@@ -51,12 +51,12 @@ const ProgramsSection = () => {
   }, []);
   const programs: Program[] = [
     {
-      title: "2-Hour LSAT Trial Session",
-      description: "Discounted first LSAT session. Experience my methodology at a special one-time introductory rate.",
-      price: "$75",
+      title: "2-Hour LSAT Acceleration Session",
+      description: "Strategic session focused on rapidly improving performance and uncovering opportunities for growth on the LSAT",
+      price: "$199",
       duration: "2 hours",
-      hourly: "$37.50",
-      savings: "(62.5% savings)",
+      hourly: "$99.50",
+      savings: null,
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 2 Hours" },
         { included: false, text: "Focused Diagnostic & Initial Strategy Session" },
@@ -68,7 +68,7 @@ const ProgramsSection = () => {
         { included: true, text: "Email & Text Support" },
         { included: false, text: "Priority in New Material Creation/Selection" }
       ],
-      buttonText: "Schedule Trial",
+      buttonText: "Purchase Session",
       highlighted: false
     },
     {
@@ -129,18 +129,18 @@ const ProgramsSection = () => {
     }
   };
 
-  // Open Calendly for the 2-hour trial session
+  // Open Calendly for the 2-hour program
   const openTwoHourCalendly = (e: React.MouseEvent) => {
     e.preventDefault();
     // Check if Calendly is loaded
     if (window.Calendly) {
       window.Calendly.initPopupWidget({
-        url: 'https://calendly.com/germaine-washington-tutoring/2-hour-lsat-trial-session'
+        url: 'https://calendly.com/germaine-washington-tutoring/2-hour-lsat-tutoring'
       });
     } else {
       console.error('Calendly not loaded yet');
       // Fallback - open directly
-      window.open('https://calendly.com/germaine-washington-tutoring/2-hour-lsat-trial-session', '_blank');
+      window.open('https://calendly.com/germaine-washington-tutoring/2-hour-lsat-tutoring', '_blank');
     }
   };
   
@@ -179,7 +179,7 @@ const ProgramsSection = () => {
     console.log(`Button clicked for: ${programTitle}`);
     
     // Different actions based on program title
-    if (programTitle === "2-Hour LSAT Trial Session") {
+    if (programTitle === "2-Hour LSAT Acceleration Session") {
       openTwoHourCalendly(new MouseEvent('click') as any);
     } else if (programTitle === "8-Hour LSAT Elevation Course") {
       open8HourCalendly(new MouseEvent('click') as any);
@@ -226,20 +226,9 @@ const ProgramsSection = () => {
 
                 <div className="flex flex-col mb-6">
                   <div className="flex items-baseline">
-                    {program.title === "2-Hour LSAT Trial Session" ? (
-                      <>
-                        <span className="text-foreground/60 font-heading font-bold text-2xl line-through mr-3">
-                          $200
-                        </span>
-                        <span className={`${program.highlighted ? "text-accent" : "text-primary"} font-heading font-bold text-4xl`}>
-                          {program.price}
-                        </span>
-                      </>
-                    ) : (
-                      <span className={`${program.highlighted ? "text-accent" : "text-primary"} font-heading font-bold text-4xl`}>
-                        {program.price}
-                      </span>
-                    )}
+                    <span className={`${program.highlighted ? "text-accent" : "text-primary"} font-heading font-bold text-4xl`}>
+                      {program.price}
+                    </span>
                     <span className={`${program.highlighted ? "text-white/70" : "text-foreground/70"} ml-2 text-sm`}> {/* Made duration text-sm */}
                       / {program.duration}
                     </span>
