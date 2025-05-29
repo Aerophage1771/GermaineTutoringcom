@@ -226,9 +226,20 @@ const ProgramsSection = () => {
 
                 <div className="flex flex-col mb-6">
                   <div className="flex items-baseline">
-                    <span className={`${program.highlighted ? "text-accent" : "text-primary"} font-heading font-bold text-4xl`}>
-                      {program.price}
-                    </span>
+                    {program.title === "2-Hour LSAT Trial Session" ? (
+                      <>
+                        <span className="text-foreground/60 font-heading font-bold text-2xl line-through mr-3">
+                          $200
+                        </span>
+                        <span className={`${program.highlighted ? "text-accent" : "text-primary"} font-heading font-bold text-4xl`}>
+                          {program.price}
+                        </span>
+                      </>
+                    ) : (
+                      <span className={`${program.highlighted ? "text-accent" : "text-primary"} font-heading font-bold text-4xl`}>
+                        {program.price}
+                      </span>
+                    )}
                     <span className={`${program.highlighted ? "text-white/70" : "text-foreground/70"} ml-2 text-sm`}> {/* Made duration text-sm */}
                       / {program.duration}
                     </span>
