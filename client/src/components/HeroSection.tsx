@@ -34,12 +34,12 @@ const HeroSection = () => {
     // Check if Calendly is loaded
     if (window.Calendly) {
       window.Calendly.initPopupWidget({
-        url: 'https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=d39e17'
+        url: 'https://calendly.com/germaine-washington-tutoring/2-hour-lsat-trial-session'
       });
     } else {
       console.error('Calendly not loaded yet');
       // Fallback - open directly
-      window.open('https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=d39e17', '_blank');
+      window.open('https://calendly.com/germaine-washington-tutoring/2-hour-lsat-trial-session', '_blank');
     }
   };
 
@@ -57,7 +57,7 @@ const HeroSection = () => {
             onClick={openCalendly}
             className="inline-block bg-accent hover:bg-accent/90 text-primary font-bold text-lg px-8 py-4 rounded-md shadow-lg transition-all transform hover:scale-105"
           >
-            Schedule Your Free Consultation
+            Schedule Your Trial Session
           </button>
         </div>
         
