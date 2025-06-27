@@ -104,12 +104,11 @@ const Header = () => {
           >
             Student Dashboard
           </button>
-          <button 
-            onClick={() => window.open('#', '_blank')} 
-            className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors"
-          >
-            Blog
-          </button>
+          <Link href="/blog">
+            <button className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
+              Blog
+            </button>
+          </Link>
           <button 
             onClick={openCalendly} 
             className="bg-accent hover:bg-accent/90 text-white px-5 py-2 rounded font-semibold text-sm lg:text-base transition-colors"
@@ -146,12 +145,14 @@ const Header = () => {
           >
             Student Dashboard
           </button>
-          <button 
-            onClick={() => window.open('#', '_blank')} 
-            className="text-foreground hover:text-primary font-medium transition-colors text-left"
-          >
-            Blog
-          </button>
+          <Link href="/blog">
+            <button 
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-foreground hover:text-primary font-medium transition-colors text-left"
+            >
+              Blog
+            </button>
+          </Link>
           <button 
             onClick={openCalendly} 
             className="bg-accent hover:bg-accent/90 text-white px-4 py-2 rounded font-semibold text-center transition-colors"
