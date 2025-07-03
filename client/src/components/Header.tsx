@@ -80,24 +80,21 @@ const Header = () => {
         
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-6 items-center">
-          <button 
-            onClick={() => scrollToSection('methodology')} 
-            className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors"
-          >
-            My Methodology
-          </button>
-          <button 
-            onClick={() => scrollToSection('programs')} 
-            className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors"
-          >
-            Tutoring Programs
-          </button>
-          <button 
-            onClick={() => scrollToSection('results')} 
-            className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors"
-          >
-            Student Results
-          </button>
+          <Link href="/methodology">
+            <button className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
+              My Methodology
+            </button>
+          </Link>
+          <Link href="/programs">
+            <button className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
+              Tutoring Programs
+            </button>
+          </Link>
+          <Link href="/results">
+            <button className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
+              Student Results
+            </button>
+          </Link>
           <button 
             onClick={() => window.open('#', '_blank')} 
             className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors"
@@ -121,24 +118,30 @@ const Header = () => {
       {/* Mobile Navigation */}
       <nav className={`${mobileMenuOpen ? 'block' : 'hidden'} bg-white w-full px-4 py-4 shadow-lg md:hidden`}>
         <div className="flex flex-col space-y-4">
-          <button 
-            onClick={() => scrollToSection('methodology')} 
-            className="text-foreground hover:text-primary font-medium transition-colors text-left"
-          >
-            My Methodology
-          </button>
-          <button 
-            onClick={() => scrollToSection('programs')} 
-            className="text-foreground hover:text-primary font-medium transition-colors text-left"
-          >
-            Tutoring Programs
-          </button>
-          <button 
-            onClick={() => scrollToSection('results')} 
-            className="text-foreground hover:text-primary font-medium transition-colors text-left"
-          >
-            Student Results
-          </button>
+          <Link href="/methodology">
+            <button 
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-foreground hover:text-primary font-medium transition-colors text-left"
+            >
+              My Methodology
+            </button>
+          </Link>
+          <Link href="/programs">
+            <button 
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-foreground hover:text-primary font-medium transition-colors text-left"
+            >
+              Tutoring Programs
+            </button>
+          </Link>
+          <Link href="/results">
+            <button 
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-foreground hover:text-primary font-medium transition-colors text-left"
+            >
+              Student Results
+            </button>
+          </Link>
           <button 
             onClick={() => window.open('#', '_blank')} 
             className="text-foreground hover:text-primary font-medium transition-colors text-left"

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { Link } from 'wouter';
 
 // Define Calendly types
 declare global {
@@ -59,24 +60,21 @@ const Footer = () => {
           <div>
             <h3 className="font-heading font-bold text-lg mb-4">Quick Links</h3>
             <nav className="flex flex-col space-y-2">
-              <button 
-                onClick={() => document.getElementById('methodology')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                className="text-white/70 hover:text-accent transition-colors text-left"
-              >
-                My Methodology
-              </button>
-              <button 
-                onClick={() => document.getElementById('programs')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                className="text-white/70 hover:text-accent transition-colors text-left"
-              >
-                Tutoring Programs
-              </button>
-              <button 
-                onClick={() => document.getElementById('results')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                className="text-white/70 hover:text-accent transition-colors text-left"
-              >
-                Student Results
-              </button>
+              <Link href="/methodology">
+                <button className="text-white/70 hover:text-accent transition-colors text-left">
+                  My Methodology
+                </button>
+              </Link>
+              <Link href="/programs">
+                <button className="text-white/70 hover:text-accent transition-colors text-left">
+                  Tutoring Programs
+                </button>
+              </Link>
+              <Link href="/results">
+                <button className="text-white/70 hover:text-accent transition-colors text-left">
+                  Student Results
+                </button>
+              </Link>
 
               <button 
                 onClick={openCalendly}
