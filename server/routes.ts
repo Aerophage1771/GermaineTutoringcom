@@ -4,7 +4,80 @@ import { storage } from "./storage";
 import { insertSubscriberSchema, insertConsultationSchema } from "@shared/schema";
 import { getAllPosts, getPostBySlug } from "./blog";
 
+// Extend the session interface to include user information
+declare module 'express-session' {
+  interface SessionData {
+    userId?: number;
+    user?: {
+      id: number;
+      username: string;
+      email: string;
+    };
+  }
+}
+
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Authentication routes
+  app.post("/api/auth/login", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      
+      if (!email || !password) {
+        return res.status(400).json({ message: "Email and password are required" });
+      }
+
+      const user = await storage.getUserByEmail(email);
+      if (!user) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+
+      const isValidPassword = await storage.validatePassword(user, password);
+      if (!isValidPassword) {
+        return res.status(401).json({ message: "Invalid email or password" });
+      }
+
+      // Create session
+      req.session.userId = user.id;
+      req.session.user = {
+        id: user.id,
+        username: user.username,
+        email: user.email
+      };
+
+      res.json({
+        message: "Login successful",
+        user: {
+          id: user.id,
+          username: user.username,
+          email: user.email
+        }
+      });
+    } catch (error) {
+      console.error("Login error:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+  app.post("/api/auth/logout", (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        console.error("Logout error:", err);
+        return res.status(500).json({ message: "Could not log out" });
+      }
+      res.json({ message: "Logout successful" });
+    });
+  });
+
+  app.get("/api/auth/me", (req, res) => {
+    if (!req.session.userId || !req.session.user) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    
+    res.json({
+      user: req.session.user
+    });
+  });
+
   // Email subscription route
   app.post("/api/subscribe", async (req, res) => {
     try {

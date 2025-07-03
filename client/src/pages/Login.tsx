@@ -1,20 +1,62 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [, setLocation] = useLocation();
+  const { toast } = useToast();
+
+  const loginMutation = useMutation({
+    mutationFn: async (credentials: { email: string; password: string }) => {
+      const response = await apiRequest("/api/auth/login", "POST", credentials);
+      const data = await response.json();
+      return data as { 
+        message: string; 
+        user: { 
+          id: number; 
+          username: string; 
+          email: string; 
+        } 
+      };
+    },
+    onSuccess: (data) => {
+      toast({
+        title: "Login Successful",
+        description: `Welcome back, ${data.user.username}!`,
+      });
+      // Redirect to a student dashboard or home page
+      setLocation("/");
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Login Failed",
+        description: error.message || "Invalid email or password",
+        variant: "destructive",
+      });
+    }
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Login functionality would go here
-    console.log("Login attempt:", { email, password });
+    if (!email || !password) {
+      toast({
+        title: "Missing Information",
+        description: "Please enter both email and password",
+        variant: "destructive",
+      });
+      return;
+    }
+    loginMutation.mutate({ email, password });
   };
 
   return (
@@ -28,7 +70,7 @@ const Login = () => {
               <CardHeader className="text-center">
                 <CardTitle className="font-heading text-2xl text-primary">Student Portal</CardTitle>
                 <CardDescription>
-                  Access your personalized study materials and progress tracking
+                  Access your personalized study materials and question explanations
                 </CardDescription>
               </CardHeader>
               
@@ -62,9 +104,10 @@ const Login = () => {
                   
                   <Button 
                     type="submit" 
+                    disabled={loginMutation.isPending}
                     className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-2 px-4 rounded-lg transition-colors"
                   >
-                    Sign In
+                    {loginMutation.isPending ? "Signing In..." : "Sign In"}
                   </Button>
                 </form>
               </CardContent>
