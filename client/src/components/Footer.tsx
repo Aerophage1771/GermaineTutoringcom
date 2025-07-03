@@ -62,17 +62,12 @@ const Footer = () => {
             <nav className="flex flex-col space-y-2">
               <Link href="/methodology">
                 <button className="text-white/70 hover:text-accent transition-colors text-left">
-                  My Methodology
+                  Methodology & Results
                 </button>
               </Link>
               <Link href="/programs">
                 <button className="text-white/70 hover:text-accent transition-colors text-left">
                   Tutoring Programs
-                </button>
-              </Link>
-              <Link href="/results">
-                <button className="text-white/70 hover:text-accent transition-colors text-left">
-                  Student Results
                 </button>
               </Link>
 

@@ -80,9 +80,14 @@ const Header = () => {
         
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-6 items-center">
+          <Link href="/">
+            <button className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
+              Home
+            </button>
+          </Link>
           <Link href="/methodology">
             <button className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
-              My Methodology
+              Methodology & Results
             </button>
           </Link>
           <Link href="/programs">
@@ -90,27 +95,22 @@ const Header = () => {
               Tutoring Programs
             </button>
           </Link>
-          <Link href="/results">
+          <Link href="/blog">
             <button className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
-              Student Results
+              LSAT Blog
             </button>
           </Link>
           <button 
             onClick={() => window.open('#', '_blank')} 
-            className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors"
+            className="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-5 rounded-lg transition-colors text-sm lg:text-base border-2 border-primary"
           >
-            Student Dashboard
+            Student Log-In
           </button>
-          <Link href="/blog">
-            <button className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
-              Blog
-            </button>
-          </Link>
           <button 
             onClick={openCalendly} 
-            className="bg-accent hover:bg-accent/90 text-white px-5 py-2 rounded font-semibold text-sm lg:text-base transition-colors"
+            className="bg-accent hover:bg-accent/90 text-primary font-bold px-5 py-2 rounded-lg transition-colors text-sm lg:text-base"
           >
-            Book Consultation
+            Schedule Consultation
           </button>
         </nav>
       </div>
@@ -118,12 +118,20 @@ const Header = () => {
       {/* Mobile Navigation */}
       <nav className={`${mobileMenuOpen ? 'block' : 'hidden'} bg-white w-full px-4 py-4 shadow-lg md:hidden`}>
         <div className="flex flex-col space-y-4">
+          <Link href="/">
+            <button 
+              onClick={() => setMobileMenuOpen(false)}
+              className="text-foreground hover:text-primary font-medium transition-colors text-left"
+            >
+              Home
+            </button>
+          </Link>
           <Link href="/methodology">
             <button 
               onClick={() => setMobileMenuOpen(false)}
               className="text-foreground hover:text-primary font-medium transition-colors text-left"
             >
-              My Methodology
+              Methodology & Results
             </button>
           </Link>
           <Link href="/programs">
@@ -134,33 +142,25 @@ const Header = () => {
               Tutoring Programs
             </button>
           </Link>
-          <Link href="/results">
-            <button 
-              onClick={() => setMobileMenuOpen(false)}
-              className="text-foreground hover:text-primary font-medium transition-colors text-left"
-            >
-              Student Results
-            </button>
-          </Link>
-          <button 
-            onClick={() => window.open('#', '_blank')} 
-            className="text-foreground hover:text-primary font-medium transition-colors text-left"
-          >
-            Student Dashboard
-          </button>
           <Link href="/blog">
             <button 
               onClick={() => setMobileMenuOpen(false)}
               className="text-foreground hover:text-primary font-medium transition-colors text-left"
             >
-              Blog
+              LSAT Blog
             </button>
           </Link>
           <button 
-            onClick={openCalendly} 
-            className="bg-accent hover:bg-accent/90 text-white px-4 py-2 rounded font-semibold text-center transition-colors"
+            onClick={() => window.open('#', '_blank')} 
+            className="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-4 rounded-lg transition-colors text-left"
           >
-            Book Consultation
+            Student Log-In
+          </button>
+          <button 
+            onClick={openCalendly} 
+            className="bg-accent hover:bg-accent/90 text-primary font-bold px-4 py-2 rounded-lg text-center transition-colors"
+          >
+            Schedule Consultation
           </button>
         </div>
       </nav>

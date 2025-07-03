@@ -33,9 +33,11 @@ GermaineTutoring.com is a premium LSAT tutoring website for Germaine Washington,
 
 ### Core Pages
 1. **Home Page** (`/`) - Main landing page with hero, about, methodology, programs, results, CTA, and FAQ sections
-2. **Blog** (`/blog`) - LSAT strategy blog listing
-3. **Blog Post** (`/blog/:slug`) - Individual blog post pages with MDX support
-4. **404 Page** - Custom not found page
+2. **Methodology & Results** (`/methodology`, `/results`) - Consolidated page combining teaching methodology and student success stories
+3. **Tutoring Programs** (`/programs`) - Detailed program comparison and pricing information
+4. **Blog** (`/blog`) - LSAT strategy blog listing
+5. **Blog Post** (`/blog/:slug`) - Individual blog post pages with MDX support
+6. **404 Page** - Custom not found page
 
 ### Major Sections
 - **Hero Section**: Credibility establishment with key stats and CTA
@@ -108,6 +110,10 @@ GermaineTutoring.com is a premium LSAT tutoring website for Germaine Washington,
 ```
 Changelog:
 - July 03, 2025. Initial setup
+- July 03, 2025. Consolidated Methodology and Results pages into single cohesive page
+- July 03, 2025. Updated header navigation - changed "Student Dashboard" to "Student Log-In" with prominence
+- July 03, 2025. Added Home button to header navigation
+- July 03, 2025. Removed all references to "Logic Games" throughout the application
 ```
 
 ## User Preferences
