@@ -10,8 +10,7 @@ const MethodologyResults = () => {
       scoreAfter: 172,
       improvement: "+17",
       school: "Harvard Law School",
-      text: "I was skeptical about going back to the basics at first, but in our first session, Germaine broke down my last practice test and showed me exactly where some wrong assumptions I had were leading me to miss problems I was 99% the way there on. That let me get through the test so much faster!",
-      extendedText: "The personalized approach made all the difference. Within weeks, I was seeing patterns I'd never noticed before, and my timing improved dramatically. Germaine's confidence in my abilities pushed me to achieve a score I never thought possible."
+      text: "I was skeptical about going back to the basics at first, but in our first session, Germaine broke down my last practice test and showed me exactly where some wrong assumptions I had were leading me to miss problems I was 99% the way there on. That let me get through the test so much faster!"
     },
     {
       name: "Taylor M.",
@@ -19,8 +18,7 @@ const MethodologyResults = () => {
       scoreAfter: 173,
       improvement: "+14",
       school: "Yale Law School",
-      text: "I initially started just with LR but the RC was actually the place where I saw the most growth. Mr. Washington explained that I was actually rushing through the passages, but that ended up costing me time on the questions themselves. And when I slowed down my passages actually both got faster and I went from -7/-8 to like -2 in a month.",
-      extendedText: "The structured approach to RC was revolutionary for me. I learned to read strategically rather than just quickly, and the passage mapping techniques became second nature. My confidence on test day was completely different."
+      text: "I initially started just with LR but the RC was actually the place where I saw the most growth. Mr. Washington explained that I was actually rushing through the passages, but that ended up costing me time on the questions themselves. And when I slowed down my passages actually both got faster and I went from -7/-8 to like -2 in a month."
     },
     {
       name: "Jordan P.",
@@ -28,8 +26,7 @@ const MethodologyResults = () => {
       scoreAfter: 174,
       improvement: "+11",
       school: "Stanford Law School",
-      text: "Rockstar tutor. The strategies were nice and all but the best part was Germaine really made me feel like a score I never thought possible was in reach. His confidence in me was contagious and I actually kinda stopped dreading working on the LSAT :P",
-      extendedText: "Beyond the score improvement, Germaine helped me develop a mindset shift. The LSAT became a puzzle to solve rather than an obstacle to overcome. The personalized materials and constant support made the journey manageable and even enjoyable."
+      text: "Rockstar tutor. The strategies were nice and all but the best part was Germaine really made me feel like a score I never thought possible was in reach. His confidence in me was contagious and I actually kinda stopped dreading working on the LSAT :P"
     },
     {
       name: "Sarah L.",
@@ -37,8 +34,7 @@ const MethodologyResults = () => {
       scoreAfter: 168,
       improvement: "+17",
       school: "Columbia Law School",
-      text: "Starting with a 151 diagnostic, I thought 160s were a pipe dream. Germaine's systematic approach broke down every question type into learnable patterns. Six months later, I had options I never imagined.",
-      extendedText: "The journey wasn't always easy, but having a clear roadmap made it manageable. Each session built on the last, and I could see my progress week by week. The bonus practice test reviews were invaluable for reinforcing concepts."
+      text: "Starting with a 151 diagnostic, I thought 160s were a pipe dream. Germaine's systematic approach broke down every question type into learnable patterns. Six months later, I had options I never imagined."
     },
     {
       name: "Michael R.",
@@ -46,8 +42,7 @@ const MethodologyResults = () => {
       scoreAfter: 177,
       improvement: "+10",
       school: "University of Chicago",
-      text: "Already scoring in the 160s, I needed precision improvements. Germaine identified subtle weaknesses in my approach that were costing me those crucial final points. The difference between 167 and 177 changed everything.",
-      extendedText: "At the high score range, every point matters exponentially. Germaine's expertise at this level was evident - he knew exactly which small adjustments would yield results. The attention to detail was extraordinary."
+      text: "Already scoring in the 160s, I needed precision improvements. Germaine identified subtle weaknesses in my approach that were costing me those crucial final points. The difference between 167 and 177 changed everything."
     },
     {
       name: "Emily C.",
@@ -55,8 +50,7 @@ const MethodologyResults = () => {
       scoreAfter: 171,
       improvement: "+13",
       school: "NYU Law School",
-      text: "The 24-hour program transformed my approach completely. From struggling with timing to finishing sections with minutes to spare, the improvement was dramatic. Worth every penny.",
-      extendedText: "What impressed me most was how the strategies were tailored to my specific weaknesses. Analytical Reasoning went from my worst section to nearly perfect, and the confidence boost carried over to the other sections."
+      text: "The 24-hour program transformed my approach completely. From struggling with timing to finishing sections with minutes to spare, the improvement was dramatic. Worth every penny."
     }
   ];
 
@@ -311,58 +305,7 @@ const MethodologyResults = () => {
                   </div>
                 </div>
 
-                {/* Analytical Reasoning */}
-                <div className="bg-white rounded-xl shadow-md p-8 border-l-4 border-accent">
-                  <div className="flex items-start">
-                    <div className="w-16 h-16 bg-accent/20 rounded-lg flex items-center justify-center mr-6 flex-shrink-0">
-                      <i className="fas fa-puzzle-piece text-2xl text-primary"></i>
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-heading font-bold text-primary text-2xl mb-4">
-                        Analytical Reasoning: Systematic Solutions
-                      </h3>
-                      <p className="text-foreground leading-relaxed mb-6">
-                        The most learnable section when approached with proper diagramming and inference techniques.
-                      </p>
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div>
-                          <h4 className="font-semibold text-primary mb-2">Core Strategies</h4>
-                          <ul className="space-y-2 text-foreground/80">
-                            <li className="flex items-start">
-                              <i className="fas fa-chevron-right text-accent mt-1 mr-2 text-xs"></i>
-                              <span>Universal diagramming system</span>
-                            </li>
-                            <li className="flex items-start">
-                              <i className="fas fa-chevron-right text-accent mt-1 mr-2 text-xs"></i>
-                              <span>Inference chain methodology</span>
-                            </li>
-                            <li className="flex items-start">
-                              <i className="fas fa-chevron-right text-accent mt-1 mr-2 text-xs"></i>
-                              <span>Split-boarding techniques</span>
-                            </li>
-                          </ul>
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-primary mb-2">Expected Progress</h4>
-                          <ul className="space-y-2 text-foreground/80">
-                            <li className="flex items-start">
-                              <i className="fas fa-chart-up text-accent mt-1 mr-2"></i>
-                              <span>-0 to -2 achievable for most</span>
-                            </li>
-                            <li className="flex items-start">
-                              <i className="fas fa-chart-up text-accent mt-1 mr-2"></i>
-                              <span>8-9 minutes per set mastery</span>
-                            </li>
-                            <li className="flex items-start">
-                              <i className="fas fa-chart-up text-accent mt-1 mr-2"></i>
-                              <span>100% accuracy potential</span>
-                            </li>
-                          </ul>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+
               </div>
             </div>
           </div>
@@ -386,15 +329,14 @@ const MethodologyResults = () => {
                       <div className="ml-4 flex-1">
                         <h3 className="font-heading font-bold text-primary text-xl">{testimonial.name}</h3>
                         <p className="text-foreground/70 font-medium">{testimonial.scoreBefore} → {testimonial.scoreAfter}</p>
-                        <p className="text-accent text-sm font-semibold">{testimonial.school}</p>
                       </div>
                     </div>
                     <p className="text-foreground leading-relaxed mb-4">
                       "{testimonial.text}"
                     </p>
-                    <p className="text-foreground/70 text-sm italic">
-                      {testimonial.extendedText}
-                    </p>
+                    <div className="bg-accent/10 rounded-lg p-3 text-center">
+                      <p className="text-accent text-sm font-semibold">{testimonial.school}</p>
+                    </div>
                   </div>
                 ))}
               </div>

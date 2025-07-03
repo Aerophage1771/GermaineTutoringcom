@@ -9,6 +9,7 @@ import Blog from "@/pages/Blog";
 import BlogPost from "@/pages/BlogPost";
 import MethodologyResults from "@/pages/MethodologyResults";
 import Programs from "@/pages/Programs";
+import Login from "@/pages/Login";
 
 function Router() {
   return (
@@ -17,6 +18,7 @@ function Router() {
       <Route path="/methodology" component={MethodologyResults} />
       <Route path="/results" component={MethodologyResults} />
       <Route path="/programs" component={Programs} />
+      <Route path="/login" component={Login} />
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:slug" component={BlogPost} />
       <Route component={NotFound} />

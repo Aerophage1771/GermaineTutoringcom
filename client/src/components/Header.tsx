@@ -51,6 +51,10 @@ const Header = () => {
     setMobileMenuOpen(false);
   };
 
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
@@ -81,31 +85,41 @@ const Header = () => {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-6 items-center">
           <Link href="/">
-            <button className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
+            <button 
+              onClick={scrollToTop}
+              className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
               Home
             </button>
           </Link>
           <Link href="/methodology">
-            <button className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
+            <button 
+              onClick={scrollToTop}
+              className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
               Methodology & Results
             </button>
           </Link>
           <Link href="/programs">
-            <button className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
+            <button 
+              onClick={scrollToTop}
+              className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
               Tutoring Programs
             </button>
           </Link>
           <Link href="/blog">
-            <button className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
+            <button 
+              onClick={scrollToTop}
+              className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
               LSAT Blog
             </button>
           </Link>
-          <button 
-            onClick={() => window.open('#', '_blank')} 
-            className="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-5 rounded-lg transition-colors text-sm lg:text-base border-2 border-primary"
-          >
-            Student Log-In
-          </button>
+          <Link href="/login">
+            <button 
+              onClick={scrollToTop}
+              className="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-5 rounded-lg transition-colors text-sm lg:text-base border-2 border-primary"
+            >
+              Student Log-In
+            </button>
+          </Link>
           <button 
             onClick={openCalendly} 
             className="bg-accent hover:bg-accent/90 text-primary font-bold px-5 py-2 rounded-lg transition-colors text-sm lg:text-base"
@@ -120,7 +134,10 @@ const Header = () => {
         <div className="flex flex-col space-y-4">
           <Link href="/">
             <button 
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() => {
+                scrollToTop();
+                setMobileMenuOpen(false);
+              }}
               className="text-foreground hover:text-primary font-medium transition-colors text-left"
             >
               Home
@@ -128,7 +145,10 @@ const Header = () => {
           </Link>
           <Link href="/methodology">
             <button 
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() => {
+                scrollToTop();
+                setMobileMenuOpen(false);
+              }}
               className="text-foreground hover:text-primary font-medium transition-colors text-left"
             >
               Methodology & Results
@@ -136,7 +156,10 @@ const Header = () => {
           </Link>
           <Link href="/programs">
             <button 
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() => {
+                scrollToTop();
+                setMobileMenuOpen(false);
+              }}
               className="text-foreground hover:text-primary font-medium transition-colors text-left"
             >
               Tutoring Programs
@@ -144,18 +167,26 @@ const Header = () => {
           </Link>
           <Link href="/blog">
             <button 
-              onClick={() => setMobileMenuOpen(false)}
+              onClick={() => {
+                scrollToTop();
+                setMobileMenuOpen(false);
+              }}
               className="text-foreground hover:text-primary font-medium transition-colors text-left"
             >
               LSAT Blog
             </button>
           </Link>
-          <button 
-            onClick={() => window.open('#', '_blank')} 
-            className="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-4 rounded-lg transition-colors text-left"
-          >
-            Student Log-In
-          </button>
+          <Link href="/login">
+            <button 
+              onClick={() => {
+                scrollToTop();
+                setMobileMenuOpen(false);
+              }}
+              className="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-4 rounded-lg transition-colors text-left"
+            >
+              Student Log-In
+            </button>
+          </Link>
           <button 
             onClick={openCalendly} 
             className="bg-accent hover:bg-accent/90 text-primary font-bold px-4 py-2 rounded-lg text-center transition-colors"
