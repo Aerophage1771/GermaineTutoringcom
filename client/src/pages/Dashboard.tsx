@@ -146,8 +146,12 @@ const Dashboard = () => {
     return <div>Loading...</div>;
   }
 
-  const timeRemainingColor = getTimeRemainingColor(user.time_remaining);
-  const canSchedule = user.time_remaining > 0;
+  // Handle undefined time_remaining with default of 8 hours
+  const timeRemaining = user.time_remaining ?? 8;
+  const bonusTestTime = user.bonus_test_review_time ?? 0;
+  
+  const timeRemainingColor = getTimeRemainingColor(timeRemaining);
+  const canSchedule = timeRemaining > 0;
 
   return (
     <div className="min-h-screen bg-background">
@@ -174,13 +178,13 @@ const Dashboard = () => {
               </div>
               <div className="text-center">
                 <div className={`text-2xl font-bold ${timeRemainingColor}`}>
-                  {user.time_remaining.toFixed(1)}h
+                  {timeRemaining.toFixed(1)}h
                 </div>
                 <div className="text-sm text-muted-foreground">Time Remaining</div>
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-blue-600">
-                  {user.bonus_test_review_time.toFixed(1)}h
+                  {bonusTestTime.toFixed(1)}h
                 </div>
                 <div className="text-sm text-muted-foreground">Bonus Test-Review Time</div>
               </div>
