@@ -97,17 +97,14 @@ const Header = () => {
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-6 items-center">
           {isAuthenticated ? (
-            // Authenticated: Show only Sign-Out button
-            <div className="flex items-center space-x-4">
-              <span className="text-foreground text-sm">Welcome, {user?.username}</span>
-              <Button 
-                onClick={handleLogout}
-                variant="outline"
-                className="border-primary text-primary hover:bg-primary hover:text-white"
-              >
-                Sign Out
-              </Button>
-            </div>
+            // Authenticated: Show only Logout button
+            <Button 
+              onClick={handleLogout}
+              variant="outline"
+              className="border-primary text-primary hover:bg-primary hover:text-white"
+            >
+              Logout
+            </Button>
           ) : (
             // Not authenticated: Show full navigation
             <>
@@ -162,19 +159,14 @@ const Header = () => {
       <nav className={`${mobileMenuOpen ? 'block' : 'hidden'} bg-white w-full px-4 py-4 shadow-lg md:hidden`}>
         <div className="flex flex-col space-y-4">
           {isAuthenticated ? (
-            // Authenticated: Show only welcome message and Sign-Out
-            <>
-              <div className="text-foreground text-sm py-2">
-                Welcome, {user?.username}!
-              </div>
-              <Button 
-                onClick={handleLogout}
-                variant="outline"
-                className="border-primary text-primary hover:bg-primary hover:text-white w-full"
-              >
-                Sign Out
-              </Button>
-            </>
+            // Authenticated: Show only Logout button
+            <Button 
+              onClick={handleLogout}
+              variant="outline"
+              className="border-primary text-primary hover:bg-primary hover:text-white w-full"
+            >
+              Logout
+            </Button>
           ) : (
             // Not authenticated: Show full navigation
             <>

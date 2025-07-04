@@ -31,6 +31,7 @@ export interface IStorage {
   getUserProblemLog(userId: number): Promise<ProblemLog[]>;
   createProblemLogEntry(entry: InsertProblemLog): Promise<ProblemLog>;
   updateProblemLogEntry(id: number, updates: Partial<ProblemLog>): Promise<ProblemLog>;
+  deleteProblemLogEntry(id: number): Promise<void>;
   
   // Practice activities
   getUserPracticeActivities(userId: number): Promise<PracticeActivity[]>;
@@ -146,6 +147,12 @@ export class DatabaseStorage implements IStorage {
       .where(eq(problemLog.id, id))
       .returning();
     return updated;
+  }
+
+  async deleteProblemLogEntry(id: number): Promise<void> {
+    await db
+      .delete(problemLog)
+      .where(eq(problemLog.id, id));
   }
 
   // Practice activities

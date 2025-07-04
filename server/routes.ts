@@ -185,6 +185,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.delete("/api/dashboard/problem-log/:id", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteProblemLogEntry(id);
+      res.json({ message: "Problem log entry deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting problem log entry:", error);
+      res.status(500).json({ message: "Failed to delete problem log entry" });
+    }
+  });
+
   // Practice activities routes
   app.get("/api/dashboard/practice-activities", async (req, res) => {
     if (!req.session.userId) {
