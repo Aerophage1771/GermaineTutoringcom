@@ -160,17 +160,17 @@ export default function PracticeTest() {
               <div className="space-y-2">
                 <Label htmlFor="difficulty">Difficulty Level (Optional)</Label>
                 <Select 
-                  value={testSettings.difficulty?.toString() || ""} 
+                  value={testSettings.difficulty?.toString() || "any"} 
                   onValueChange={(value) => setTestSettings(prev => ({ 
                     ...prev, 
-                    difficulty: value ? parseInt(value) : undefined 
+                    difficulty: value === "any" ? undefined : parseInt(value) 
                   }))}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Any difficulty" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Any difficulty</SelectItem>
+                    <SelectItem value="any">Any difficulty</SelectItem>
                     <SelectItem value="1">Level 1 (Easiest)</SelectItem>
                     <SelectItem value="2">Level 2</SelectItem>
                     <SelectItem value="3">Level 3</SelectItem>
