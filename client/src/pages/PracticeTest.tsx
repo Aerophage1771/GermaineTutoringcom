@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Clock, ArrowLeft, ArrowRight, CheckCircle } from "lucide-react";
+import { Clock, ArrowLeft, ArrowRight, CheckCircle, Home } from "lucide-react";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 
 interface LsatQuestion {
@@ -37,6 +38,7 @@ interface QuestionAnswer {
 }
 
 export default function PracticeTest() {
+  const [, setLocation] = useLocation();
   const [testSettings, setTestSettings] = useState<TestSettings>({
     sectionType: "",
     questionCount: 10,
@@ -112,7 +114,7 @@ export default function PracticeTest() {
       questions_attempted: questionsAttempted,
       questions_correct: questionsCorrect,
       time_spent: Math.floor(timeSpent / 60), // Convert to minutes
-      score_percentage: scorePercentage + "%"
+      score_percentage: scorePercentage // Send as numeric value without %
     });
   };
 
@@ -129,7 +131,17 @@ export default function PracticeTest() {
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white p-6">
         <div className="max-w-2xl mx-auto">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Practice Test</h1>
+            <div className="flex items-center justify-between mb-4">
+              <h1 className="text-3xl font-bold text-gray-900">Practice Test</h1>
+              <Button
+                variant="outline"
+                onClick={() => setLocation("/dashboard")}
+                className="flex items-center"
+              >
+                <Home className="h-4 w-4 mr-2" />
+                Back to Dashboard
+              </Button>
+            </div>
             <p className="text-gray-600">Configure your practice session and start improving your LSAT skills</p>
           </div>
 
@@ -282,17 +294,27 @@ export default function PracticeTest() {
                 </div>
               </div>
 
-              <Button 
-                onClick={() => {
-                  setTestStarted(false);
-                  setTestCompleted(false);
-                  setCurrentQuestionIndex(0);
-                  setAnswers({});
-                }}
-                className="w-full"
-              >
-                Start New Practice Test
-              </Button>
+              <div className="space-y-2">
+                <Button 
+                  onClick={() => {
+                    setTestStarted(false);
+                    setTestCompleted(false);
+                    setCurrentQuestionIndex(0);
+                    setAnswers({});
+                  }}
+                  className="w-full"
+                >
+                  Start New Practice Test
+                </Button>
+                <Button 
+                  variant="outline"
+                  onClick={() => setLocation("/dashboard")}
+                  className="w-full"
+                >
+                  <Home className="h-4 w-4 mr-2" />
+                  Back to Dashboard
+                </Button>
+              </div>
             </CardContent>
           </Card>
         </div>
@@ -306,6 +328,15 @@ export default function PracticeTest() {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setLocation("/dashboard")}
+              className="flex items-center"
+            >
+              <Home className="h-4 w-4 mr-2" />
+              Dashboard
+            </Button>
             <Badge variant="secondary">{testSettings.sectionType}</Badge>
             <span className="text-sm text-gray-600">
               Question {currentQuestionIndex + 1} of {questions.length}
