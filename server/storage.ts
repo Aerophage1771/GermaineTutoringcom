@@ -1,62 +1,77 @@
-import { users, type User, type InsertUser, subscribers, type Subscriber, type InsertSubscriber, consultations, type Consultation, type InsertConsultation } from "@shared/schema";
-
-// modify the interface with any CRUD methods
-// you might need
+import { 
+  users, type User, type InsertUser, 
+  subscribers, type Subscriber, type InsertSubscriber, 
+  consultations, type Consultation, type InsertConsultation,
+  sessions, type Session, type InsertSession,
+  problemLog, type ProblemLog, type InsertProblemLog,
+  practiceActivities, type PracticeActivity, type InsertPracticeActivity,
+  timeAddOns, type TimeAddOn, type InsertTimeAddOn
+} from "@shared/schema";
+import { db } from "./db";
+import { eq, desc, sql } from "drizzle-orm";
 
 export interface IStorage {
+  // User management
   getUser(id: number): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  updateUser(id: number, updates: Partial<User>): Promise<User>;
   validatePassword(user: User, password: string): Promise<boolean>;
+  
+  // Subscription and consultation (legacy)
   createSubscriber(subscriber: InsertSubscriber): Promise<Subscriber>;
   createConsultation(consultation: InsertConsultation): Promise<Consultation>;
+  
+  // Session management
+  getUserSessions(userId: number): Promise<Session[]>;
+  createSession(session: InsertSession): Promise<Session>;
+  
+  // Problem log
+  getUserProblemLog(userId: number): Promise<ProblemLog[]>;
+  createProblemLogEntry(entry: InsertProblemLog): Promise<ProblemLog>;
+  updateProblemLogEntry(id: number, updates: Partial<ProblemLog>): Promise<ProblemLog>;
+  
+  // Practice activities
+  getUserPracticeActivities(userId: number): Promise<PracticeActivity[]>;
+  createPracticeActivity(activity: InsertPracticeActivity): Promise<PracticeActivity>;
+  
+  // Time add-ons
+  getUserTimeAddOns(userId: number): Promise<TimeAddOn[]>;
+  createTimeAddOn(addon: InsertTimeAddOn): Promise<TimeAddOn>;
 }
 
-export class MemStorage implements IStorage {
-  private users: Map<number, User>;
-  private subscribers: Map<number, Subscriber>;
-  private consultations: Map<number, Consultation>;
-  private currentUserId: number;
-  private currentSubscriberId: number;
-  private currentConsultationId: number;
-
-  constructor() {
-    this.users = new Map();
-    this.subscribers = new Map();
-    this.consultations = new Map();
-    this.currentUserId = 1;
-    this.currentSubscriberId = 1;
-    this.currentConsultationId = 1;
-
-    // Create a demo student account for testing
-    this.createUser({
-      username: "student",
-      email: "student@demo.com",
-      password: "demo123"
-    });
-  }
-
+export class DatabaseStorage implements IStorage {
+  // User management
   async getUser(id: number): Promise<User | undefined> {
-    return this.users.get(id);
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user || undefined;
   }
 
   async getUserByUsername(username: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.username === username,
-    );
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user || undefined;
   }
 
   async getUserByEmail(email: string): Promise<User | undefined> {
-    return Array.from(this.users.values()).find(
-      (user) => user.email === email,
-    );
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user || undefined;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const id = this.currentUserId++;
-    const user: User = { ...insertUser, id };
-    this.users.set(id, user);
+    const [user] = await db
+      .insert(users)
+      .values(insertUser)
+      .returning();
+    return user;
+  }
+
+  async updateUser(id: number, updates: Partial<User>): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ ...updates, updated_at: new Date() } as any)
+      .where(eq(users.id, id))
+      .returning();
     return user;
   }
 
@@ -66,30 +81,106 @@ export class MemStorage implements IStorage {
     return user.password === password;
   }
 
+  // Legacy subscription and consultation
   async createSubscriber(insertSubscriber: InsertSubscriber): Promise<Subscriber> {
-    const id = this.currentSubscriberId++;
-    const subscriber: Subscriber = { 
-      ...insertSubscriber, 
-      id,
-      created_at: new Date()
-    };
-    this.subscribers.set(id, subscriber);
+    const [subscriber] = await db
+      .insert(subscribers)
+      .values(insertSubscriber)
+      .returning();
     return subscriber;
   }
 
   async createConsultation(insertConsultation: InsertConsultation): Promise<Consultation> {
-    const id = this.currentConsultationId++;
-    const consultation: Consultation = { 
-      ...insertConsultation, 
-      id,
-      created_at: new Date(),
-      contacted: false,
-      current_score: insertConsultation.current_score || null,
-      test_date: insertConsultation.test_date || null
-    };
-    this.consultations.set(id, consultation);
+    const [consultation] = await db
+      .insert(consultations)
+      .values(insertConsultation)
+      .returning();
     return consultation;
+  }
+
+  // Session management
+  async getUserSessions(userId: number): Promise<Session[]> {
+    return await db
+      .select()
+      .from(sessions)
+      .where(eq(sessions.user_id, userId))
+      .orderBy(desc(sessions.date));
+  }
+
+  async createSession(insertSession: InsertSession): Promise<Session> {
+    const [session] = await db
+      .insert(sessions)
+      .values(insertSession)
+      .returning();
+    
+    // Update user's session count using SQL increment
+    await db
+      .update(users)
+      .set({ sessions_held: sql`${users.sessions_held} + 1` })
+      .where(eq(users.id, insertSession.user_id));
+    
+    return session;
+  }
+
+  // Problem log
+  async getUserProblemLog(userId: number): Promise<ProblemLog[]> {
+    return await db
+      .select()
+      .from(problemLog)
+      .where(eq(problemLog.user_id, userId))
+      .orderBy(desc(problemLog.updated_at));
+  }
+
+  async createProblemLogEntry(entry: InsertProblemLog): Promise<ProblemLog> {
+    const [problemEntry] = await db
+      .insert(problemLog)
+      .values(entry)
+      .returning();
+    return problemEntry;
+  }
+
+  async updateProblemLogEntry(id: number, updates: Partial<ProblemLog>): Promise<ProblemLog> {
+    const [updated] = await db
+      .update(problemLog)
+      .set({ ...updates, updated_at: new Date() })
+      .where(eq(problemLog.id, id))
+      .returning();
+    return updated;
+  }
+
+  // Practice activities
+  async getUserPracticeActivities(userId: number): Promise<PracticeActivity[]> {
+    return await db
+      .select()
+      .from(practiceActivities)
+      .where(eq(practiceActivities.user_id, userId))
+      .orderBy(desc(practiceActivities.completed_at));
+  }
+
+  async createPracticeActivity(activity: InsertPracticeActivity): Promise<PracticeActivity> {
+    const [practiceActivity] = await db
+      .insert(practiceActivities)
+      .values(activity)
+      .returning();
+    return practiceActivity;
+  }
+
+  // Time add-ons
+  async getUserTimeAddOns(userId: number): Promise<TimeAddOn[]> {
+    return await db
+      .select()
+      .from(timeAddOns)
+      .where(eq(timeAddOns.user_id, userId))
+      .orderBy(desc(timeAddOns.purchased_at));
+  }
+
+  async createTimeAddOn(addon: InsertTimeAddOn): Promise<TimeAddOn> {
+    const [timeAddon] = await db
+      .insert(timeAddOns)
+      .values(addon)
+      .returning();
+    return timeAddon;
   }
 }
 
-export const storage = new MemStorage();
+export const storage = new DatabaseStorage();

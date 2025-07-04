@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "wouter";
+import { useAuth } from "@/lib/auth";
+import { Button } from "@/components/ui/button";
 
 // Define Calendly types
 declare global {
@@ -12,6 +14,7 @@ declare global {
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { isAuthenticated, logout, user } = useAuth();
   
   // Add Calendly script to the document when component mounts
   useEffect(() => {
@@ -66,6 +69,15 @@ const Header = () => {
     setMobileMenuOpen(false);
   };
 
+  const handleLogout = async () => {
+    try {
+      await logout();
+      setMobileMenuOpen(false);
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
   return (
     <header className="sticky top-0 z-50 bg-white shadow-md">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
@@ -84,115 +96,151 @@ const Header = () => {
         
         {/* Desktop Navigation */}
         <nav className="hidden md:flex space-x-6 items-center">
-          <Link href="/">
-            <button 
-              onClick={scrollToTop}
-              className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
-              Home
-            </button>
-          </Link>
-          <Link href="/methodology">
-            <button 
-              onClick={scrollToTop}
-              className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
-              Methodology & Results
-            </button>
-          </Link>
-          <Link href="/programs">
-            <button 
-              onClick={scrollToTop}
-              className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
-              Tutoring Programs
-            </button>
-          </Link>
-          <Link href="/blog">
-            <button 
-              onClick={scrollToTop}
-              className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
-              LSAT Blog
-            </button>
-          </Link>
-          <Link href="/login">
-            <button 
-              onClick={scrollToTop}
-              className="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-5 rounded-lg transition-colors text-sm lg:text-base border-2 border-primary"
-            >
-              Student Log-In
-            </button>
-          </Link>
-          <button 
-            onClick={openCalendly} 
-            className="bg-accent hover:bg-accent/90 text-primary font-bold px-5 py-2 rounded-lg transition-colors text-sm lg:text-base"
-          >
-            Schedule Consultation
-          </button>
+          {isAuthenticated ? (
+            // Authenticated: Show only Sign-Out button
+            <div className="flex items-center space-x-4">
+              <span className="text-foreground text-sm">Welcome, {user?.username}</span>
+              <Button 
+                onClick={handleLogout}
+                variant="outline"
+                className="border-primary text-primary hover:bg-primary hover:text-white"
+              >
+                Sign Out
+              </Button>
+            </div>
+          ) : (
+            // Not authenticated: Show full navigation
+            <>
+              <Link href="/">
+                <button 
+                  onClick={scrollToTop}
+                  className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
+                  Home
+                </button>
+              </Link>
+              <Link href="/methodology">
+                <button 
+                  onClick={scrollToTop}
+                  className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
+                  Methodology & Results
+                </button>
+              </Link>
+              <Link href="/programs">
+                <button 
+                  onClick={scrollToTop}
+                  className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
+                  Tutoring Programs
+                </button>
+              </Link>
+              <Link href="/blog">
+                <button 
+                  onClick={scrollToTop}
+                  className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
+                  LSAT Blog
+                </button>
+              </Link>
+              <Link href="/login">
+                <button 
+                  onClick={scrollToTop}
+                  className="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-5 rounded-lg transition-colors text-sm lg:text-base border-2 border-primary"
+                >
+                  Student Log-In
+                </button>
+              </Link>
+              <button 
+                onClick={openCalendly} 
+                className="bg-accent hover:bg-accent/90 text-primary font-bold px-5 py-2 rounded-lg transition-colors text-sm lg:text-base"
+              >
+                Schedule Consultation
+              </button>
+            </>
+          )}
         </nav>
       </div>
       
       {/* Mobile Navigation */}
       <nav className={`${mobileMenuOpen ? 'block' : 'hidden'} bg-white w-full px-4 py-4 shadow-lg md:hidden`}>
         <div className="flex flex-col space-y-4">
-          <Link href="/">
-            <button 
-              onClick={() => {
-                scrollToTop();
-                setMobileMenuOpen(false);
-              }}
-              className="text-foreground hover:text-primary font-medium transition-colors text-left"
-            >
-              Home
-            </button>
-          </Link>
-          <Link href="/methodology">
-            <button 
-              onClick={() => {
-                scrollToTop();
-                setMobileMenuOpen(false);
-              }}
-              className="text-foreground hover:text-primary font-medium transition-colors text-left"
-            >
-              Methodology & Results
-            </button>
-          </Link>
-          <Link href="/programs">
-            <button 
-              onClick={() => {
-                scrollToTop();
-                setMobileMenuOpen(false);
-              }}
-              className="text-foreground hover:text-primary font-medium transition-colors text-left"
-            >
-              Tutoring Programs
-            </button>
-          </Link>
-          <Link href="/blog">
-            <button 
-              onClick={() => {
-                scrollToTop();
-                setMobileMenuOpen(false);
-              }}
-              className="text-foreground hover:text-primary font-medium transition-colors text-left"
-            >
-              LSAT Blog
-            </button>
-          </Link>
-          <Link href="/login">
-            <button 
-              onClick={() => {
-                scrollToTop();
-                setMobileMenuOpen(false);
-              }}
-              className="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-4 rounded-lg transition-colors text-left"
-            >
-              Student Log-In
-            </button>
-          </Link>
-          <button 
-            onClick={openCalendly} 
-            className="bg-accent hover:bg-accent/90 text-primary font-bold px-4 py-2 rounded-lg text-center transition-colors"
-          >
-            Schedule Consultation
-          </button>
+          {isAuthenticated ? (
+            // Authenticated: Show only welcome message and Sign-Out
+            <>
+              <div className="text-foreground text-sm py-2">
+                Welcome, {user?.username}!
+              </div>
+              <Button 
+                onClick={handleLogout}
+                variant="outline"
+                className="border-primary text-primary hover:bg-primary hover:text-white w-full"
+              >
+                Sign Out
+              </Button>
+            </>
+          ) : (
+            // Not authenticated: Show full navigation
+            <>
+              <Link href="/">
+                <button 
+                  onClick={() => {
+                    scrollToTop();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="text-foreground hover:text-primary font-medium transition-colors text-left"
+                >
+                  Home
+                </button>
+              </Link>
+              <Link href="/methodology">
+                <button 
+                  onClick={() => {
+                    scrollToTop();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="text-foreground hover:text-primary font-medium transition-colors text-left"
+                >
+                  Methodology & Results
+                </button>
+              </Link>
+              <Link href="/programs">
+                <button 
+                  onClick={() => {
+                    scrollToTop();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="text-foreground hover:text-primary font-medium transition-colors text-left"
+                >
+                  Tutoring Programs
+                </button>
+              </Link>
+              <Link href="/blog">
+                <button 
+                  onClick={() => {
+                    scrollToTop();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="text-foreground hover:text-primary font-medium transition-colors text-left"
+                >
+                  LSAT Blog
+                </button>
+              </Link>
+              <Link href="/login">
+                <button 
+                  onClick={() => {
+                    scrollToTop();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-4 rounded-lg transition-colors text-left"
+                >
+                  Student Log-In
+                </button>
+              </Link>
+              <button 
+                onClick={openCalendly} 
+                className="bg-accent hover:bg-accent/90 text-primary font-bold px-4 py-2 rounded-lg text-center transition-colors"
+              >
+                Schedule Consultation
+              </button>
+            </>
+          )}
         </div>
       </nav>
     </header>

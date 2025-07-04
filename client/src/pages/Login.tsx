@@ -1,52 +1,29 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Link, useLocation } from "wouter";
-import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { apiRequest } from "@/lib/queryClient";
+import { useAuth } from "@/lib/auth";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [, setLocation] = useLocation();
   const { toast } = useToast();
+  const { login, isLoading, isAuthenticated } = useAuth();
 
-  const loginMutation = useMutation({
-    mutationFn: async (credentials: { email: string; password: string }) => {
-      const response = await apiRequest("POST", "/api/auth/login", credentials);
-      const data = await response.json();
-      return data as { 
-        message: string; 
-        user: { 
-          id: number; 
-          username: string; 
-          email: string; 
-        } 
-      };
-    },
-    onSuccess: (data) => {
-      toast({
-        title: "Login Successful",
-        description: `Welcome back, ${data.user.username}!`,
-      });
-      // Redirect to a student dashboard or home page
-      setLocation("/");
-    },
-    onError: (error: any) => {
-      toast({
-        title: "Login Failed",
-        description: error.message || "Invalid email or password",
-        variant: "destructive",
-      });
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (isAuthenticated) {
+      setLocation("/dashboard");
     }
-  });
+  }, [isAuthenticated, setLocation]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
       toast({
@@ -56,7 +33,22 @@ const Login = () => {
       });
       return;
     }
-    loginMutation.mutate({ email, password });
+
+    try {
+      await login(email, password);
+      toast({
+        title: "Login Successful",
+        description: "Welcome to your dashboard!",
+      });
+      // Redirect to dashboard after successful login
+      setLocation("/dashboard");
+    } catch (error: any) {
+      toast({
+        title: "Login Failed",
+        description: error.message || "Invalid email or password",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -104,10 +96,10 @@ const Login = () => {
                   
                   <Button 
                     type="submit" 
-                    disabled={loginMutation.isPending}
+                    disabled={isLoading}
                     className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-2 px-4 rounded-lg transition-colors"
                   >
-                    {loginMutation.isPending ? "Signing In..." : "Sign In"}
+                    {isLoading ? "Signing In..." : "Sign In"}
                   </Button>
                 </form>
               </CardContent>

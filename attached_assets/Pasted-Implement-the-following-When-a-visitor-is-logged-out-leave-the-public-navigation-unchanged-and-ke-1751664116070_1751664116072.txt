@@ -1,0 +1,15 @@
+Implement the following.
+
+When a visitor is logged out, leave the public navigation unchanged and keep a “Student Log-In” button in the header. The instant a student signs in, hide every navigation item except a single “Sign-Out” button.
+
+Direct the signed-in student to a dashboard. At its top, place a block that reports three values: Sessions Held (integer), Time Remaining (decimal hours to one decimal), and Bonus Test-Review Time (decimal hours). Show the Time Remaining figure in green whenever eight hours or more are left, fade from green toward red as it drops below eight, turn fully red at two hours, and grey the display once it reaches zero while disabling scheduling controls. Beside the counters, add an “Add Time” button so students can purchase more hours.
+
+Below that block, present a table of past sessions with the columns Date, Summary, and a Watch link that opens the session’s Google Drive video. Include a prominent “Schedule Session” button; when clicked, let the student choose 1-hour, 1.5-hour, or 2-hour slots (I will supply target links later).
+
+Provide two tabs:
+
+1. **Problem Log** – an inline-editable grid with the columns PrepTest, Section, Question, Correct Reasoning, Student Flaw, and Rule for the Future. Save changes automatically when a cell loses focus.
+
+2. **Practice & Test-Taking** – a split view. One mode delivers full-length tests that copy the LawHub LSAT interface, complete with timer and digital bubbling. The other offers question- or set-level practice that matches the 7Sage feel; separate LR and RC practice and let the user filter by question type, skills, difficulty 1-5, and PrepTest range. For RC sets, pin the passage on the left and place collapsible questions on the right.
+
+Keep the design clean, responsive, and distraction-free. Use sortable zebra-striped tables, clear call-to-action buttons, consistent typography, and intuitive hover states. Make sure the flows cover sign-in to dashboard, video playback, log edits, time upgrades, session scheduling, practice launch, submission, and return to the dashboard with data persisted.
