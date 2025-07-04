@@ -1,0 +1,117 @@
+1. The Main Selection Screen
+
+Intended Design:
+
+A clear landing page with the heading "Choose Your Practice Mode". The three cards are now more distinct in their purpose.
+
+    Card 1: Smart LR Driller
+
+        Description: "Create a targeted Logical Reasoning drill in seconds. Our algorithm selects questions based on your performance to attack your weaknesses."
+
+        Best for: Quick, daily LR practice and shoring up weak areas without manual setup.
+
+    Card 2: Custom LR Drill Builder
+
+        Description: "Take full control of the Logical Reasoning question bank. Build a unique drill by filtering by question type, skill, difficulty, and more."
+
+        Best for: Deep-dives into specific LR concepts, creating targeted problem sets, and advanced study.
+
+    Card 3: Reading Comp Section Generator
+
+        Description: "Simulate the full Reading Comprehension section. Generate passages from specific PrepTests or create themed sections based on passage and question type."
+
+        Best for: Practicing RC pacing, improving reading endurance, and mastering passage analysis.
+
+2. Mode 1: Smart LR Driller (LR Only)
+
+This mode is now exclusively for Logical Reasoning, offering the fastest path from login to practice. The interface is minimal and data-driven.
+
+Intended Design & Specificity:
+
+    Objective: Get the user practicing high-yield LR questions in under 10 seconds.
+
+    Interface Components:
+
+        Heading: "Create a Smart LR Drill" (The section type is now fixed, so no dropdown is needed).
+
+        Number of Questions Dropdown: [5, 10, 15, 20, 25]
+
+        Targeting Criteria Dropdown: This dropdown uses your performance data to build the drill.
+
+            Incorrect when last taken
+
+            Weakest Question Types (The algorithm identifies which LR Tags from your list the user struggles with most).
+
+            Weakest Skills (The algorithm identifies which LR Skills from your list the user struggles with most).
+
+            Never Attempted Questions
+
+        CTA Button: A large, prominent Create Drill button.
+
+    User Flow: A user wants to improve. They navigate to the Smart Driller, select "15 questions", choose the "Weakest Question Types" criteria, and click "Create Drill". The system instantly generates a 15-question LR drill composed of the question types (e.g., Flaw, Necessary Assumption) where their accuracy is lowest.
+
+3. Mode 2: Custom LR Drill Builder (LR Only)
+
+This is the power-user mode for Logical Reasoning. It has been updated to remove clutter and incorporate your new, more granular filtering categories.
+
+Intended Design & Specificity:
+
+    Objective: Allow users to build a perfectly tailored LR drill by filtering the entire question bank with multiple, specific criteria.
+
+    Interface Components:
+
+        Section Type: This is now fixed to Logical Reasoning. The radio buttons are removed, and the heading can be "Custom LR Drill Builder". The "Recommended for Drills" pills are also removed as requested.
+
+        Attribute Filters: This section is completely redesigned with your new lists.
+
+            Logical Reasoning Type (Tags): A filter group with checkboxes/pills for the primary question types.
+
+                List: Agree, Argument Part, Disagree, Evaluate, Fill in the blank, Flaw, Inference, Main conclusion or main point, Method of Reasoning, Miscellaneous, Most Strongly Supported, Must be False, Must be True, Necessary assumption, Omitted, Paradox - Explain, Parallel, Parallel Flaw, Principle, Principle - Application, Principle - Rule, Strengthen, Sufficient assumption, Weaken.
+
+            Logical Reasoning Skills: A second filter group that allows for cross-referencing with the types above.
+
+                List: Analogy, Causal Reasoning, Conditional Reasoning, Eliminating Options, Except, Fact v. Belief v. Knowledge, Fallacy, Link Assumption, Math, Net Effect, Part v. Whole, Quantifier, Rule-Application, Sampling, Value Judgment.
+
+            Other Filters: Difficulty, Taken, Note remain as before.
+
+        Real-Time Question Table:
+
+            The table updates instantly as filters are applied.
+
+            The Answer column is removed as requested.
+
+            Columns: Checkbox, Question/Quick View, Tags (showing the LR Type), Skills (a new column showing the LR Skill), Difficulty, Explanation.
+
+        Bulk Actions & Drill Summary: The Add all shown and Remove all shown buttons remain. A persistent summary bar (Drill (7 questions selected) [Start Drill] [Clear]) provides a clear call-to-action.
+
+    User Flow: A user wants to practice difficult "Strengthen" questions that specifically involve "Causal Reasoning". They select the "Strengthen" tag from the LR Type filter and the "Causal Reasoning" skill from the LR Skills filter, then set difficulty to 4-5 dots. The table populates with the exact questions matching this niche criteria, which they can then select for their drill.
+
+4. Mode 3: Reading Comp Section Generator (RC Only)
+
+This mode is now the dedicated home for all Reading Comprehension practice, focusing on building full, timed sections. It uses your new RC categories to allow for powerful custom section creation.
+
+Intended Design & Specificity:
+
+    Objective: To simulate a test-day Reading Comprehension section for pacing and endurance practice, with powerful customization options.
+
+    Interface Components:
+
+        Heading: "Generate a Reading Comp Section" (Section type is fixed).
+
+        Source Material (Radio Buttons):
+
+            Single Unused PrepTest Section: Pulls an authentic, untouched RC section from a PrepTest.
+
+            Mix from PrepTest Range: Builds a 4-passage section by pulling passages from a user-selected range of PrepTests (e.g., PTs 80-90).
+
+            Custom Themed Section: This option now reveals two new filter sets based on your lists.
+
+                Passage Category Filter: Checkboxes for Art, Comparative, Debate, Humanities, Hypothesis, Law, One-Position, Problem Analysis, Science, Single-Topic.
+
+                Question Category Filter: Checkboxes for Analogy, Application, Approach, Author Attitude... Structure, Weaken-Strengthen.
+
+        Timing Mode (Toggle Switch): Timed (35:00) or Untimed.
+
+        CTA Button: Generate Section.
+
+    User Flow: A user knows they struggle with "Science" passages, specifically on "Purpose of Paragraph" questions. They select the Custom Themed Section source. Under Passage Category, they check "Science". Under Question Category, they check "Purpose of Paragraph" and "Main Idea". The system then generates a full-length RC section composed exclusively of Science passages, with the question set heavily weighted towards the selected question types.

@@ -4,10 +4,13 @@ import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { Clock, ArrowLeft, ArrowRight, CheckCircle, Home } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Separator } from "@/components/ui/separator";
+import { Clock, ArrowLeft, ArrowRight, CheckCircle, Home, Brain, Settings, BookOpen, Zap, Filter } from "lucide-react";
 import { queryClient, apiRequest } from "@/lib/queryClient";
 
 interface LsatQuestion {
@@ -24,433 +27,568 @@ interface LsatQuestion {
   rc_question_categories?: string;
 }
 
-interface TestSettings {
-  sectionType: string;
-  difficulty?: number;
+type PracticeMode = "selection" | "smart-lr" | "custom-lr" | "reading-comp";
+
+interface SmartLRSettings {
   questionCount: number;
-  timeLimit: number; // in minutes
+  targetingCriteria: string;
 }
 
-interface QuestionAnswer {
-  questionId: string;
-  selectedAnswer: string;
-  isCorrect?: boolean;
+interface CustomLRFilters {
+  questionTypes: string[];
+  skills: string[];
+  difficulty: number[];
+  taken: string;
+  hasNote: boolean;
 }
+
+interface RCSettings {
+  sourceType: string;
+  prepTestRange?: { start: number; end: number };
+  passageCategories: string[];
+  questionCategories: string[];
+  timed: boolean;
+}
+
+const LR_QUESTION_TYPES = [
+  "Agree", "Argument Part", "Disagree", "Evaluate", "Fill in the blank", "Flaw", 
+  "Inference", "Main conclusion or main point", "Method of Reasoning", "Miscellaneous", 
+  "Most Strongly Supported", "Must be False", "Must be True", "Necessary assumption", 
+  "Omitted", "Paradox - Explain", "Parallel", "Parallel Flaw", "Principle", 
+  "Principle - Application", "Principle - Rule", "Strengthen", "Sufficient assumption", "Weaken"
+];
+
+const LR_SKILLS = [
+  "Analogy", "Causal Reasoning", "Conditional Reasoning", "Eliminating Options", 
+  "Except", "Fact v. Belief v. Knowledge", "Fallacy", "Link Assumption", "Math", 
+  "Net Effect", "Part v. Whole", "Quantifier", "Rule-Application", "Sampling", "Value Judgment"
+];
+
+const RC_PASSAGE_CATEGORIES = [
+  "Art", "Comparative", "Debate", "Humanities", "Hypothesis", "Law", 
+  "One-Position", "Problem Analysis", "Science", "Single-Topic"
+];
+
+const RC_QUESTION_CATEGORIES = [
+  "Analogy", "Application", "Approach", "Author Attitude", "Function", "Inference", 
+  "Main Idea", "Purpose of Paragraph", "Strengthen-Weaken", "Structure", "Tone"
+];
 
 export default function PracticeTest() {
   const [, setLocation] = useLocation();
-  const [testSettings, setTestSettings] = useState<TestSettings>({
-    sectionType: "",
+  const [currentMode, setCurrentMode] = useState<PracticeMode>("selection");
+  
+  // Smart LR Driller state
+  const [smartLRSettings, setSmartLRSettings] = useState<SmartLRSettings>({
     questionCount: 10,
-    timeLimit: 35
+    targetingCriteria: ""
   });
   
-  const [testStarted, setTestStarted] = useState(false);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<string, string>>({});
-  const [testCompleted, setTestCompleted] = useState(false);
-  const [timeRemaining, setTimeRemaining] = useState(0);
-
-  // Fetch questions based on test settings
-  const { data: questions = [], isLoading: questionsLoading } = useQuery<LsatQuestion[]>({
-    queryKey: ['/api/lsat/random', testSettings],
-    enabled: testStarted && !!testSettings.sectionType,
+  // Custom LR Drill Builder state
+  const [customLRFilters, setCustomLRFilters] = useState<CustomLRFilters>({
+    questionTypes: [],
+    skills: [],
+    difficulty: [],
+    taken: "all",
+    hasNote: false
+  });
+  const [selectedQuestions, setSelectedQuestions] = useState<string[]>([]);
+  
+  // Reading Comp Generator state
+  const [rcSettings, setRCSettings] = useState<RCSettings>({
+    sourceType: "single-unused",
+    passageCategories: [],
+    questionCategories: [],
+    timed: true
   });
 
-  const submitTestMutation = useMutation({
-    mutationFn: (data: {
-      activity_type: string;
-      test_name: string;
-      section_type: string;
-      questions_attempted: number;
-      questions_correct: number;
-      time_spent: number;
-      score_percentage: string;
-    }) => apiRequest("POST", "/api/dashboard/practice-activities", data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/dashboard/practice-activities"] });
-    },
-  });
-
-  const startTest = () => {
-    if (!testSettings.sectionType) return;
-    setTestStarted(true);
-    setTimeRemaining(testSettings.timeLimit * 60); // Convert to seconds
-    
-    // Start countdown timer
-    const timer = setInterval(() => {
-      setTimeRemaining((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          handleTestComplete();
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-  };
-
-  const handleAnswerSelect = (questionId: string, answer: string) => {
-    setAnswers(prev => ({
-      ...prev,
-      [questionId]: answer
-    }));
-  };
-
-  const handleTestComplete = () => {
-    setTestCompleted(true);
-    
-    // Calculate score and submit to database
-    const questionsAttempted = Object.keys(answers).length;
-    const questionsCorrect = 0; // Will be calculated when actual questions/answers are available
-    const timeSpent = (testSettings.timeLimit * 60) - timeRemaining;
-    const scorePercentage = questionsAttempted > 0 ? 
-      ((questionsCorrect / questionsAttempted) * 100).toFixed(1) : "0.0";
-    
-    submitTestMutation.mutate({
-      activity_type: "Practice Test",
-      test_name: `${testSettings.sectionType} Practice`,
-      section_type: testSettings.sectionType,
-      questions_attempted: questionsAttempted,
-      questions_correct: questionsCorrect,
-      time_spent: Math.floor(timeSpent / 60), // Convert to minutes
-      score_percentage: scorePercentage // Send as numeric value without %
-    });
-  };
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  const currentQuestion = questions[currentQuestionIndex];
-
-  if (!testStarted) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white p-6">
-        <div className="max-w-2xl mx-auto">
-          <div className="mb-8">
-            <div className="flex items-center justify-between mb-4">
-              <h1 className="text-3xl font-bold text-gray-900">Practice Test</h1>
-              <Button
-                variant="outline"
-                onClick={() => setLocation("/dashboard")}
-                className="flex items-center"
-              >
-                <Home className="h-4 w-4 mr-2" />
-                Back to Dashboard
-              </Button>
-            </div>
-            <p className="text-gray-600">Configure your practice session and start improving your LSAT skills</p>
-          </div>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Test Settings</CardTitle>
-              <CardDescription>
-                Customize your practice test based on your study goals
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="space-y-2">
-                <Label htmlFor="section-type">Section Type</Label>
-                <Select 
-                  value={testSettings.sectionType} 
-                  onValueChange={(value) => setTestSettings(prev => ({ ...prev, sectionType: value }))}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select section type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Logical Reasoning">Logical Reasoning</SelectItem>
-                    <SelectItem value="Reading Comprehension">Reading Comprehension</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="difficulty">Difficulty Level (Optional)</Label>
-                <Select 
-                  value={testSettings.difficulty?.toString() || "any"} 
-                  onValueChange={(value) => setTestSettings(prev => ({ 
-                    ...prev, 
-                    difficulty: value === "any" ? undefined : parseInt(value) 
-                  }))}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Any difficulty" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="any">Any difficulty</SelectItem>
-                    <SelectItem value="1">Level 1 (Easiest)</SelectItem>
-                    <SelectItem value="2">Level 2</SelectItem>
-                    <SelectItem value="3">Level 3</SelectItem>
-                    <SelectItem value="4">Level 4</SelectItem>
-                    <SelectItem value="5">Level 5 (Hardest)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="question-count">Number of Questions</Label>
-                <Select 
-                  value={testSettings.questionCount.toString()} 
-                  onValueChange={(value) => setTestSettings(prev => ({ ...prev, questionCount: parseInt(value) }))}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="5">5 questions</SelectItem>
-                    <SelectItem value="10">10 questions</SelectItem>
-                    <SelectItem value="15">15 questions</SelectItem>
-                    <SelectItem value="20">20 questions</SelectItem>
-                    <SelectItem value="25">25 questions (Full section)</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="time-limit">Time Limit (minutes)</Label>
-                <Select 
-                  value={testSettings.timeLimit.toString()} 
-                  onValueChange={(value) => setTestSettings(prev => ({ ...prev, timeLimit: parseInt(value) }))}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="15">15 minutes</SelectItem>
-                    <SelectItem value="25">25 minutes</SelectItem>
-                    <SelectItem value="35">35 minutes (Standard)</SelectItem>
-                    <SelectItem value="45">45 minutes</SelectItem>
-                    <SelectItem value="60">60 minutes</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <Button 
-                onClick={startTest} 
-                disabled={!testSettings.sectionType}
-                className="w-full"
-                size="lg"
-              >
-                Start Practice Test
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    );
-  }
-
-  if (questionsLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white flex items-center justify-center">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading practice questions...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (testCompleted) {
-    const questionsAttempted = Object.keys(answers).length;
-    const completionRate = questions.length > 0 ? (questionsAttempted / questions.length * 100).toFixed(1) : "0";
-
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white p-6">
-        <div className="max-w-2xl mx-auto">
-          <Card>
-            <CardHeader className="text-center">
-              <div className="mx-auto mb-4 w-16 h-16 bg-green-100 rounded-full flex items-center justify-center">
-                <CheckCircle className="h-8 w-8 text-green-600" />
-              </div>
-              <CardTitle className="text-2xl">Test Completed!</CardTitle>
-              <CardDescription>Great job on completing your practice session</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center p-4 bg-blue-50 rounded-lg">
-                  <div className="text-2xl font-bold text-blue-600">{questionsAttempted}</div>
-                  <div className="text-sm text-gray-600">Questions Attempted</div>
-                </div>
-                <div className="text-center p-4 bg-green-50 rounded-lg">
-                  <div className="text-2xl font-bold text-green-600">{completionRate}%</div>
-                  <div className="text-sm text-gray-600">Completion Rate</div>
-                </div>
-              </div>
-              
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span>Section Type:</span>
-                  <Badge variant="secondary">{testSettings.sectionType}</Badge>
-                </div>
-                <div className="flex justify-between">
-                  <span>Time Spent:</span>
-                  <span>{Math.floor(((testSettings.timeLimit * 60) - timeRemaining) / 60)} minutes</span>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Button 
-                  onClick={() => {
-                    setTestStarted(false);
-                    setTestCompleted(false);
-                    setCurrentQuestionIndex(0);
-                    setAnswers({});
-                  }}
-                  className="w-full"
-                >
-                  Start New Practice Test
-                </Button>
-                <Button 
-                  variant="outline"
-                  onClick={() => setLocation("/dashboard")}
-                  className="w-full"
-                >
-                  <Home className="h-4 w-4 mr-2" />
-                  Back to Dashboard
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    );
-  }
-
-  return (
+  // Mode Selection Screen
+  const renderModeSelection = () => (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white p-6">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center space-x-4">
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h1 className="text-3xl font-bold text-gray-900">Choose Your Practice Mode</h1>
             <Button
               variant="outline"
-              size="sm"
               onClick={() => setLocation("/dashboard")}
               className="flex items-center"
             >
               <Home className="h-4 w-4 mr-2" />
-              Dashboard
+              Back to Dashboard
             </Button>
-            <Badge variant="secondary">{testSettings.sectionType}</Badge>
-            <span className="text-sm text-gray-600">
-              Question {currentQuestionIndex + 1} of {questions.length}
-            </span>
           </div>
-          <div className="flex items-center space-x-2 text-orange-600">
-            <Clock className="h-4 w-4" />
-            <span className="font-mono font-medium">{formatTime(timeRemaining)}</span>
-          </div>
+          <p className="text-gray-600">Select the practice mode that best fits your study goals</p>
         </div>
 
-        {/* Question Card */}
-        {currentQuestion && (
-          <Card className="mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Smart LR Driller */}
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setCurrentMode("smart-lr")}>
             <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-lg">
-                  Question {currentQuestion.question_number_in_section || currentQuestionIndex + 1}
-                </CardTitle>
-                <div className="flex space-x-2">
-                  <Badge variant="outline">
-                    Difficulty {currentQuestion.question_difficulty}
-                  </Badge>
-                  {currentQuestion.lr_question_type && (
-                    <Badge variant="outline">
-                      {currentQuestion.lr_question_type}
-                    </Badge>
-                  )}
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-blue-100 rounded-lg">
+                  <Zap className="h-6 w-6 text-blue-600" />
                 </div>
+                <CardTitle className="text-xl">Smart LR Driller</CardTitle>
               </div>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                <p className="text-gray-600">
-                  <strong>Question ID:</strong> {currentQuestion.question_id}
-                </p>
-                <p className="text-gray-600 italic">
-                  [Question text will be loaded here when available]
-                </p>
-                
-                {/* Answer Options */}
-                <RadioGroup
-                  value={answers[currentQuestion.question_id] || ""}
-                  onValueChange={(value) => handleAnswerSelect(currentQuestion.question_id, value)}
-                >
-                  <div className="space-y-2">
-                    {["A", "B", "C", "D", "E"].map((option) => (
-                      <div key={option} className="flex items-center space-x-2">
-                        <RadioGroupItem value={option} id={option} />
-                        <Label htmlFor={option} className="flex-1 cursor-pointer">
-                          ({option}) [Answer option will be loaded here]
-                        </Label>
+              <CardDescription className="text-base mb-4">
+                Create a targeted Logical Reasoning drill in seconds. Our algorithm selects questions 
+                based on your performance to attack your weaknesses.
+              </CardDescription>
+              <Badge variant="secondary" className="mb-2">Best for:</Badge>
+              <p className="text-sm text-gray-600">
+                Quick, daily LR practice and shoring up weak areas without manual setup.
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Custom LR Drill Builder */}
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setCurrentMode("custom-lr")}>
+            <CardHeader>
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-green-100 rounded-lg">
+                  <Settings className="h-6 w-6 text-green-600" />
+                </div>
+                <CardTitle className="text-xl">Custom LR Drill Builder</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <CardDescription className="text-base mb-4">
+                Take full control of the Logical Reasoning question bank. Build a unique drill by 
+                filtering by question type, skill, difficulty, and more.
+              </CardDescription>
+              <Badge variant="secondary" className="mb-2">Best for:</Badge>
+              <p className="text-sm text-gray-600">
+                Deep-dives into specific LR concepts, creating targeted problem sets, and advanced study.
+              </p>
+            </CardContent>
+          </Card>
+
+          {/* Reading Comp Section Generator */}
+          <Card className="cursor-pointer hover:shadow-lg transition-shadow" onClick={() => setCurrentMode("reading-comp")}>
+            <CardHeader>
+              <div className="flex items-center space-x-3">
+                <div className="p-2 bg-purple-100 rounded-lg">
+                  <BookOpen className="h-6 w-6 text-purple-600" />
+                </div>
+                <CardTitle className="text-xl">Reading Comp Section Generator</CardTitle>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <CardDescription className="text-base mb-4">
+                Simulate the full Reading Comprehension section. Generate passages from specific 
+                PrepTests or create themed sections based on passage and question type.
+              </CardDescription>
+              <Badge variant="secondary" className="mb-2">Best for:</Badge>
+              <p className="text-sm text-gray-600">
+                Practicing RC pacing, improving reading endurance, and mastering passage analysis.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Smart LR Driller Mode
+  const renderSmartLRDriller = () => (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white p-6">
+      <div className="max-w-2xl mx-auto">
+        <div className="mb-8">
+          <div className="flex items-center space-x-4 mb-4">
+            <Button
+              variant="outline"
+              onClick={() => setCurrentMode("selection")}
+              className="flex items-center"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
+            </Button>
+            <h1 className="text-3xl font-bold text-gray-900">Create a Smart LR Drill</h1>
+          </div>
+          <p className="text-gray-600">Generate a targeted Logical Reasoning practice set in seconds</p>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Brain className="h-5 w-5" />
+              <span>AI-Powered Question Selection</span>
+            </CardTitle>
+            <CardDescription>
+              Our algorithm will select the most effective questions for your improvement
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Label htmlFor="question-count">Number of Questions</Label>
+              <Select
+                value={smartLRSettings.questionCount.toString()}
+                onValueChange={(value) => setSmartLRSettings(prev => ({ ...prev, questionCount: parseInt(value) }))}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="5">5 Questions</SelectItem>
+                  <SelectItem value="10">10 Questions</SelectItem>
+                  <SelectItem value="15">15 Questions</SelectItem>
+                  <SelectItem value="20">20 Questions</SelectItem>
+                  <SelectItem value="25">25 Questions</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="targeting-criteria">Targeting Criteria</Label>
+              <Select
+                value={smartLRSettings.targetingCriteria}
+                onValueChange={(value) => setSmartLRSettings(prev => ({ ...prev, targetingCriteria: value }))}
+              >
+                <SelectTrigger>
+                  <SelectValue placeholder="Choose targeting approach" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="incorrect-last">Incorrect when last taken</SelectItem>
+                  <SelectItem value="weakest-types">Weakest Question Types</SelectItem>
+                  <SelectItem value="weakest-skills">Weakest Skills</SelectItem>
+                  <SelectItem value="never-attempted">Never Attempted Questions</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <Button 
+              className="w-full" 
+              size="lg"
+              disabled={!smartLRSettings.targetingCriteria}
+            >
+              <Zap className="h-4 w-4 mr-2" />
+              Create Drill
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+
+  // Custom LR Drill Builder Mode  
+  const renderCustomLRBuilder = () => (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white p-6">
+      <div className="max-w-6xl mx-auto">
+        <div className="mb-8">
+          <div className="flex items-center space-x-4 mb-4">
+            <Button
+              variant="outline"
+              onClick={() => setCurrentMode("selection")}
+              className="flex items-center"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
+            </Button>
+            <h1 className="text-3xl font-bold text-gray-900">Custom LR Drill Builder</h1>
+          </div>
+          <p className="text-gray-600">Build a perfectly tailored Logical Reasoning drill with advanced filtering</p>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Filters Panel */}
+          <div className="lg:col-span-1">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center space-x-2">
+                  <Filter className="h-5 w-5" />
+                  <span>Attribute Filters</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-6">
+                {/* LR Question Types */}
+                <div className="space-y-3">
+                  <Label className="text-sm font-medium">Logical Reasoning Types</Label>
+                  <div className="grid grid-cols-1 gap-2 max-h-48 overflow-y-auto">
+                    {LR_QUESTION_TYPES.map((type) => (
+                      <div key={type} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={type}
+                          checked={customLRFilters.questionTypes.includes(type)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setCustomLRFilters(prev => ({
+                                ...prev,
+                                questionTypes: [...prev.questionTypes, type]
+                              }));
+                            } else {
+                              setCustomLRFilters(prev => ({
+                                ...prev,
+                                questionTypes: prev.questionTypes.filter(t => t !== type)
+                              }));
+                            }
+                          }}
+                        />
+                        <Label htmlFor={type} className="text-sm cursor-pointer">{type}</Label>
                       </div>
                     ))}
                   </div>
-                </RadioGroup>
+                </div>
 
-                {/* Question Details */}
-                <div className="text-sm text-gray-500 space-y-1">
-                  <p><strong>Prep Test:</strong> {currentQuestion.prep_test_number}</p>
-                  <p><strong>Section:</strong> {currentQuestion.section_number}</p>
-                  {currentQuestion.lr_skills && (
-                    <p><strong>Skills:</strong> {currentQuestion.lr_skills}</p>
-                  )}
-                  {currentQuestion.rc_passage_categories && (
-                    <p><strong>Passage Categories:</strong> {currentQuestion.rc_passage_categories}</p>
+                <Separator />
+
+                {/* LR Skills */}
+                <div className="space-y-3">
+                  <Label className="text-sm font-medium">Logical Reasoning Skills</Label>
+                  <div className="grid grid-cols-1 gap-2 max-h-48 overflow-y-auto">
+                    {LR_SKILLS.map((skill) => (
+                      <div key={skill} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={skill}
+                          checked={customLRFilters.skills.includes(skill)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setCustomLRFilters(prev => ({
+                                ...prev,
+                                skills: [...prev.skills, skill]
+                              }));
+                            } else {
+                              setCustomLRFilters(prev => ({
+                                ...prev,
+                                skills: prev.skills.filter(s => s !== skill)
+                              }));
+                            }
+                          }}
+                        />
+                        <Label htmlFor={skill} className="text-sm cursor-pointer">{skill}</Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <Separator />
+
+                {/* Other Filters */}
+                <div className="space-y-3">
+                  <Label className="text-sm font-medium">Other Filters</Label>
+                  <div className="space-y-4">
+                    <div className="space-y-2">
+                      <Label className="text-xs">Difficulty</Label>
+                      <div className="flex space-x-2">
+                        {[1, 2, 3, 4, 5].map((diff) => (
+                          <Checkbox
+                            key={diff}
+                            checked={customLRFilters.difficulty.includes(diff)}
+                            onCheckedChange={(checked) => {
+                              if (checked) {
+                                setCustomLRFilters(prev => ({
+                                  ...prev,
+                                  difficulty: [...prev.difficulty, diff]
+                                }));
+                              } else {
+                                setCustomLRFilters(prev => ({
+                                  ...prev,
+                                  difficulty: prev.difficulty.filter(d => d !== diff)
+                                }));
+                              }
+                            }}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Results Panel */}
+          <div className="lg:col-span-2">
+            <Card>
+              <CardHeader>
+                <div className="flex items-center justify-between">
+                  <CardTitle>Question Results</CardTitle>
+                  <Badge variant="outline">
+                    {selectedQuestions.length} questions selected
+                  </Badge>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="text-center py-8 text-gray-500">
+                    Apply filters to see matching questions
+                  </div>
+                  
+                  {selectedQuestions.length > 0 && (
+                    <div className="flex items-center justify-between bg-blue-50 p-4 rounded-lg">
+                      <span className="font-medium">
+                        Drill ({selectedQuestions.length} questions selected)
+                      </span>
+                      <div className="space-x-2">
+                        <Button>Start Drill</Button>
+                        <Button variant="outline" onClick={() => setSelectedQuestions([])}>
+                          Clear
+                        </Button>
+                      </div>
+                    </div>
                   )}
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-
-        {/* Navigation */}
-        <div className="flex justify-between">
-          <Button
-            variant="outline"
-            onClick={() => setCurrentQuestionIndex(prev => Math.max(0, prev - 1))}
-            disabled={currentQuestionIndex === 0}
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Previous
-          </Button>
-
-          <div className="flex space-x-2">
-            {currentQuestionIndex === questions.length - 1 ? (
-              <Button onClick={handleTestComplete}>
-                Complete Test
-              </Button>
-            ) : (
-              <Button
-                onClick={() => setCurrentQuestionIndex(prev => Math.min(questions.length - 1, prev + 1))}
-              >
-                Next
-                <ArrowRight className="h-4 w-4 ml-2" />
-              </Button>
-            )}
-          </div>
-        </div>
-
-        {/* Progress */}
-        <div className="mt-6">
-          <div className="flex justify-between text-sm text-gray-600 mb-2">
-            <span>Progress</span>
-            <span>{currentQuestionIndex + 1} / {questions.length}</span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div 
-              className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}
-            />
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>
     </div>
   );
+
+  // Reading Comp Section Generator Mode
+  const renderRCGenerator = () => (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-white p-6">
+      <div className="max-w-2xl mx-auto">
+        <div className="mb-8">
+          <div className="flex items-center space-x-4 mb-4">
+            <Button
+              variant="outline"
+              onClick={() => setCurrentMode("selection")}
+              className="flex items-center"
+            >
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back
+            </Button>
+            <h1 className="text-3xl font-bold text-gray-900">Generate a Reading Comp Section</h1>
+          </div>
+          <p className="text-gray-600">Create a full-length Reading Comprehension section for practice</p>
+        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <BookOpen className="h-5 w-5" />
+              <span>Section Configuration</span>
+            </CardTitle>
+            <CardDescription>
+              Choose your source material and customization options
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-4">
+              <Label className="text-sm font-medium">Source Material</Label>
+              <RadioGroup
+                value={rcSettings.sourceType}
+                onValueChange={(value) => setRCSettings(prev => ({ ...prev, sourceType: value }))}
+              >
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="single-unused" id="single-unused" />
+                  <Label htmlFor="single-unused">Single Unused PrepTest Section</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="preptest-range" id="preptest-range" />
+                  <Label htmlFor="preptest-range">Mix from PrepTest Range</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="custom-themed" id="custom-themed" />
+                  <Label htmlFor="custom-themed">Custom Themed Section</Label>
+                </div>
+              </RadioGroup>
+            </div>
+
+            {rcSettings.sourceType === "custom-themed" && (
+              <>
+                <Separator />
+                
+                {/* Passage Categories */}
+                <div className="space-y-3">
+                  <Label className="text-sm font-medium">Passage Categories</Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {RC_PASSAGE_CATEGORIES.map((category) => (
+                      <div key={category} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={category}
+                          checked={rcSettings.passageCategories.includes(category)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setRCSettings(prev => ({
+                                ...prev,
+                                passageCategories: [...prev.passageCategories, category]
+                              }));
+                            } else {
+                              setRCSettings(prev => ({
+                                ...prev,
+                                passageCategories: prev.passageCategories.filter(c => c !== category)
+                              }));
+                            }
+                          }}
+                        />
+                        <Label htmlFor={category} className="text-sm cursor-pointer">{category}</Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <Separator />
+
+                {/* Question Categories */}
+                <div className="space-y-3">
+                  <Label className="text-sm font-medium">Question Categories</Label>
+                  <div className="grid grid-cols-2 gap-2">
+                    {RC_QUESTION_CATEGORIES.map((category) => (
+                      <div key={category} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={category}
+                          checked={rcSettings.questionCategories.includes(category)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setRCSettings(prev => ({
+                                ...prev,
+                                questionCategories: [...prev.questionCategories, category]
+                              }));
+                            } else {
+                              setRCSettings(prev => ({
+                                ...prev,
+                                questionCategories: prev.questionCategories.filter(c => c !== category)
+                              }));
+                            }
+                          }}
+                        />
+                        <Label htmlFor={category} className="text-sm cursor-pointer">{category}</Label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                <Separator />
+              </>
+            )}
+
+            {/* Timing Mode */}
+            <div className="space-y-3">
+              <Label className="text-sm font-medium">Timing Mode</Label>
+              <div className="flex items-center justify-between">
+                <Label htmlFor="timed-mode">Timed (35:00)</Label>
+                <Switch
+                  id="timed-mode"
+                  checked={rcSettings.timed}
+                  onCheckedChange={(checked) => setRCSettings(prev => ({ ...prev, timed: checked }))}
+                />
+              </div>
+            </div>
+
+            <Button className="w-full" size="lg">
+              <BookOpen className="h-4 w-4 mr-2" />
+              Generate Section
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+
+  // Render current mode
+  switch (currentMode) {
+    case "smart-lr":
+      return renderSmartLRDriller();
+    case "custom-lr":
+      return renderCustomLRBuilder();
+    case "reading-comp":
+      return renderRCGenerator();
+    default:
+      return renderModeSelection();
+  }
 }
