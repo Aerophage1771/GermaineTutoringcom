@@ -470,12 +470,7 @@ const Dashboard = () => {
               size="lg" 
               className="w-full h-16 text-lg font-semibold"
               variant="outline"
-              onClick={() => {
-                toast({
-                  title: "Coming Soon",
-                  description: "Practice drill builder is under development",
-                });
-              }}
+              onClick={() => setLocation("/practice-test")}
             >
               <BookOpen className="h-6 w-6 mr-2" />
               Practice

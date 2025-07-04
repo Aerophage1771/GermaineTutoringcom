@@ -114,6 +114,12 @@ Changelog:
 - July 03, 2025. Updated header navigation - changed "Student Dashboard" to "Student Log-In" with prominence
 - July 03, 2025. Added Home button to header navigation
 - July 03, 2025. Removed all references to "Logic Games" throughout the application
+- July 04, 2025. Added complete authentication system with PostgreSQL database storage
+- July 04, 2025. Implemented two-column Dashboard layout with Account Summary, Session History, and large action buttons
+- July 04, 2025. Added Problem Log with auto-save inline editing and delete functionality
+- July 04, 2025. Created LSAT questions database with 6,008 questions imported from CSV metadata
+- July 04, 2025. Built Practice Test interface with configurable settings and question display system
+- July 04, 2025. Connected Dashboard Practice button to new testing interface
 ```
 
 ## User Preferences

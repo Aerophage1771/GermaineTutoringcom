@@ -5,10 +5,11 @@ import {
   sessions, type Session, type InsertSession,
   problemLog, type ProblemLog, type InsertProblemLog,
   practiceActivities, type PracticeActivity, type InsertPracticeActivity,
-  timeAddOns, type TimeAddOn, type InsertTimeAddOn
+  timeAddOns, type TimeAddOn, type InsertTimeAddOn,
+  lsatQuestions, type LsatQuestion
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, sql } from "drizzle-orm";
+import { eq, desc, sql, and } from "drizzle-orm";
 
 export interface IStorage {
   // User management
@@ -40,6 +41,12 @@ export interface IStorage {
   // Time add-ons
   getUserTimeAddOns(userId: number): Promise<TimeAddOn[]>;
   createTimeAddOn(addon: InsertTimeAddOn): Promise<TimeAddOn>;
+  
+  // LSAT Questions
+  getLSATQuestionsByTest(prepTest: number): Promise<LsatQuestion[]>;
+  getLSATQuestionsBySection(prepTest: number, sectionNumber: number): Promise<LsatQuestion[]>;
+  getLSATQuestionsByType(sectionType: string, limit?: number): Promise<LsatQuestion[]>;
+  getRandomLSATQuestions(count: number, sectionType?: string, difficulty?: number): Promise<LsatQuestion[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -187,6 +194,72 @@ export class DatabaseStorage implements IStorage {
       .values(addon)
       .returning();
     return timeAddon;
+  }
+
+  // LSAT Questions
+  async getLSATQuestionsByTest(prepTest: number): Promise<LsatQuestion[]> {
+    return await db
+      .select()
+      .from(lsatQuestions)
+      .where(eq(lsatQuestions.prep_test_number, prepTest))
+      .orderBy(lsatQuestions.section_number, lsatQuestions.question_number_in_section);
+  }
+
+  async getLSATQuestionsBySection(prepTest: number, sectionNumber: number): Promise<LsatQuestion[]> {
+    return await db
+      .select()
+      .from(lsatQuestions)
+      .where(
+        and(
+          eq(lsatQuestions.prep_test_number, prepTest),
+          eq(lsatQuestions.section_number, sectionNumber)
+        )
+      )
+      .orderBy(lsatQuestions.question_number_in_section);
+  }
+
+  async getLSATQuestionsByType(sectionType: string, limit: number = 50): Promise<LsatQuestion[]> {
+    return await db
+      .select()
+      .from(lsatQuestions)
+      .where(eq(lsatQuestions.section_type, sectionType))
+      .limit(limit);
+  }
+
+  async getRandomLSATQuestions(count: number, sectionType?: string, difficulty?: number): Promise<LsatQuestion[]> {
+    if (sectionType && difficulty) {
+      return await db
+        .select()
+        .from(lsatQuestions)
+        .where(
+          and(
+            eq(lsatQuestions.section_type, sectionType),
+            eq(lsatQuestions.question_difficulty, difficulty)
+          )
+        )
+        .orderBy(sql`RANDOM()`)
+        .limit(count);
+    } else if (sectionType) {
+      return await db
+        .select()
+        .from(lsatQuestions)
+        .where(eq(lsatQuestions.section_type, sectionType))
+        .orderBy(sql`RANDOM()`)
+        .limit(count);
+    } else if (difficulty) {
+      return await db
+        .select()
+        .from(lsatQuestions)
+        .where(eq(lsatQuestions.question_difficulty, difficulty))
+        .orderBy(sql`RANDOM()`)
+        .limit(count);
+    }
+    
+    return await db
+      .select()
+      .from(lsatQuestions)
+      .orderBy(sql`RANDOM()`)
+      .limit(count);
   }
 }
 

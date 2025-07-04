@@ -215,6 +215,56 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // LSAT Questions routes
+  app.get("/api/lsat/random", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    
+    try {
+      const count = parseInt(req.query.count as string) || 10;
+      const sectionType = req.query.sectionType as string;
+      const difficulty = req.query.difficulty ? parseInt(req.query.difficulty as string) : undefined;
+      
+      const questions = await storage.getRandomLSATQuestions(count, sectionType, difficulty);
+      res.json(questions);
+    } catch (error) {
+      console.error("Error fetching random LSAT questions:", error);
+      res.status(500).json({ message: "Failed to fetch LSAT questions" });
+    }
+  });
+
+  app.get("/api/lsat/prep-test/:prepTest", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    
+    try {
+      const prepTest = parseInt(req.params.prepTest);
+      const questions = await storage.getLSATQuestionsByTest(prepTest);
+      res.json(questions);
+    } catch (error) {
+      console.error("Error fetching prep test questions:", error);
+      res.status(500).json({ message: "Failed to fetch prep test questions" });
+    }
+  });
+
+  app.get("/api/lsat/prep-test/:prepTest/section/:section", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    
+    try {
+      const prepTest = parseInt(req.params.prepTest);
+      const section = parseInt(req.params.section);
+      const questions = await storage.getLSATQuestionsBySection(prepTest, section);
+      res.json(questions);
+    } catch (error) {
+      console.error("Error fetching section questions:", error);
+      res.status(500).json({ message: "Failed to fetch section questions" });
+    }
+  });
+
   app.post("/api/dashboard/practice-activities", async (req, res) => {
     if (!req.session.userId) {
       return res.status(401).json({ message: "Not authenticated" });

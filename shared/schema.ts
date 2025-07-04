@@ -208,3 +208,45 @@ export const insertConsultationSchema = createInsertSchema(consultations)
 
 export type InsertConsultation = z.infer<typeof insertConsultationSchema>;
 export type Consultation = typeof consultations.$inferSelect;
+
+// LSAT Questions metadata table
+export const lsatQuestions = pgTable("lsat_questions", {
+  id: serial("id").primaryKey(),
+  prep_test_number: integer("prep_test_number").notNull(),
+  section_number: integer("section_number").notNull(),
+  section_type: text("section_type").notNull(), // "Reading Comprehension" or "Logical Reasoning"
+  question_number_in_section: integer("question_number_in_section"),
+  question_id: text("question_id").notNull().unique(),
+  question_difficulty: integer("question_difficulty"), // 1-5
+  question_50_percent_score: decimal("question_50_percent_score", { precision: 6, scale: 2 }),
+  lr_question_type: text("lr_question_type"), // For Logical Reasoning questions
+  lr_skills: text("lr_skills"), // For Logical Reasoning questions  
+  rc_passage_id: text("rc_passage_id"), // For Reading Comprehension questions
+  rc_passage_number_in_section: integer("rc_passage_number_in_section"),
+  rc_passage_difficulty: integer("rc_passage_difficulty"),
+  rc_passage_categories: text("rc_passage_categories"),
+  rc_question_categories: text("rc_question_categories"),
+  rc_question_number_in_passage: integer("rc_question_number_in_passage"),
+  created_at: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const insertLsatQuestionSchema = createInsertSchema(lsatQuestions).pick({
+  prep_test_number: true,
+  section_number: true,
+  section_type: true,
+  question_number_in_section: true,
+  question_id: true,
+  question_difficulty: true,
+  question_50_percent_score: true,
+  lr_question_type: true,
+  lr_skills: true,
+  rc_passage_id: true,
+  rc_passage_number_in_section: true,
+  rc_passage_difficulty: true,
+  rc_passage_categories: true,
+  rc_question_categories: true,
+  rc_question_number_in_passage: true,
+});
+
+export type InsertLsatQuestion = z.infer<typeof insertLsatQuestionSchema>;
+export type LsatQuestion = typeof lsatQuestions.$inferSelect;
