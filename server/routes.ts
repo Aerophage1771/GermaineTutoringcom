@@ -249,6 +249,24 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  app.get("/api/lsat/browse", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    
+    try {
+      // For now, return all questions with basic filtering by section type
+      const mode = req.query.mode as string;
+      const sectionType = mode === 'lr' ? 'Logical Reasoning' : 'Reading Comprehension';
+      
+      const questions = await storage.getLSATQuestionsByType(sectionType, 100);
+      res.json(questions);
+    } catch (error) {
+      console.error("Error fetching browse questions:", error);
+      res.status(500).json({ message: "Failed to fetch browse questions" });
+    }
+  });
+
   app.get("/api/lsat/prep-test/:prepTest/section/:section", async (req, res) => {
     if (!req.session.userId) {
       return res.status(401).json({ message: "Not authenticated" });

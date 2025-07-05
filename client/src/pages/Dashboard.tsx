@@ -465,15 +465,26 @@ const Dashboard = () => {
               Full-Length Test
             </Button>
 
-            {/* Practice */}
+            {/* Practice Logical Reasoning */}
             <Button 
               size="lg" 
               className="w-full h-16 text-lg font-semibold"
               variant="outline"
-              onClick={() => setLocation("/practice-test")}
+              onClick={() => setLocation("/practice-test?mode=lr")}
             >
               <BookOpen className="h-6 w-6 mr-2" />
-              Practice
+              Practice Logical Reasoning
+            </Button>
+
+            {/* Practice Reading Comprehension */}
+            <Button 
+              size="lg" 
+              className="w-full h-16 text-lg font-semibold"
+              variant="outline"
+              onClick={() => setLocation("/practice-test?mode=rc")}
+            >
+              <BookOpen className="h-6 w-6 mr-2" />
+              Practice Reading Comprehension
             </Button>
 
             {/* Learning Library */}

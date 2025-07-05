@@ -120,6 +120,10 @@ Changelog:
 - July 04, 2025. Created LSAT questions database with 6,008 questions imported from CSV metadata
 - July 04, 2025. Built Practice Test interface with configurable settings and question display system
 - July 04, 2025. Connected Dashboard Practice button to new testing interface
+- July 04, 2025. Split Practice into two separate dashboard sections: "Practice Logical Reasoning" and "Practice Reading Comprehension"
+- July 04, 2025. Redesigned Practice interface with free browsing as default and smart drilling option for LR only
+- July 04, 2025. Removed Reading Comprehension section generator and "never attempted questions" targeting criteria
+- July 04, 2025. Added comprehensive question filtering by type, skills, difficulty, and passage categories
 ```
 
 ## User Preferences
