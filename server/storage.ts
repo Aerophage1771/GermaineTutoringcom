@@ -9,7 +9,7 @@ import {
   lsatQuestions, type LsatQuestion
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, sql, and } from "drizzle-orm";
+import { eq, desc, sql, and, inArray } from "drizzle-orm";
 
 export interface IStorage {
   // User management
@@ -47,6 +47,21 @@ export interface IStorage {
   getLSATQuestionsBySection(prepTest: number, sectionNumber: number): Promise<LsatQuestion[]>;
   getLSATQuestionsByType(sectionType: string, limit?: number): Promise<LsatQuestion[]>;
   getRandomLSATQuestions(count: number, sectionType?: string, difficulty?: number): Promise<LsatQuestion[]>;
+  
+  // Browse methods with filters
+  browseLRQuestions(filters: {
+    questionTypes?: string[];
+    skills?: string[];
+    difficulty?: number[];
+    prepTests?: number[];
+  }, limit?: number): Promise<LsatQuestion[]>;
+  
+  browseRCPassages(filters: {
+    passageCategories?: string[];
+    questionCategories?: string[];
+    difficulty?: number[];
+    prepTests?: number[];
+  }, limit?: number): Promise<LsatQuestion[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -260,6 +275,93 @@ export class DatabaseStorage implements IStorage {
       .from(lsatQuestions)
       .orderBy(sql`RANDOM()`)
       .limit(count);
+  }
+
+  async browseLRQuestions(filters: {
+    questionTypes?: string[];
+    skills?: string[];
+    difficulty?: number[];
+    prepTests?: number[];
+  }, limit: number = 50): Promise<LsatQuestion[]> {
+    try {
+      let query = db.select().from(lsatQuestions)
+        .where(eq(lsatQuestions.section_type, 'Logical Reasoning'));
+      
+      const conditions = [eq(lsatQuestions.section_type, 'Logical Reasoning')];
+      
+      if (filters.questionTypes && filters.questionTypes.length > 0) {
+        conditions.push(inArray(lsatQuestions.lr_question_type, filters.questionTypes));
+      }
+      
+      if (filters.skills && filters.skills.length > 0) {
+        conditions.push(inArray(lsatQuestions.lr_skills, filters.skills));
+      }
+      
+      if (filters.difficulty && filters.difficulty.length > 0) {
+        conditions.push(inArray(lsatQuestions.question_difficulty, filters.difficulty));
+      }
+      
+      if (filters.prepTests && filters.prepTests.length > 0) {
+        conditions.push(inArray(lsatQuestions.prep_test_number, filters.prepTests));
+      }
+      
+      const questions = await db
+        .select()
+        .from(lsatQuestions)
+        .where(and(...conditions))
+        .orderBy(lsatQuestions.prep_test_number, lsatQuestions.section_number, lsatQuestions.question_number_in_section)
+        .limit(limit);
+      
+      return questions;
+    } catch (error) {
+      console.error("Error browsing LR questions:", error);
+      throw error;
+    }
+  }
+
+  async browseRCPassages(filters: {
+    passageCategories?: string[];
+    questionCategories?: string[];
+    difficulty?: number[];
+    prepTests?: number[];
+  }, limit: number = 50): Promise<LsatQuestion[]> {
+    try {
+      const conditions = [eq(lsatQuestions.section_type, 'Reading Comprehension')];
+      
+      if (filters.passageCategories && filters.passageCategories.length > 0) {
+        conditions.push(inArray(lsatQuestions.rc_passage_categories, filters.passageCategories));
+      }
+      
+      if (filters.questionCategories && filters.questionCategories.length > 0) {
+        conditions.push(inArray(lsatQuestions.rc_question_categories, filters.questionCategories));
+      }
+      
+      if (filters.difficulty && filters.difficulty.length > 0) {
+        conditions.push(inArray(lsatQuestions.rc_passage_difficulty, filters.difficulty));
+      }
+      
+      if (filters.prepTests && filters.prepTests.length > 0) {
+        conditions.push(inArray(lsatQuestions.prep_test_number, filters.prepTests));
+      }
+      
+      // Group by passage and order questions within each passage
+      const questions = await db
+        .select()
+        .from(lsatQuestions)
+        .where(and(...conditions))
+        .orderBy(
+          lsatQuestions.prep_test_number, 
+          lsatQuestions.section_number, 
+          lsatQuestions.rc_passage_number_in_section,
+          lsatQuestions.rc_question_number_in_passage
+        )
+        .limit(limit);
+      
+      return questions;
+    } catch (error) {
+      console.error("Error browsing RC passages:", error);
+      throw error;
+    }
   }
 }
 

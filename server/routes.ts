@@ -255,11 +255,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
     
     try {
-      // For now, return all questions with basic filtering by section type
       const mode = req.query.mode as string;
-      const sectionType = mode === 'lr' ? 'Logical Reasoning' : 'Reading Comprehension';
+      const filters = req.query.filters ? JSON.parse(req.query.filters as string) : {};
       
-      const questions = await storage.getLSATQuestionsByType(sectionType, 100);
+      let questions;
+      
+      if (mode === 'lr') {
+        questions = await storage.browseLRQuestions({
+          questionTypes: filters.questionTypes || [],
+          skills: filters.skills || [],
+          difficulty: filters.difficulty || [],
+          prepTests: filters.prepTests || []
+        }, 100);
+      } else if (mode === 'rc') {
+        questions = await storage.browseRCPassages({
+          passageCategories: filters.passageCategories || [],
+          questionCategories: filters.questionCategories || [],
+          difficulty: filters.difficulty || [],
+          prepTests: filters.prepTests || []
+        }, 100);
+      } else {
+        // Default fallback
+        questions = await storage.getLSATQuestionsByType('Logical Reasoning', 50);
+      }
+      
       res.json(questions);
     } catch (error) {
       console.error("Error fetching browse questions:", error);

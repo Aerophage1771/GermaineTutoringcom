@@ -41,6 +41,13 @@ interface BrowseFilters {
   prepTests: number[];
 }
 
+interface RCFilters {
+  passageCategories: string[];
+  questionCategories: string[];
+  difficulty: number[];
+  prepTests: number[];
+}
+
 const LR_QUESTION_TYPES = [
   "Agree", "Argument Part", "Disagree", "Evaluate", "Fill in the blank", "Flaw", 
   "Inference", "Main conclusion or main point", "Method of Reasoning", "Miscellaneous", 
@@ -81,17 +88,38 @@ export default function PracticeTest() {
     targetingCriteria: ""
   });
   
-  // Browse filters
+  // Browse filters (for LR)
   const [browseFilters, setBrowseFilters] = useState<BrowseFilters>({
     questionTypes: [],
     skills: [],
     difficulty: [],
     prepTests: []
   });
+
+  // RC filters
+  const [rcFilters, setRCFilters] = useState<RCFilters>({
+    passageCategories: [],
+    questionCategories: [],
+    difficulty: [],
+    prepTests: []
+  });
   
   // Fetch questions for browsing
   const { data: questions = [], isLoading: questionsLoading } = useQuery<LsatQuestion[]>({
-    queryKey: ['/api/lsat/browse', practiceMode, browseFilters],
+    queryKey: ['/api/lsat/browse', practiceMode, practiceMode === 'lr' ? browseFilters : rcFilters],
+    queryFn: async () => {
+      const filters = practiceMode === 'lr' ? browseFilters : rcFilters;
+      const params = new URLSearchParams({
+        mode: practiceMode,
+        filters: JSON.stringify(filters)
+      });
+      
+      const response = await fetch(`/api/lsat/browse?${params}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch questions');
+      }
+      return response.json();
+    },
     enabled: lrDisplayMode === "browse" || practiceMode === "rc",
   });
 
@@ -299,7 +327,23 @@ export default function PracticeTest() {
                   <div className="grid grid-cols-1 gap-2">
                     {RC_PASSAGE_CATEGORIES.map((category) => (
                       <div key={category} className="flex items-center space-x-2">
-                        <Checkbox id={category} />
+                        <Checkbox 
+                          id={category}
+                          checked={rcFilters.passageCategories.includes(category)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setRCFilters(prev => ({
+                                ...prev,
+                                passageCategories: [...prev.passageCategories, category]
+                              }));
+                            } else {
+                              setRCFilters(prev => ({
+                                ...prev,
+                                passageCategories: prev.passageCategories.filter(c => c !== category)
+                              }));
+                            }
+                          }}
+                        />
                         <Label htmlFor={category} className="text-sm cursor-pointer">{category}</Label>
                       </div>
                     ))}
@@ -314,7 +358,23 @@ export default function PracticeTest() {
                   <div className="grid grid-cols-1 gap-2">
                     {RC_QUESTION_CATEGORIES.map((category) => (
                       <div key={category} className="flex items-center space-x-2">
-                        <Checkbox id={category} />
+                        <Checkbox 
+                          id={category}
+                          checked={rcFilters.questionCategories.includes(category)}
+                          onCheckedChange={(checked) => {
+                            if (checked) {
+                              setRCFilters(prev => ({
+                                ...prev,
+                                questionCategories: [...prev.questionCategories, category]
+                              }));
+                            } else {
+                              setRCFilters(prev => ({
+                                ...prev,
+                                questionCategories: prev.questionCategories.filter(c => c !== category)
+                              }));
+                            }
+                          }}
+                        />
                         <Label htmlFor={category} className="text-sm cursor-pointer">{category}</Label>
                       </div>
                     ))}
@@ -330,23 +390,41 @@ export default function PracticeTest() {
               <Label className="text-sm font-medium">Difficulty</Label>
               <div className="flex space-x-2">
                 {[1, 2, 3, 4, 5].map((diff) => (
-                  <Checkbox
-                    key={diff}
-                    checked={browseFilters.difficulty.includes(diff)}
-                    onCheckedChange={(checked) => {
-                      if (checked) {
-                        setBrowseFilters(prev => ({
-                          ...prev,
-                          difficulty: [...prev.difficulty, diff]
-                        }));
-                      } else {
-                        setBrowseFilters(prev => ({
-                          ...prev,
-                          difficulty: prev.difficulty.filter(d => d !== diff)
-                        }));
-                      }
-                    }}
-                  />
+                  <div key={diff} className="flex flex-col items-center space-y-1">
+                    <Checkbox
+                      checked={practiceMode === 'lr' 
+                        ? browseFilters.difficulty.includes(diff)
+                        : rcFilters.difficulty.includes(diff)}
+                      onCheckedChange={(checked) => {
+                        if (practiceMode === 'lr') {
+                          if (checked) {
+                            setBrowseFilters(prev => ({
+                              ...prev,
+                              difficulty: [...prev.difficulty, diff]
+                            }));
+                          } else {
+                            setBrowseFilters(prev => ({
+                              ...prev,
+                              difficulty: prev.difficulty.filter(d => d !== diff)
+                            }));
+                          }
+                        } else {
+                          if (checked) {
+                            setRCFilters(prev => ({
+                              ...prev,
+                              difficulty: [...prev.difficulty, diff]
+                            }));
+                          } else {
+                            setRCFilters(prev => ({
+                              ...prev,
+                              difficulty: prev.difficulty.filter(d => d !== diff)
+                            }));
+                          }
+                        }
+                      }}
+                    />
+                    <Label className="text-xs">{diff}</Label>
+                  </div>
                 ))}
               </div>
             </div>

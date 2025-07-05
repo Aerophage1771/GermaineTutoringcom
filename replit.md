@@ -124,6 +124,8 @@ Changelog:
 - July 04, 2025. Redesigned Practice interface with free browsing as default and smart drilling option for LR only
 - July 04, 2025. Removed Reading Comprehension section generator and "never attempted questions" targeting criteria
 - July 04, 2025. Added comprehensive question filtering by type, skills, difficulty, and passage categories
+- July 05, 2025. Updated Reading Comprehension to be passage-based with RC-specific filters (passage categories, question categories)
+- July 05, 2025. Implemented proper RC filtering backend with passage grouping and ordering by passage structure
 ```
 
 ## User Preferences
