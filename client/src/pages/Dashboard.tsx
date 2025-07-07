@@ -99,11 +99,7 @@ export default function Dashboard() {
     enabled: !!user
   });
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
-
-  // Mutations
+  // Mutations - must be called before any early returns
   const addProblemMutation = useMutation({
     mutationFn: (data: any) => apiRequest("/api/dashboard/problem-log", "POST", data),
     onSuccess: () => {
@@ -155,6 +151,10 @@ export default function Dashboard() {
       toast({ title: "Error deleting problem", description: error.message, variant: "destructive" });
     }
   });
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
 
   // Calculations
   const timeRemaining = user.time_remaining / 60; // Convert minutes to hours
