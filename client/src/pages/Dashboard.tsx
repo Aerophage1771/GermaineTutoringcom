@@ -12,501 +12,634 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Clock, Plus, Play, BookOpen, Target, TrendingUp, Calendar, Archive, BarChart3, Trash2, ChevronDown, ChevronUp, Eye } from "lucide-react";
+import { Clock, Plus, Play, BookOpen, Target, TrendingUp, Calendar, Archive, BarChart3, Trash2, Brain, FileText, Video, MessageCircle } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { apiRequest } from "@/lib/queryClient";
 
 // Types
 interface Session {
   id: number;
+  user_id: number;
   date: string;
-  summary: string;
-  duration: string;
-  video_link?: string;
+  duration: number;
+  topic: string;
+  notes?: string;
 }
 
-interface ProblemLogEntry {
+interface ProblemLog {
   id: number;
-  prep_test: string;
-  section: string;
-  question: string;
-  correct_reasoning?: string;
-  student_flaw?: string;
-  rule_for_future?: string;
+  user_id: number;
+  prep_test: number;
+  section_number: number;
+  question_number: number;
+  question_type: string;
+  difficulty: number;
+  correct: boolean;
+  time_spent: number;
+  notes?: string;
+  created_at: string;
 }
 
 interface PracticeActivity {
   id: number;
+  user_id: number;
   activity_type: string;
-  test_name?: string;
-  section_type?: string;
+  duration: number;
   questions_attempted: number;
   questions_correct: number;
-  time_spent: number;
-  score_percentage?: string;
-  completed_at: string;
+  date: string;
+  notes?: string;
 }
 
-// Time remaining color logic
-const getTimeRemainingColor = (hours: number): string => {
-  if (hours === 0) return "text-gray-400";
-  if (hours >= 8) return "text-green-600";
-  if (hours >= 2) {
-    const ratio = (hours - 2) / 6; // Scale from 2-8 hours
-    const red = Math.round(255 * (1 - ratio));
-    const green = Math.round(255 * ratio);
-    return `text-[rgb(${red},${green},0)]`;
-  }
-  return "text-red-600";
-};
-
-const Dashboard = () => {
-  const { user, isAuthenticated } = useAuth();
-  const [, setLocation] = useLocation();
+export default function Dashboard() {
+  const { user, logout } = useAuth();
+  const [location, setLocation] = useLocation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
-  
-  // State for modals and collapsible sections
+
+  // Dialog states
   const [isBookSessionOpen, setIsBookSessionOpen] = useState(false);
-  const [isProblemLogOpen, setIsProblemLogOpen] = useState(false);
-  const [isSessionHistoryOpen, setIsSessionHistoryOpen] = useState(false);
-  
-  // Redirect if not authenticated
-  useEffect(() => {
-    if (!isAuthenticated) {
-      setLocation("/login");
-    }
-  }, [isAuthenticated, setLocation]);
+  const [isAddProblemOpen, setIsAddProblemOpen] = useState(false);
+  const [isAddActivityOpen, setIsAddActivityOpen] = useState(false);
 
-  // Fetch dashboard data
-  const { data: sessions = [] } = useQuery({
-    queryKey: ['/api/dashboard/sessions'],
-    enabled: isAuthenticated,
+  // Problem log form state
+  const [problemForm, setProblemForm] = useState({
+    prep_test: "",
+    section_number: "",
+    question_number: "",
+    question_type: "",
+    difficulty: "",
+    correct: "false",
+    time_spent: "",
+    notes: ""
   });
 
-  const { data: problemLog = [] } = useQuery({
-    queryKey: ['/api/dashboard/problem-log'],
-    enabled: isAuthenticated,
+  // Practice activity form state
+  const [activityForm, setActivityForm] = useState({
+    activity_type: "",
+    duration: "",
+    questions_attempted: "",
+    questions_correct: "",
+    notes: ""
   });
-
-  const { data: practiceActivities = [] } = useQuery({
-    queryKey: ['/api/dashboard/practice-activities'],
-    enabled: isAuthenticated,
-  });
-
-  // Problem log mutations for auto-save
-  const updateProblemLogMutation = useMutation({
-    mutationFn: async ({ id, field, value }: { id: number; field: string; value: string }) => {
-      const response = await apiRequest("PUT", `/api/dashboard/problem-log/${id}`, { [field]: value });
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/dashboard/problem-log'] });
-    },
-    onError: (error) => {
-      toast({
-        title: "Save Failed",
-        description: "Could not save changes. Please try again.",
-        variant: "destructive",
-      });
-    }
-  });
-
-  const createProblemLogMutation = useMutation({
-    mutationFn: async (entry: Omit<ProblemLogEntry, 'id'>) => {
-      const response = await apiRequest("POST", "/api/dashboard/problem-log", entry);
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/dashboard/problem-log'] });
-      toast({
-        title: "Entry Added",
-        description: "Problem log entry created successfully.",
-      });
-    }
-  });
-
-  const deleteProblemLogMutation = useMutation({
-    mutationFn: async (id: number) => {
-      const response = await apiRequest("DELETE", `/api/dashboard/problem-log/${id}`);
-      return response.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/dashboard/problem-log'] });
-      toast({
-        title: "Entry Deleted",
-        description: "Problem log entry deleted successfully.",
-      });
-    }
-  });
-
-  // Auto-save handler for problem log
-  const handleProblemLogChange = (id: number, field: string, value: string) => {
-    updateProblemLogMutation.mutate({ id, field, value });
-  };
-
-  // Add new problem log entry
-  const addProblemLogEntry = () => {
-    createProblemLogMutation.mutate({
-      prep_test: "",
-      section: "1",
-      question: "",
-      correct_reasoning: "",
-      student_flaw: "",
-      rule_for_future: ""
-    });
-  };
-
-  // Delete problem log entry
-  const deleteProblemLogEntry = (id: number) => {
-    deleteProblemLogMutation.mutate(id);
-  };
-
-  // Schedule session handler
-  const handleScheduleSession = (duration: string) => {
-    // Placeholder for Calendly integration
-    window.open(`https://calendly.com/placeholder-${duration}hour`, '_blank');
-  };
 
   if (!user) {
     return <div>Loading...</div>;
   }
 
-  // Handle undefined time_remaining with default of 8 hours
-  const timeRemaining = user.time_remaining ?? 8;
-  const bonusTestTime = user.bonus_test_review_time ?? 0;
+  // Data queries
+  const { data: sessions = [] } = useQuery<Session[]>({
+    queryKey: ["/api/dashboard/sessions"],
+    enabled: !!user
+  });
+
+  const { data: problemLog = [] } = useQuery<ProblemLog[]>({
+    queryKey: ["/api/dashboard/problem-log"],
+    enabled: !!user
+  });
+
+  const { data: practiceActivities = [] } = useQuery<PracticeActivity[]>({
+    queryKey: ["/api/dashboard/practice-activities"],
+    enabled: !!user
+  });
+
+  // Mutations
+  const addProblemMutation = useMutation({
+    mutationFn: (data: any) => apiRequest("/api/dashboard/problem-log", "POST", data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/dashboard/problem-log"] });
+      setIsAddProblemOpen(false);
+      setProblemForm({
+        prep_test: "",
+        section_number: "",
+        question_number: "",
+        question_type: "",
+        difficulty: "",
+        correct: "false",
+        time_spent: "",
+        notes: ""
+      });
+      toast({ title: "Problem added successfully" });
+    },
+    onError: (error: any) => {
+      toast({ title: "Error adding problem", description: error.message, variant: "destructive" });
+    }
+  });
+
+  const addActivityMutation = useMutation({
+    mutationFn: (data: any) => apiRequest("/api/dashboard/practice-activities", "POST", data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/dashboard/practice-activities"] });
+      setIsAddActivityOpen(false);
+      setActivityForm({
+        activity_type: "",
+        duration: "",
+        questions_attempted: "",
+        questions_correct: "",
+        notes: ""
+      });
+      toast({ title: "Activity added successfully" });
+    },
+    onError: (error: any) => {
+      toast({ title: "Error adding activity", description: error.message, variant: "destructive" });
+    }
+  });
+
+  const deleteProblemMutation = useMutation({
+    mutationFn: (id: number) => apiRequest(`/api/dashboard/problem-log/${id}`, "DELETE"),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/dashboard/problem-log"] });
+      toast({ title: "Problem deleted successfully" });
+    },
+    onError: (error: any) => {
+      toast({ title: "Error deleting problem", description: error.message, variant: "destructive" });
+    }
+  });
+
+  // Calculations
+  const timeRemaining = user.time_remaining / 60; // Convert minutes to hours
+  const bonusTestTime = user.bonus_test_review_time / 60;
+  const sessionHistory = sessions.slice(0, 5);
+  
+  const getTimeRemainingColor = (time: number) => {
+    if (time > 5) return "text-green-600";
+    if (time > 2) return "text-yellow-600";
+    return "text-red-600";
+  };
   
   const timeRemainingColor = getTimeRemainingColor(timeRemaining);
   const canSchedule = timeRemaining > 0;
 
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString();
+  };
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Student Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back, {user.username}!</p>
+        <div className="mb-8 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-normal text-gray-800 mb-2">Student Dashboard</h1>
+            <p className="text-gray-600">Welcome back, {user.username.charAt(0).toUpperCase() + user.username.slice(1)}!</p>
+          </div>
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-medium">
+              {user.username.charAt(0).toUpperCase()}
+            </div>
+            <Button variant="outline" size="sm" onClick={() => logout()}>
+              Logout
+            </Button>
+          </div>
         </div>
 
-        {/* Two Column Layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Left Column */}
-          <div className="lg:col-span-1 space-y-6">
-            {/* Account Summary - Small Card */}
-            <Card className="p-4">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-lg flex items-center gap-2">
-                  <Clock className="h-4 w-4" />
-                  Account Summary
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-3 gap-4 text-center">
-                  <div>
-                    <div className="text-lg font-bold text-primary">{user.sessions_held}</div>
-                    <div className="text-xs text-muted-foreground">Sessions</div>
-                  </div>
-                  <div>
-                    <div className={`text-lg font-bold ${timeRemainingColor}`}>
-                      {timeRemaining.toFixed(1)}h
-                    </div>
-                    <div className="text-xs text-muted-foreground">Time Left</div>
-                  </div>
-                  <div>
-                    <div className="text-lg font-bold text-blue-600">
-                      {bonusTestTime.toFixed(1)}h
-                    </div>
-                    <div className="text-xs text-muted-foreground">Bonus</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Session History - Collapsible */}
-            <Card>
-              <Collapsible 
-                open={isSessionHistoryOpen} 
-                onOpenChange={setIsSessionHistoryOpen}
-              >
-                <CollapsibleTrigger asChild>
-                  <CardHeader className="cursor-pointer hover:bg-gray-50 rounded-t-lg">
-                    <CardTitle className="text-lg flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4" />
-                        Session History
+        {/* Layout: Smaller left column + centered right content */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* Left Column - Compact */}
+          <div className="lg:col-span-1 space-y-4">
+            {/* Tabbed Account Info */}
+            <Card className="shadow-lg bg-white border-0">
+              <Tabs defaultValue="summary" className="w-full">
+                <TabsList className="grid w-full grid-cols-2">
+                  <TabsTrigger value="summary">Account</TabsTrigger>
+                  <TabsTrigger value="sessions">Sessions</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="summary" className="p-4">
+                  <div className="space-y-3">
+                    <h3 className="font-medium flex items-center gap-2">
+                      <Clock className="h-4 w-4 text-blue-500" />
+                      Summary
+                    </h3>
+                    <div className="grid grid-cols-1 gap-3">
+                      <div className="text-center p-3 bg-gray-50 rounded-lg">
+                        <div className="text-xl font-bold text-blue-600">{user.sessions_held}</div>
+                        <div className="text-xs text-gray-600">Sessions</div>
                       </div>
-                      {isSessionHistoryOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                    </CardTitle>
-                  </CardHeader>
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                  <CardContent>
-                    {Array.isArray(sessions) && sessions.length > 0 ? (
+                      <div className="text-center p-3 bg-gray-50 rounded-lg">
+                        <div className={`text-xl font-bold ${timeRemainingColor}`}>
+                          {timeRemaining.toFixed(1)}h
+                        </div>
+                        <div className="text-xs text-gray-600">Time Left</div>
+                      </div>
+                      <div className="text-center p-3 bg-gray-50 rounded-lg">
+                        <div className="text-xl font-bold text-emerald-600">
+                          {bonusTestTime.toFixed(1)}h
+                        </div>
+                        <div className="text-xs text-gray-600">Bonus</div>
+                      </div>
+                    </div>
+                  </div>
+                </TabsContent>
+                
+                <TabsContent value="sessions" className="p-4 max-h-64 overflow-y-auto">
+                  <div className="space-y-3">
+                    <h3 className="font-medium flex items-center gap-2">
+                      <Calendar className="h-4 w-4 text-blue-500" />
+                      Recent Sessions
+                    </h3>
+                    {sessionHistory.length > 0 ? (
                       <div className="space-y-2">
-                        {sessions.map((session: any, index: number) => (
-                          <div key={index} className="flex items-center justify-between p-2 bg-gray-50 rounded">
-                            <div className="flex-1">
-                              <div className="font-medium text-sm">{session.date}</div>
-                              <div className="text-xs text-muted-foreground truncate">{session.summary}</div>
+                        {sessionHistory.slice(0, 3).map((session) => (
+                          <div key={session.id} className="border-l-3 border-blue-400 pl-3 py-2 bg-gray-50 rounded-r-lg">
+                            <div className="text-sm font-medium">
+                              {session.topic || "Session"}
                             </div>
-                            {session.video_link && (
-                              <Button size="sm" variant="outline" className="ml-2">
-                                <Eye className="h-3 w-3" />
-                                Watch
-                              </Button>
-                            )}
+                            <div className="text-xs text-gray-600">
+                              {formatDate(session.date)} • {session.duration}h
+                            </div>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <p className="text-sm text-muted-foreground">No sessions yet</p>
+                      <p className="text-sm text-gray-500 text-center py-3">
+                        No sessions yet
+                      </p>
                     )}
-                  </CardContent>
-                </CollapsibleContent>
-              </Collapsible>
+                  </div>
+                </TabsContent>
+              </Tabs>
             </Card>
           </div>
 
-          {/* Right Column - Large Action Buttons */}
-          <div className="lg:col-span-2 space-y-4">
-            {/* Book Session */}
-            <Dialog open={isBookSessionOpen} onOpenChange={setIsBookSessionOpen}>
-              <DialogTrigger asChild>
+          {/* Right Column - Centered Action Buttons */}
+          <div className="lg:col-span-3 space-y-8 max-w-4xl mx-auto">
+            {/* Sessions & Tracking Section */}
+            <div>
+              <h2 className="text-lg font-medium text-gray-800 mb-4 flex items-center gap-2">
+                <Calendar className="h-5 w-5 text-blue-500" />
+                Sessions & Tracking
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Book Session */}
                 <Button 
                   size="lg" 
-                  className="w-full h-16 text-lg font-semibold"
+                  className="h-20 text-lg font-semibold bg-blue-600 hover:bg-blue-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
                   disabled={!canSchedule}
+                  onClick={() => window.open('https://calendly.com/germainetutor/consultation', '_blank')}
                 >
-                  <Calendar className="h-6 w-6 mr-2" />
-                  Book Session
+                  <Calendar className="h-6 w-6 mr-3" />
+                  <div className="text-left">
+                    <div>Book Session</div>
+                    <div className="text-sm font-normal opacity-80">Schedule a new tutoring session</div>
+                  </div>
                 </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle>Book a Session</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <Button 
-                    onClick={() => {
-                      handleScheduleSession('1');
-                      setIsBookSessionOpen(false);
-                    }}
-                    className="w-full h-12"
-                    disabled={!canSchedule}
-                  >
-                    1 Hour Session
-                  </Button>
-                  <Button 
-                    onClick={() => {
-                      handleScheduleSession('1.5');
-                      setIsBookSessionOpen(false);
-                    }}
-                    className="w-full h-12"
-                    variant="outline"
-                    disabled={!canSchedule}
-                  >
-                    1.5 Hour Session
-                  </Button>
-                  <Button 
-                    onClick={() => {
-                      handleScheduleSession('2');
-                      setIsBookSessionOpen(false);
-                    }}
-                    className="w-full h-12"
-                    variant="outline"
-                    disabled={!canSchedule}
-                  >
-                    2 Hour Session
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
 
-            {/* Problem Log */}
-            <Dialog open={isProblemLogOpen} onOpenChange={setIsProblemLogOpen}>
-              <DialogTrigger asChild>
+                {/* Session Analytics */}
                 <Button 
                   size="lg" 
-                  className="w-full h-16 text-lg font-semibold"
                   variant="outline"
+                  className="h-20 text-lg font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105 rounded-xl"
+                  onClick={() => setLocation("/analytics")}
                 >
-                  <Target className="h-6 w-6 mr-2" />
-                  Problem Log
+                  <BarChart3 className="h-6 w-6 mr-3" />
+                  <div className="text-left">
+                    <div>View Analytics</div>
+                    <div className="text-sm font-normal opacity-70">Track your progress</div>
+                  </div>
                 </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-                <DialogHeader>
-                  <DialogTitle>Problem Log</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <Button onClick={addProblemLogEntry} className="w-full">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Add New Entry
-                  </Button>
-                  {Array.isArray(problemLog) && problemLog.length > 0 ? (
+              </div>
+            </div>
+
+            {/* Practice & Review Section */}
+            <div>
+              <h2 className="text-lg font-medium text-gray-800 mb-4 flex items-center gap-2">
+                <Brain className="h-5 w-5 text-emerald-500" />
+                Practice & Review
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Practice LR */}
+                <Button 
+                  size="lg" 
+                  className="h-20 text-lg font-semibold bg-emerald-600 hover:bg-emerald-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
+                  onClick={() => setLocation("/practice-test")}
+                >
+                  <BookOpen className="h-6 w-6 mr-3" />
+                  <div className="text-left">
+                    <div>Practice Logical Reasoning</div>
+                    <div className="text-sm font-normal opacity-80">Work on LR questions</div>
+                  </div>
+                </Button>
+
+                {/* Practice RC */}
+                <Button 
+                  size="lg" 
+                  className="h-20 text-lg font-semibold bg-purple-600 hover:bg-purple-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
+                  onClick={() => setLocation("/practice-rc")}
+                >
+                  <FileText className="h-6 w-6 mr-3" />
+                  <div className="text-left">
+                    <div>Practice Reading Comprehension</div>
+                    <div className="text-sm font-normal opacity-80">Work on RC passages</div>
+                  </div>
+                </Button>
+
+                {/* Problem Log */}
+                <Dialog open={isAddProblemOpen} onOpenChange={setIsAddProblemOpen}>
+                  <DialogTrigger asChild>
+                    <Button 
+                      size="lg" 
+                      variant="outline"
+                      className="h-20 text-lg font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105 rounded-xl"
+                    >
+                      <Target className="h-6 w-6 mr-3" />
+                      <div className="text-left">
+                        <div>Problem Log</div>
+                        <div className="text-sm font-normal opacity-70">Track difficult questions</div>
+                      </div>
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Add Problem to Log</DialogTitle>
+                    </DialogHeader>
                     <div className="space-y-4">
-                      {problemLog.map((entry: any, index: number) => (
-                        <Card key={index} className="p-4">
-                          <div className="flex justify-between items-start mb-4">
-                            <div className="text-sm font-medium">Entry #{entry.id}</div>
-                            <Button 
-                              size="sm" 
-                              variant="destructive"
-                              onClick={() => deleteProblemLogEntry(entry.id)}
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </Button>
-                          </div>
-                          <div className="grid grid-cols-2 gap-4">
-                            <div>
-                              <Label htmlFor={`prep-test-${entry.id}`} className="text-sm font-medium">
-                                Prep Test
-                              </Label>
-                              <Input
-                                id={`prep-test-${entry.id}`}
-                                value={entry.prep_test}
-                                onChange={(e) => handleProblemLogChange(entry.id, 'prep_test', e.target.value)}
-                                placeholder="e.g., PT 101"
-                              />
-                            </div>
-                            <div>
-                              <Label htmlFor={`section-${entry.id}`} className="text-sm font-medium">
-                                Section (1-4)
-                              </Label>
-                              <Select 
-                                value={entry.section} 
-                                onValueChange={(value) => handleProblemLogChange(entry.id, 'section', value)}
-                              >
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select section" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                  <SelectItem value="1">1</SelectItem>
-                                  <SelectItem value="2">2</SelectItem>
-                                  <SelectItem value="3">3</SelectItem>
-                                  <SelectItem value="4">4</SelectItem>
-                                </SelectContent>
-                              </Select>
-                            </div>
-                          </div>
-                          <div className="mt-4">
-                            <Label htmlFor={`question-${entry.id}`} className="text-sm font-medium">
-                              Question
-                            </Label>
-                            <Input
-                              id={`question-${entry.id}`}
-                              value={entry.question}
-                              onChange={(e) => handleProblemLogChange(entry.id, 'question', e.target.value)}
-                              placeholder="Question number or description"
-                            />
-                          </div>
-                          <div className="mt-4 space-y-4">
-                            <div>
-                              <Label htmlFor={`reasoning-${entry.id}`} className="text-sm font-medium">
-                                Correct Reasoning
-                              </Label>
-                              <Textarea
-                                id={`reasoning-${entry.id}`}
-                                value={entry.correct_reasoning}
-                                onChange={(e) => handleProblemLogChange(entry.id, 'correct_reasoning', e.target.value)}
-                                placeholder="Explain the correct approach..."
-                                rows={3}
-                              />
-                            </div>
-                            <div>
-                              <Label htmlFor={`flaw-${entry.id}`} className="text-sm font-medium">
-                                Student Flaw
-                              </Label>
-                              <Textarea
-                                id={`flaw-${entry.id}`}
-                                value={entry.student_flaw}
-                                onChange={(e) => handleProblemLogChange(entry.id, 'student_flaw', e.target.value)}
-                                placeholder="What went wrong in your reasoning..."
-                                rows={3}
-                              />
-                            </div>
-                            <div>
-                              <Label htmlFor={`rule-${entry.id}`} className="text-sm font-medium">
-                                Rule for Future
-                              </Label>
-                              <Textarea
-                                id={`rule-${entry.id}`}
-                                value={entry.rule_for_future}
-                                onChange={(e) => handleProblemLogChange(entry.id, 'rule_for_future', e.target.value)}
-                                placeholder="How to avoid this mistake..."
-                                rows={3}
-                              />
-                            </div>
-                          </div>
-                        </Card>
-                      ))}
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label>Prep Test</Label>
+                          <Input 
+                            value={problemForm.prep_test}
+                            onChange={(e) => setProblemForm({...problemForm, prep_test: e.target.value})}
+                            placeholder="e.g., 88"
+                          />
+                        </div>
+                        <div>
+                          <Label>Section #</Label>
+                          <Input 
+                            value={problemForm.section_number}
+                            onChange={(e) => setProblemForm({...problemForm, section_number: e.target.value})}
+                            placeholder="e.g., 1"
+                          />
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label>Question #</Label>
+                          <Input 
+                            value={problemForm.question_number}
+                            onChange={(e) => setProblemForm({...problemForm, question_number: e.target.value})}
+                            placeholder="e.g., 15"
+                          />
+                        </div>
+                        <div>
+                          <Label>Question Type</Label>
+                          <Select value={problemForm.question_type} onValueChange={(value) => setProblemForm({...problemForm, question_type: value})}>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select type" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="strengthen">Strengthen</SelectItem>
+                              <SelectItem value="weaken">Weaken</SelectItem>
+                              <SelectItem value="assumption">Assumption</SelectItem>
+                              <SelectItem value="inference">Inference</SelectItem>
+                              <SelectItem value="main-point">Main Point</SelectItem>
+                              <SelectItem value="parallel">Parallel Reasoning</SelectItem>
+                              <SelectItem value="flaw">Flaw</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                      <div className="grid grid-cols-3 gap-4">
+                        <div>
+                          <Label>Difficulty (1-5)</Label>
+                          <Input 
+                            type="number" 
+                            min="1" 
+                            max="5"
+                            value={problemForm.difficulty}
+                            onChange={(e) => setProblemForm({...problemForm, difficulty: e.target.value})}
+                          />
+                        </div>
+                        <div>
+                          <Label>Correct?</Label>
+                          <Select value={problemForm.correct} onValueChange={(value) => setProblemForm({...problemForm, correct: value})}>
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="true">Correct</SelectItem>
+                              <SelectItem value="false">Incorrect</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label>Time (seconds)</Label>
+                          <Input 
+                            type="number"
+                            value={problemForm.time_spent}
+                            onChange={(e) => setProblemForm({...problemForm, time_spent: e.target.value})}
+                            placeholder="90"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <Label>Notes</Label>
+                        <Textarea 
+                          value={problemForm.notes}
+                          onChange={(e) => setProblemForm({...problemForm, notes: e.target.value})}
+                          placeholder="What went wrong? Strategy notes..."
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <Button 
+                          onClick={() => addProblemMutation.mutate(problemForm)}
+                          disabled={addProblemMutation.isPending}
+                        >
+                          Add Problem
+                        </Button>
+                        <Button variant="outline" onClick={() => setIsAddProblemOpen(false)}>
+                          Cancel
+                        </Button>
+                      </div>
                     </div>
-                  ) : (
-                    <p className="text-center text-muted-foreground">No problem log entries yet</p>
-                  )}
-                </div>
-              </DialogContent>
-            </Dialog>
+                  </DialogContent>
+                </Dialog>
 
-            {/* Full-Length Test */}
-            <Button 
-              size="lg" 
-              className="w-full h-16 text-lg font-semibold"
-              variant="outline"
-              onClick={() => {
-                toast({
-                  title: "Coming Soon",
-                  description: "Full-length test feature is under development",
-                });
-              }}
-            >
-              <Play className="h-6 w-6 mr-2" />
-              Full-Length Test
-            </Button>
+                {/* Practice Activities */}
+                <Dialog open={isAddActivityOpen} onOpenChange={setIsAddActivityOpen}>
+                  <DialogTrigger asChild>
+                    <Button 
+                      size="lg" 
+                      variant="outline"
+                      className="h-20 text-lg font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105 rounded-xl"
+                    >
+                      <TrendingUp className="h-6 w-6 mr-3" />
+                      <div className="text-left">
+                        <div>Log Practice</div>
+                        <div className="text-sm font-normal opacity-70">Record practice sessions</div>
+                      </div>
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Log Practice Activity</DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-4">
+                      <div>
+                        <Label>Activity Type</Label>
+                        <Select value={activityForm.activity_type} onValueChange={(value) => setActivityForm({...activityForm, activity_type: value})}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select activity" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="timed-section">Timed Section</SelectItem>
+                            <SelectItem value="untimed-practice">Untimed Practice</SelectItem>
+                            <SelectItem value="drilling">Question Drilling</SelectItem>
+                            <SelectItem value="review">Review Session</SelectItem>
+                            <SelectItem value="full-test">Full Practice Test</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <Label>Duration (minutes)</Label>
+                          <Input 
+                            type="number"
+                            value={activityForm.duration}
+                            onChange={(e) => setActivityForm({...activityForm, duration: e.target.value})}
+                            placeholder="35"
+                          />
+                        </div>
+                        <div>
+                          <Label>Questions Attempted</Label>
+                          <Input 
+                            type="number"
+                            value={activityForm.questions_attempted}
+                            onChange={(e) => setActivityForm({...activityForm, questions_attempted: e.target.value})}
+                            placeholder="25"
+                          />
+                        </div>
+                      </div>
+                      <div>
+                        <Label>Questions Correct</Label>
+                        <Input 
+                          type="number"
+                          value={activityForm.questions_correct}
+                          onChange={(e) => setActivityForm({...activityForm, questions_correct: e.target.value})}
+                          placeholder="20"
+                        />
+                      </div>
+                      <div>
+                        <Label>Notes</Label>
+                        <Textarea 
+                          value={activityForm.notes}
+                          onChange={(e) => setActivityForm({...activityForm, notes: e.target.value})}
+                          placeholder="How did it go? What to focus on next..."
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <Button 
+                          onClick={() => addActivityMutation.mutate(activityForm)}
+                          disabled={addActivityMutation.isPending}
+                        >
+                          Log Activity
+                        </Button>
+                        <Button variant="outline" onClick={() => setIsAddActivityOpen(false)}>
+                          Cancel
+                        </Button>
+                      </div>
+                    </div>
+                  </DialogContent>
+                </Dialog>
+              </div>
+            </div>
 
-            {/* Practice Logical Reasoning */}
-            <Button 
-              size="lg" 
-              className="w-full h-16 text-lg font-semibold"
-              variant="outline"
-              onClick={() => setLocation("/practice-test?mode=lr")}
-            >
-              <BookOpen className="h-6 w-6 mr-2" />
-              Practice Logical Reasoning
-            </Button>
+            {/* Resources & Tools Section */}
+            <div>
+              <h2 className="text-lg font-medium text-gray-800 mb-4 flex items-center gap-2">
+                <Archive className="h-5 w-5 text-orange-500" />
+                Resources & Tools
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Learning Library */}
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  className="h-20 text-lg font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105 rounded-xl"
+                  onClick={() => window.open('https://www.khanacademy.org/prep/lsat', '_blank')}
+                >
+                  <Video className="h-6 w-6 mr-3" />
+                  <div className="text-left">
+                    <div>Learning Library</div>
+                    <div className="text-sm font-normal opacity-70">Access video tutorials</div>
+                  </div>
+                </Button>
 
-            {/* Practice Reading Comprehension */}
-            <Button 
-              size="lg" 
-              className="w-full h-16 text-lg font-semibold"
-              variant="outline"
-              onClick={() => setLocation("/practice-rc")}
-            >
-              <BookOpen className="h-6 w-6 mr-2" />
-              Practice Reading Comprehension
-            </Button>
-
-            {/* Learning Library */}
-            <Button 
-              size="lg" 
-              className="w-full h-16 text-lg font-semibold"
-              variant="outline"
-              onClick={() => {
-                toast({
-                  title: "Coming Soon",
-                  description: "Learning Library is under development",
-                });
-              }}
-            >
-              <Archive className="h-6 w-6 mr-2" />
-              Learning Library
-            </Button>
+                {/* Contact Tutor */}
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  className="h-20 text-lg font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105 rounded-xl"
+                  onClick={() => window.open('mailto:germaine@germainetutoring.com', '_blank')}
+                >
+                  <MessageCircle className="h-6 w-6 mr-3" />
+                  <div className="text-left">
+                    <div>Contact Tutor</div>
+                    <div className="text-sm font-normal opacity-70">Get help and support</div>
+                  </div>
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
+
+        {/* Problem Log Table */}
+        {problemLog.length > 0 && (
+          <div className="mt-12">
+            <h2 className="text-xl font-semibold mb-4">Recent Problem Log</h2>
+            <Card>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Test</TableHead>
+                    <TableHead>Section</TableHead>
+                    <TableHead>Question</TableHead>
+                    <TableHead>Type</TableHead>
+                    <TableHead>Difficulty</TableHead>
+                    <TableHead>Result</TableHead>
+                    <TableHead>Time</TableHead>
+                    <TableHead>Notes</TableHead>
+                    <TableHead></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {problemLog.slice(0, 10).map((problem) => (
+                    <TableRow key={problem.id}>
+                      <TableCell>PT {problem.prep_test}</TableCell>
+                      <TableCell>S{problem.section_number}</TableCell>
+                      <TableCell>Q{problem.question_number}</TableCell>
+                      <TableCell>
+                        <Badge variant="outline">{problem.question_type}</Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={problem.difficulty >= 4 ? "destructive" : problem.difficulty >= 3 ? "default" : "secondary"}>
+                          {problem.difficulty}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <Badge variant={problem.correct ? "default" : "destructive"}>
+                          {problem.correct ? "✓" : "✗"}
+                        </Badge>
+                      </TableCell>
+                      <TableCell>{problem.time_spent}s</TableCell>
+                      <TableCell className="max-w-xs truncate">{problem.notes}</TableCell>
+                      <TableCell>
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => deleteProblemMutation.mutate(problem.id)}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Card>
+          </div>
+        )}
       </div>
     </div>
   );
-};
-
-export default Dashboard;
+}

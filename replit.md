@@ -133,6 +133,8 @@ Changelog:
 - July 07, 2025. Separated LR and RC into optimized dedicated tables (lr_questions, rc_questions) with performance indexes
 - July 07, 2025. Created migration from unified lsat_questions table to specialized tables with cleaner field names
 - July 07, 2025. Updated API endpoints to use new optimized tables while maintaining backward compatibility
+- July 07, 2025. Fixed RC Practice Mode bug by creating completely separate PracticeRC component and /practice-rc route
+- July 07, 2025. Redesigned Student Dashboard with modern UI: tabbed left sidebar, grouped action buttons, softer colors, improved typography
 ```
 
 ## User Preferences
