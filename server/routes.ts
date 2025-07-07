@@ -249,6 +249,57 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Separate LR questions endpoint
+  app.get("/api/lsat/lr-questions", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    
+    try {
+      const filters = req.query.filters ? JSON.parse(req.query.filters as string) : {};
+      console.log("LR questions requested with filters:", filters);
+      
+      const questions = await storage.getLRQuestions({
+        questionTypes: filters.questionTypes || [],
+        skills: filters.skills || [],
+        difficulty: filters.difficulty || [],
+        prepTests: filters.prepTests || []
+      }, 100);
+      
+      console.log("LR questions returned:", questions.length);
+      res.json(questions);
+    } catch (error) {
+      console.error("Error fetching LR questions:", error);
+      res.status(500).json({ message: "Failed to fetch LR questions" });
+    }
+  });
+
+  // Separate RC questions endpoint  
+  app.get("/api/lsat/rc-questions", async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    
+    try {
+      const filters = req.query.filters ? JSON.parse(req.query.filters as string) : {};
+      console.log("RC questions requested with filters:", filters);
+      
+      const questions = await storage.getRCQuestions({
+        passageCategories: filters.passageCategories || [],
+        questionCategories: filters.questionCategories || [],
+        difficulty: filters.difficulty || [],
+        prepTests: filters.prepTests || []
+      }, 100);
+      
+      console.log("RC questions returned:", questions.length);
+      res.json(questions);
+    } catch (error) {
+      console.error("Error fetching RC questions:", error);
+      res.status(500).json({ message: "Failed to fetch RC questions" });
+    }
+  });
+
+  // Legacy browse endpoint (keep for backward compatibility)
   app.get("/api/lsat/browse", async (req, res) => {
     if (!req.session.userId) {
       return res.status(401).json({ message: "Not authenticated" });
@@ -257,6 +308,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     try {
       const mode = req.query.mode as string;
       const filters = req.query.filters ? JSON.parse(req.query.filters as string) : {};
+      console.log("Legacy browse called with mode:", mode, "filters:", filters);
       
       let questions;
       
@@ -281,6 +333,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         questions = await storage.getLSATQuestionsByType('Logical Reasoning', 50);
       }
       
+      console.log("Legacy browse returning:", questions.length, "questions for mode:", mode);
       res.json(questions);
     } catch (error) {
       console.error("Error fetching browse questions:", error);

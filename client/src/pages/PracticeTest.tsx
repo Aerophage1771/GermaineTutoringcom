@@ -99,6 +99,7 @@ export default function PracticeTest() {
   useEffect(() => {
     const urlParams = new URLSearchParams(location.split('?')[1] || '');
     const newMode = (urlParams.get('mode') as PracticeMode) || 'lr';
+    console.log('URL changed, new mode:', newMode, 'current mode:', practiceMode);
     setPracticeMode(newMode);
   }, [location]);
   const [lrDisplayMode, setLRDisplayMode] = useState<LRDisplayMode>("browse");
@@ -132,24 +133,45 @@ export default function PracticeTest() {
   // Selected questions for custom set creation
   const [selectedQuestions, setSelectedQuestions] = useState<SelectedQuestions>({});
   
-  // Fetch questions for browsing
-  const { data: allQuestions = [], isLoading: questionsLoading } = useQuery<LsatQuestion[]>({
-    queryKey: ['/api/lsat/browse', practiceMode, practiceMode === 'lr' ? browseFilters : rcFilters],
+  // Separate queries for LR and RC questions
+  const { data: lrQuestions = [], isLoading: lrQuestionsLoading } = useQuery<LsatQuestion[]>({
+    queryKey: ['/api/lsat/lr-questions', browseFilters],
     queryFn: async () => {
-      const filters = practiceMode === 'lr' ? browseFilters : rcFilters;
       const params = new URLSearchParams({
-        mode: practiceMode,
-        filters: JSON.stringify(filters)
+        filters: JSON.stringify(browseFilters)
       });
       
-      const response = await fetch(`/api/lsat/browse?${params}`);
+      const response = await fetch(`/api/lsat/lr-questions?${params}`);
       if (!response.ok) {
-        throw new Error('Failed to fetch questions');
+        throw new Error('Failed to fetch LR questions');
       }
       return response.json();
     },
-    enabled: lrDisplayMode === "browse" || practiceMode === "rc",
+    enabled: practiceMode === 'lr' && lrDisplayMode === "browse"
   });
+
+  const { data: rcQuestions = [], isLoading: rcQuestionsLoading } = useQuery<LsatQuestion[]>({
+    queryKey: ['/api/lsat/rc-questions', rcFilters],
+    queryFn: async () => {
+      const params = new URLSearchParams({
+        filters: JSON.stringify(rcFilters)
+      });
+      
+      console.log('Fetching RC questions with filters:', rcFilters);
+      const response = await fetch(`/api/lsat/rc-questions?${params}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch RC questions');
+      }
+      const data = await response.json();
+      console.log('RC questions fetched:', data.length, 'questions');
+      return data;
+    },
+    enabled: practiceMode === 'rc'
+  });
+
+  // Use the appropriate questions based on mode
+  const allQuestions = practiceMode === 'lr' ? lrQuestions : rcQuestions;
+  const questionsLoading = practiceMode === 'lr' ? lrQuestionsLoading : rcQuestionsLoading;
 
   // Calculate pagination
   const totalPages = Math.ceil(allQuestions.length / questionsPerPage);
