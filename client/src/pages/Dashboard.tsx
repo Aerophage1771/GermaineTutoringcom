@@ -481,7 +481,7 @@ const Dashboard = () => {
               size="lg" 
               className="w-full h-16 text-lg font-semibold"
               variant="outline"
-              onClick={() => setLocation("/practice-test?mode=rc")}
+              onClick={() => setLocation("/practice-rc")}
             >
               <BookOpen className="h-6 w-6 mr-2" />
               Practice Reading Comprehension

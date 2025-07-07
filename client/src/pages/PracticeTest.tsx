@@ -89,17 +89,20 @@ const RC_QUESTION_CATEGORIES = [
 export default function PracticeTest() {
   const [location, setLocation] = useLocation();
   
-  // Get mode from URL parameters
+  // Get mode from URL parameters and log the full URL
+  console.log('Full location:', location);
   const urlParams = new URLSearchParams(location.split('?')[1] || '');
   const initialMode = (urlParams.get('mode') as PracticeMode) || 'lr';
+  console.log('Initial mode from URL:', initialMode, 'URL params:', Object.fromEntries(urlParams.entries()));
   
   const [practiceMode, setPracticeMode] = useState<PracticeMode>(initialMode);
   
   // Update practice mode when URL changes
   useEffect(() => {
+    console.log('Location changed to:', location);
     const urlParams = new URLSearchParams(location.split('?')[1] || '');
     const newMode = (urlParams.get('mode') as PracticeMode) || 'lr';
-    console.log('URL changed, new mode:', newMode, 'current mode:', practiceMode);
+    console.log('URL changed, new mode:', newMode, 'current mode:', practiceMode, 'full URL:', location);
     setPracticeMode(newMode);
   }, [location]);
   const [lrDisplayMode, setLRDisplayMode] = useState<LRDisplayMode>("browse");
