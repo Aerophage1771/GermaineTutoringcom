@@ -83,11 +83,7 @@ export default function Dashboard() {
     notes: ""
   });
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
-
-  // Data queries
+  // Data queries - must be called before any early returns
   const { data: sessions = [] } = useQuery<Session[]>({
     queryKey: ["/api/dashboard/sessions"],
     enabled: !!user
@@ -102,6 +98,10 @@ export default function Dashboard() {
     queryKey: ["/api/dashboard/practice-activities"],
     enabled: !!user
   });
+
+  if (!user) {
+    return <div>Loading...</div>;
+  }
 
   // Mutations
   const addProblemMutation = useMutation({
