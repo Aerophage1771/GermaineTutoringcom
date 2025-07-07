@@ -9,7 +9,7 @@ import {
   lsatQuestions, type LsatQuestion
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, desc, sql, and, inArray } from "drizzle-orm";
+import { eq, desc, sql, and, inArray, like, or } from "drizzle-orm";
 
 export interface IStorage {
   // User management
@@ -284,17 +284,32 @@ export class DatabaseStorage implements IStorage {
     prepTests?: number[];
   }, limit: number = 50): Promise<LsatQuestion[]> {
     try {
-      let query = db.select().from(lsatQuestions)
-        .where(eq(lsatQuestions.section_type, 'Logical Reasoning'));
-      
       const conditions = [eq(lsatQuestions.section_type, 'Logical Reasoning')];
       
+      // Handle semicolon-delimited question types
       if (filters.questionTypes && filters.questionTypes.length > 0) {
-        conditions.push(inArray(lsatQuestions.lr_question_type, filters.questionTypes));
+        const typeConditions = filters.questionTypes.map(type => 
+          or(
+            eq(lsatQuestions.lr_question_type, type),
+            like(lsatQuestions.lr_question_type, `${type};%`),
+            like(lsatQuestions.lr_question_type, `%;${type};%`),
+            like(lsatQuestions.lr_question_type, `%;${type}`)
+          )
+        );
+        conditions.push(or(...typeConditions));
       }
       
+      // Handle semicolon-delimited skills
       if (filters.skills && filters.skills.length > 0) {
-        conditions.push(inArray(lsatQuestions.lr_skills, filters.skills));
+        const skillConditions = filters.skills.map(skill => 
+          or(
+            eq(lsatQuestions.lr_skills, skill),
+            like(lsatQuestions.lr_skills, `${skill};%`),
+            like(lsatQuestions.lr_skills, `%;${skill};%`),
+            like(lsatQuestions.lr_skills, `%;${skill}`)
+          )
+        );
+        conditions.push(or(...skillConditions));
       }
       
       if (filters.difficulty && filters.difficulty.length > 0) {
@@ -328,12 +343,30 @@ export class DatabaseStorage implements IStorage {
     try {
       const conditions = [eq(lsatQuestions.section_type, 'Reading Comprehension')];
       
+      // Handle semicolon-delimited passage categories
       if (filters.passageCategories && filters.passageCategories.length > 0) {
-        conditions.push(inArray(lsatQuestions.rc_passage_categories, filters.passageCategories));
+        const passageConditions = filters.passageCategories.map(category => 
+          or(
+            eq(lsatQuestions.rc_passage_categories, category),
+            like(lsatQuestions.rc_passage_categories, `${category};%`),
+            like(lsatQuestions.rc_passage_categories, `%;${category};%`),
+            like(lsatQuestions.rc_passage_categories, `%;${category}`)
+          )
+        );
+        conditions.push(or(...passageConditions));
       }
       
+      // Handle semicolon-delimited question categories
       if (filters.questionCategories && filters.questionCategories.length > 0) {
-        conditions.push(inArray(lsatQuestions.rc_question_categories, filters.questionCategories));
+        const questionConditions = filters.questionCategories.map(category => 
+          or(
+            eq(lsatQuestions.rc_question_categories, category),
+            like(lsatQuestions.rc_question_categories, `${category};%`),
+            like(lsatQuestions.rc_question_categories, `%;${category};%`),
+            like(lsatQuestions.rc_question_categories, `%;${category}`)
+          )
+        );
+        conditions.push(or(...questionConditions));
       }
       
       if (filters.difficulty && filters.difficulty.length > 0) {
