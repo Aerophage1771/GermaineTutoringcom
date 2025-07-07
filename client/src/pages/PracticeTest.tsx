@@ -26,12 +26,14 @@ interface LsatQuestion {
   skills?: string;
   passage_categories?: string;
   question_categories?: string;
+  question_number_in_passage?: number;
   
   // Legacy fields for backward compatibility
   lr_question_type?: string;
   lr_skills?: string;
   rc_passage_categories?: string;
   rc_question_categories?: string;
+  rc_question_number_in_passage?: number;
 }
 
 type PracticeMode = "lr" | "rc";
@@ -525,13 +527,16 @@ export default function PracticeTest() {
                           onCheckedChange={() => toggleQuestionSelection(question.question_id)}
                         />
                         <Badge variant="secondary">
-                          PT {question.prep_test_number}
+                          LSAT {question.prep_test_number}
                         </Badge>
                         <Badge variant="outline">
                           Section {question.section_number}
                         </Badge>
                         <Badge variant="outline">
-                          Q{question.question_number_in_section}
+                          {practiceMode === 'rc' 
+                            ? `Question ${question.question_number_in_passage || question.rc_question_number_in_passage || 'N/A'}`
+                            : `Question ${question.question_number_in_section}`
+                          }
                         </Badge>
                         {question.question_difficulty && (
                           <Badge variant="outline">
@@ -560,11 +565,7 @@ export default function PracticeTest() {
                       )}
                     </div>
                     
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-600">
-                        Question ID: {question.question_id}
-                      </p>
-                    </div>
+
                   </Card>
                 ))}
                 
