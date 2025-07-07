@@ -48,6 +48,10 @@ interface RCFilters {
   prepTests: number[];
 }
 
+interface SelectedQuestions {
+  [key: string]: boolean;
+}
+
 const LR_QUESTION_TYPES = [
   "Agree", "Argument Part", "Disagree", "Evaluate", "Fill in the blank", "Flaw", 
   "Inference", "Main conclusion or main point", "Method of Reasoning", "Miscellaneous", 
@@ -103,9 +107,16 @@ export default function PracticeTest() {
     difficulty: [],
     prepTests: []
   });
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const questionsPerPage = 50;
+
+  // Selected questions for custom set creation
+  const [selectedQuestions, setSelectedQuestions] = useState<SelectedQuestions>({});
   
   // Fetch questions for browsing
-  const { data: questions = [], isLoading: questionsLoading } = useQuery<LsatQuestion[]>({
+  const { data: allQuestions = [], isLoading: questionsLoading } = useQuery<LsatQuestion[]>({
     queryKey: ['/api/lsat/browse', practiceMode, practiceMode === 'lr' ? browseFilters : rcFilters],
     queryFn: async () => {
       const filters = practiceMode === 'lr' ? browseFilters : rcFilters;
@@ -123,12 +134,36 @@ export default function PracticeTest() {
     enabled: lrDisplayMode === "browse" || practiceMode === "rc",
   });
 
+  // Calculate pagination
+  const totalPages = Math.ceil(allQuestions.length / questionsPerPage);
+  const startIndex = (currentPage - 1) * questionsPerPage;
+  const endIndex = startIndex + questionsPerPage;
+  const paginatedQuestions = allQuestions.slice(startIndex, endIndex);
+
+  // Reset pagination when mode or filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [practiceMode, browseFilters, rcFilters]);
+
   // Update mode when URL changes
   useEffect(() => {
     const urlParams = new URLSearchParams(location.split('?')[1] || '');
     const newMode = (urlParams.get('mode') as PracticeMode) || 'lr';
     setPracticeMode(newMode);
+    // Reset selections when switching modes
+    setSelectedQuestions({});
+    setCurrentPage(1);
   }, [location]);
+
+  // Helper functions for selection
+  const toggleQuestionSelection = (questionId: string) => {
+    setSelectedQuestions(prev => ({
+      ...prev,
+      [questionId]: !prev[questionId]
+    }));
+  };
+
+  const selectedCount = Object.values(selectedQuestions).filter(Boolean).length;
 
   // Header component
   const renderHeader = () => (
@@ -148,26 +183,39 @@ export default function PracticeTest() {
           </h1>
         </div>
         
-        {practiceMode === 'lr' && (
-          <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2">
+          {practiceMode === 'lr' && (
+            <>
+              <Button
+                variant={lrDisplayMode === "browse" ? "default" : "outline"}
+                onClick={() => setLRDisplayMode("browse")}
+                className="flex items-center"
+              >
+                <Eye className="h-4 w-4 mr-2" />
+                Browse Questions
+              </Button>
+              <Button
+                variant={lrDisplayMode === "smart-drill" ? "default" : "outline"}
+                onClick={() => setLRDisplayMode("smart-drill")}
+                className="flex items-center"
+              >
+                <Brain className="h-4 w-4 mr-2" />
+                Smart Drill
+              </Button>
+            </>
+          )}
+          
+          {(lrDisplayMode === "browse" || practiceMode === "rc") && (
             <Button
-              variant={lrDisplayMode === "browse" ? "default" : "outline"}
-              onClick={() => setLRDisplayMode("browse")}
+              variant={selectedCount > 0 ? "default" : "outline"}
+              disabled={selectedCount === 0}
               className="flex items-center"
             >
-              <Eye className="h-4 w-4 mr-2" />
-              Browse Questions
+              <Users className="h-4 w-4 mr-2" />
+              Create Set from Selections ({selectedCount})
             </Button>
-            <Button
-              variant={lrDisplayMode === "smart-drill" ? "default" : "outline"}
-              onClick={() => setLRDisplayMode("smart-drill")}
-              className="flex items-center"
-            >
-              <Brain className="h-4 w-4 mr-2" />
-              Smart Drill
-            </Button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
       <p className="text-gray-600">
         {practiceMode === 'lr' && lrDisplayMode === "browse" && "Browse and practice individual Logical Reasoning questions"}
@@ -440,9 +488,16 @@ export default function PracticeTest() {
               <CardTitle>
                 {practiceMode === 'lr' ? 'Logical Reasoning Questions' : 'Reading Comprehension Questions'}
               </CardTitle>
-              <Badge variant="outline">
-                {questionsLoading ? "Loading..." : `${questions.length} questions`}
-              </Badge>
+              <div className="flex items-center space-x-2">
+                <Badge variant="outline">
+                  {questionsLoading ? "Loading..." : `${allQuestions.length} total questions`}
+                </Badge>
+                {totalPages > 1 && (
+                  <Badge variant="secondary">
+                    Page {currentPage} of {totalPages}
+                  </Badge>
+                )}
+              </div>
             </div>
           </CardHeader>
           <CardContent>
@@ -451,12 +506,16 @@ export default function PracticeTest() {
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
                 <p className="text-gray-600">Loading questions...</p>
               </div>
-            ) : questions.length > 0 ? (
+            ) : paginatedQuestions.length > 0 ? (
               <div className="space-y-4">
-                {questions.slice(0, 20).map((question) => (
-                  <Card key={question.id} className="p-4 hover:shadow-md transition-shadow cursor-pointer">
+                {paginatedQuestions.map((question) => (
+                  <Card key={question.id} className="p-4 hover:shadow-md transition-shadow">
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center space-x-2">
+                        <Checkbox
+                          checked={selectedQuestions[question.question_id] || false}
+                          onCheckedChange={() => toggleQuestionSelection(question.question_id)}
+                        />
                         <Badge variant="secondary">
                           PT {question.prep_test_number}
                         </Badge>
@@ -501,17 +560,60 @@ export default function PracticeTest() {
                   </Card>
                 ))}
                 
-                {questions.length > 20 && (
-                  <div className="text-center py-4">
-                    <Button variant="outline">
-                      Load More Questions
+                {/* Pagination Controls */}
+                {totalPages > 1 && (
+                  <div className="flex items-center justify-center space-x-2 py-6">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                      disabled={currentPage === 1}
+                    >
+                      Previous
+                    </Button>
+                    
+                    <div className="flex items-center space-x-1">
+                      {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                        let pageNum;
+                        if (totalPages <= 5) {
+                          pageNum = i + 1;
+                        } else if (currentPage <= 3) {
+                          pageNum = i + 1;
+                        } else if (currentPage >= totalPages - 2) {
+                          pageNum = totalPages - 4 + i;
+                        } else {
+                          pageNum = currentPage - 2 + i;
+                        }
+                        
+                        return (
+                          <Button
+                            key={pageNum}
+                            variant={currentPage === pageNum ? "default" : "outline"}
+                            size="sm"
+                            onClick={() => setCurrentPage(pageNum)}
+                            className="w-10"
+                          >
+                            {pageNum}
+                          </Button>
+                        );
+                      })}
+                    </div>
+                    
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                      disabled={currentPage === totalPages}
+                    >
+                      Next
                     </Button>
                   </div>
                 )}
               </div>
             ) : (
               <div className="text-center py-8 text-gray-500">
-                {browseFilters.questionTypes.length > 0 || browseFilters.skills.length > 0 || browseFilters.difficulty.length > 0 
+                {(practiceMode === 'lr' && (browseFilters.questionTypes.length > 0 || browseFilters.skills.length > 0 || browseFilters.difficulty.length > 0)) ||
+                 (practiceMode === 'rc' && (rcFilters.passageCategories.length > 0 || rcFilters.questionCategories.length > 0 || rcFilters.difficulty.length > 0))
                   ? "No questions match your current filters" 
                   : `No ${practiceMode === 'lr' ? 'Logical Reasoning' : 'Reading Comprehension'} questions available`}
               </div>

@@ -126,6 +126,9 @@ Changelog:
 - July 04, 2025. Added comprehensive question filtering by type, skills, difficulty, and passage categories
 - July 05, 2025. Updated Reading Comprehension to be passage-based with RC-specific filters (passage categories, question categories)
 - July 05, 2025. Implemented proper RC filtering backend with passage grouping and ordering by passage structure
+- July 05, 2025. Fixed RC Practice Mode to properly load Reading Comprehension questions instead of Logical Reasoning
+- July 05, 2025. Added pagination system (50 questions per page) with Previous/Next navigation and page numbers
+- July 05, 2025. Added "Create Set from Selections" feature with checkboxes on question cards and selection counter
 ```
 
 ## User Preferences
