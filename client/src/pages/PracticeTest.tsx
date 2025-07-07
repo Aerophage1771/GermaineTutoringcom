@@ -94,6 +94,13 @@ export default function PracticeTest() {
   const initialMode = (urlParams.get('mode') as PracticeMode) || 'lr';
   
   const [practiceMode, setPracticeMode] = useState<PracticeMode>(initialMode);
+  
+  // Update practice mode when URL changes
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.split('?')[1] || '');
+    const newMode = (urlParams.get('mode') as PracticeMode) || 'lr';
+    setPracticeMode(newMode);
+  }, [location]);
   const [lrDisplayMode, setLRDisplayMode] = useState<LRDisplayMode>("browse");
   
   // Smart LR Driller state
