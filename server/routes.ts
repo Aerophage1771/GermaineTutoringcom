@@ -261,21 +261,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
       let questions;
       
       if (mode === 'lr') {
-        questions = await storage.browseLRQuestions({
+        // Use new optimized LR table
+        questions = await storage.getLRQuestions({
           questionTypes: filters.questionTypes || [],
           skills: filters.skills || [],
           difficulty: filters.difficulty || [],
           prepTests: filters.prepTests || []
         }, 100);
       } else if (mode === 'rc') {
-        questions = await storage.browseRCPassages({
+        // Use new optimized RC table
+        questions = await storage.getRCQuestions({
           passageCategories: filters.passageCategories || [],
           questionCategories: filters.questionCategories || [],
           difficulty: filters.difficulty || [],
           prepTests: filters.prepTests || []
         }, 100);
       } else {
-        // Default fallback
+        // Default fallback to legacy method
         questions = await storage.getLSATQuestionsByType('Logical Reasoning', 50);
       }
       

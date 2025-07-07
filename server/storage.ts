@@ -6,7 +6,9 @@ import {
   problemLog, type ProblemLog, type InsertProblemLog,
   practiceActivities, type PracticeActivity, type InsertPracticeActivity,
   timeAddOns, type TimeAddOn, type InsertTimeAddOn,
-  lsatQuestions, type LsatQuestion
+  lsatQuestions, type LsatQuestion,
+  lrQuestions, type LrQuestion,
+  rcQuestions, type RcQuestion
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql, and, inArray, like, or } from "drizzle-orm";
@@ -42,13 +44,28 @@ export interface IStorage {
   getUserTimeAddOns(userId: number): Promise<TimeAddOn[]>;
   createTimeAddOn(addon: InsertTimeAddOn): Promise<TimeAddOn>;
   
-  // LSAT Questions
+  // LSAT Questions (legacy - will be deprecated)
   getLSATQuestionsByTest(prepTest: number): Promise<LsatQuestion[]>;
   getLSATQuestionsBySection(prepTest: number, sectionNumber: number): Promise<LsatQuestion[]>;
   getLSATQuestionsByType(sectionType: string, limit?: number): Promise<LsatQuestion[]>;
   getRandomLSATQuestions(count: number, sectionType?: string, difficulty?: number): Promise<LsatQuestion[]>;
   
-  // Browse methods with filters
+  // New separated tables
+  getLRQuestions(filters: {
+    questionTypes?: string[];
+    skills?: string[];
+    difficulty?: number[];
+    prepTests?: number[];
+  }, limit?: number): Promise<LrQuestion[]>;
+  
+  getRCQuestions(filters: {
+    passageCategories?: string[];
+    questionCategories?: string[];
+    difficulty?: number[];
+    prepTests?: number[];
+  }, limit?: number): Promise<RcQuestion[]>;
+  
+  // Browse methods with filters (legacy)
   browseLRQuestions(filters: {
     questionTypes?: string[];
     skills?: string[];
@@ -393,6 +410,128 @@ export class DatabaseStorage implements IStorage {
       return questions;
     } catch (error) {
       console.error("Error browsing RC passages:", error);
+      throw error;
+    }
+  }
+
+  // New optimized LR Questions method
+  async getLRQuestions(filters: {
+    questionTypes?: string[];
+    skills?: string[];
+    difficulty?: number[];
+    prepTests?: number[];
+  }, limit: number = 50): Promise<LrQuestion[]> {
+    try {
+      const conditions = [];
+      
+      // Handle semicolon-delimited question types
+      if (filters.questionTypes && filters.questionTypes.length > 0) {
+        const typeConditions = filters.questionTypes.map(type => 
+          or(
+            eq(lrQuestions.question_type, type),
+            like(lrQuestions.question_type, `${type};%`),
+            like(lrQuestions.question_type, `%;${type};%`),
+            like(lrQuestions.question_type, `%;${type}`)
+          )
+        );
+        conditions.push(or(...typeConditions));
+      }
+      
+      // Handle semicolon-delimited skills
+      if (filters.skills && filters.skills.length > 0) {
+        const skillConditions = filters.skills.map(skill => 
+          or(
+            eq(lrQuestions.skills, skill),
+            like(lrQuestions.skills, `${skill};%`),
+            like(lrQuestions.skills, `%;${skill};%`),
+            like(lrQuestions.skills, `%;${skill}`)
+          )
+        );
+        conditions.push(or(...skillConditions));
+      }
+      
+      if (filters.difficulty && filters.difficulty.length > 0) {
+        conditions.push(inArray(lrQuestions.question_difficulty, filters.difficulty));
+      }
+      
+      if (filters.prepTests && filters.prepTests.length > 0) {
+        conditions.push(inArray(lrQuestions.prep_test_number, filters.prepTests));
+      }
+      
+      const questions = await db
+        .select()
+        .from(lrQuestions)
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .orderBy(lrQuestions.prep_test_number, lrQuestions.section_number, lrQuestions.question_number_in_section)
+        .limit(limit);
+      
+      return questions;
+    } catch (error) {
+      console.error("Error fetching LR questions:", error);
+      throw error;
+    }
+  }
+
+  // New optimized RC Questions method
+  async getRCQuestions(filters: {
+    passageCategories?: string[];
+    questionCategories?: string[];
+    difficulty?: number[];
+    prepTests?: number[];
+  }, limit: number = 50): Promise<RcQuestion[]> {
+    try {
+      const conditions = [];
+      
+      // Handle semicolon-delimited passage categories
+      if (filters.passageCategories && filters.passageCategories.length > 0) {
+        const passageConditions = filters.passageCategories.map(category => 
+          or(
+            eq(rcQuestions.passage_categories, category),
+            like(rcQuestions.passage_categories, `${category};%`),
+            like(rcQuestions.passage_categories, `%;${category};%`),
+            like(rcQuestions.passage_categories, `%;${category}`)
+          )
+        );
+        conditions.push(or(...passageConditions));
+      }
+      
+      // Handle semicolon-delimited question categories
+      if (filters.questionCategories && filters.questionCategories.length > 0) {
+        const questionConditions = filters.questionCategories.map(category => 
+          or(
+            eq(rcQuestions.question_categories, category),
+            like(rcQuestions.question_categories, `${category};%`),
+            like(rcQuestions.question_categories, `%;${category};%`),
+            like(rcQuestions.question_categories, `%;${category}`)
+          )
+        );
+        conditions.push(or(...questionConditions));
+      }
+      
+      if (filters.difficulty && filters.difficulty.length > 0) {
+        conditions.push(inArray(rcQuestions.passage_difficulty, filters.difficulty));
+      }
+      
+      if (filters.prepTests && filters.prepTests.length > 0) {
+        conditions.push(inArray(rcQuestions.prep_test_number, filters.prepTests));
+      }
+      
+      // Group by passage and order questions within each passage
+      const questions = await db
+        .select()
+        .from(rcQuestions)
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .orderBy(
+          rcQuestions.prep_test_number, 
+          rcQuestions.section_number, 
+          rcQuestions.passage_number_in_section,
+          rcQuestions.question_number_in_passage
+        )
+        .limit(limit);
+      
+      return questions;
+    } catch (error) {
+      console.error("Error fetching RC questions:", error);
       throw error;
     }
   }

@@ -250,3 +250,66 @@ export const insertLsatQuestionSchema = createInsertSchema(lsatQuestions).pick({
 
 export type InsertLsatQuestion = z.infer<typeof insertLsatQuestionSchema>;
 export type LsatQuestion = typeof lsatQuestions.$inferSelect;
+
+// Separate Logical Reasoning Questions Table (optimized)
+export const lrQuestions = pgTable("lr_questions", {
+  id: serial("id").primaryKey(),
+  prep_test_number: integer("prep_test_number").notNull(),
+  section_number: integer("section_number").notNull(),
+  question_number_in_section: integer("question_number_in_section").notNull(),
+  question_id: text("question_id").notNull().unique(),
+  question_difficulty: integer("question_difficulty"), // 1-5
+  question_50_percent_score: decimal("question_50_percent_score", { precision: 6, scale: 2 }),
+  question_type: text("question_type"), // Clean field name
+  skills: text("skills"), // Clean field name
+  created_at: timestamp("created_at").notNull().defaultNow(),
+});
+
+// Separate Reading Comprehension Questions Table (optimized)
+export const rcQuestions = pgTable("rc_questions", {
+  id: serial("id").primaryKey(),
+  prep_test_number: integer("prep_test_number").notNull(),
+  section_number: integer("section_number").notNull(),
+  question_number_in_section: integer("question_number_in_section"),
+  question_id: text("question_id").notNull().unique(),
+  question_difficulty: integer("question_difficulty"), // 1-5
+  question_50_percent_score: decimal("question_50_percent_score", { precision: 6, scale: 2 }),
+  passage_id: text("passage_id"), // Clean field name
+  passage_number_in_section: integer("passage_number_in_section"),
+  passage_difficulty: integer("passage_difficulty"),
+  passage_categories: text("passage_categories"), // Clean field name
+  question_categories: text("question_categories"), // Clean field name
+  question_number_in_passage: integer("question_number_in_passage"),
+  created_at: timestamp("created_at").notNull().defaultNow(),
+});
+
+export const insertLrQuestionSchema = createInsertSchema(lrQuestions).pick({
+  prep_test_number: true,
+  section_number: true,
+  question_number_in_section: true,
+  question_id: true,
+  question_difficulty: true,
+  question_50_percent_score: true,
+  question_type: true,
+  skills: true,
+});
+
+export const insertRcQuestionSchema = createInsertSchema(rcQuestions).pick({
+  prep_test_number: true,
+  section_number: true,
+  question_number_in_section: true,
+  question_id: true,
+  question_difficulty: true,
+  question_50_percent_score: true,
+  passage_id: true,
+  passage_number_in_section: true,
+  passage_difficulty: true,
+  passage_categories: true,
+  question_categories: true,
+  question_number_in_passage: true,
+});
+
+export type InsertLrQuestion = z.infer<typeof insertLrQuestionSchema>;
+export type LrQuestion = typeof lrQuestions.$inferSelect;
+export type InsertRcQuestion = z.infer<typeof insertRcQuestionSchema>;
+export type RcQuestion = typeof rcQuestions.$inferSelect;

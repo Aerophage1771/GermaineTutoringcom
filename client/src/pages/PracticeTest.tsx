@@ -16,10 +16,18 @@ interface LsatQuestion {
   id: number;
   prep_test_number: number;
   section_number: number;
-  section_type: string;
+  section_type?: string;
   question_number_in_section: number;
   question_id: string;
   question_difficulty: number;
+  
+  // New optimized fields
+  question_type?: string;
+  skills?: string;
+  passage_categories?: string;
+  question_categories?: string;
+  
+  // Legacy fields for backward compatibility
   lr_question_type?: string;
   lr_skills?: string;
   rc_passage_categories?: string;
@@ -538,17 +546,17 @@ export default function PracticeTest() {
                     </div>
                     
                     <div className="flex items-center space-x-2 text-sm text-gray-600">
-                      {practiceMode === 'lr' && question.lr_question_type && (
-                        <Badge variant="secondary">{question.lr_question_type}</Badge>
+                      {practiceMode === 'lr' && (question.question_type || question.lr_question_type) && (
+                        <Badge variant="secondary">{question.question_type || question.lr_question_type}</Badge>
                       )}
-                      {practiceMode === 'lr' && question.lr_skills && (
-                        <Badge variant="outline">{question.lr_skills}</Badge>
+                      {practiceMode === 'lr' && (question.skills || question.lr_skills) && (
+                        <Badge variant="outline">{question.skills || question.lr_skills}</Badge>
                       )}
-                      {practiceMode === 'rc' && question.rc_passage_categories && (
-                        <Badge variant="secondary">{question.rc_passage_categories}</Badge>
+                      {practiceMode === 'rc' && (question.passage_categories || question.rc_passage_categories) && (
+                        <Badge variant="secondary">{question.passage_categories || question.rc_passage_categories}</Badge>
                       )}
-                      {practiceMode === 'rc' && question.rc_question_categories && (
-                        <Badge variant="outline">{question.rc_question_categories}</Badge>
+                      {practiceMode === 'rc' && (question.question_categories || question.rc_question_categories) && (
+                        <Badge variant="outline">{question.question_categories || question.rc_question_categories}</Badge>
                       )}
                     </div>
                     

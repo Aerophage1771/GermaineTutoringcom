@@ -129,6 +129,10 @@ Changelog:
 - July 05, 2025. Fixed RC Practice Mode to properly load Reading Comprehension questions instead of Logical Reasoning
 - July 05, 2025. Added pagination system (50 questions per page) with Previous/Next navigation and page numbers
 - July 05, 2025. Added "Create Set from Selections" feature with checkboxes on question cards and selection counter
+- July 07, 2025. Fixed semicolon-delimited label parsing for proper filtering (e.g., "Inference; Purpose" now splits correctly)
+- July 07, 2025. Separated LR and RC into optimized dedicated tables (lr_questions, rc_questions) with performance indexes
+- July 07, 2025. Created migration from unified lsat_questions table to specialized tables with cleaner field names
+- July 07, 2025. Updated API endpoints to use new optimized tables while maintaining backward compatibility
 ```
 
 ## User Preferences
