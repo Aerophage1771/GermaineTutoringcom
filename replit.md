@@ -135,6 +135,7 @@ Changelog:
 - July 07, 2025. Updated API endpoints to use new optimized tables while maintaining backward compatibility
 - July 07, 2025. Fixed RC Practice Mode bug by creating completely separate PracticeRC component and /practice-rc route
 - July 07, 2025. Redesigned Student Dashboard with modern UI: tabbed left sidebar, grouped action buttons, softer colors, improved typography
+- July 08, 2025. Added Calendly integration with three session length options (60min, 90min, 120min) with dedicated booking URLs
 ```
 
 ## User Preferences
