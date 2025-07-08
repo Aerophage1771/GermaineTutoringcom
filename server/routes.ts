@@ -264,7 +264,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         skills: filters.skills || [],
         difficulty: filters.difficulty || [],
         prepTests: filters.prepTests || []
-      }, 100);
+      });
       
       console.log("LR questions returned:", questions.length);
       res.json(questions);
@@ -289,7 +289,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         questionCategories: filters.questionCategories || [],
         difficulty: filters.difficulty || [],
         prepTests: filters.prepTests || []
-      }, 100);
+      });
       
       console.log("RC questions returned:", questions.length);
       res.json(questions);
@@ -319,7 +319,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           skills: filters.skills || [],
           difficulty: filters.difficulty || [],
           prepTests: filters.prepTests || []
-        }, 100);
+        });
       } else if (mode === 'rc') {
         // Use new optimized RC table
         questions = await storage.getRCQuestions({
@@ -327,7 +327,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           questionCategories: filters.questionCategories || [],
           difficulty: filters.difficulty || [],
           prepTests: filters.prepTests || []
-        }, 100);
+        });
       } else {
         // Default fallback to legacy method
         questions = await storage.getLSATQuestionsByType('Logical Reasoning', 50);

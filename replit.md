@@ -139,6 +139,8 @@ Changelog:
 - July 08, 2025. Revamped RC question selector to display passages as expandable cards with accordion-style dropdown toggles
 - July 08, 2025. Added passage-level selection that auto-selects all questions in a passage, with partial selection indicators
 - July 08, 2025. Implemented individual question selection within expanded passages for granular control
+- July 08, 2025. Removed 100-question hardcoded limits from all API endpoints - now accessing all 3,910 LR and 2,098 RC questions
+- July 08, 2025. Updated storage methods to support up to 10,000 questions per query for comprehensive database access
 ```
 
 ## User Preferences

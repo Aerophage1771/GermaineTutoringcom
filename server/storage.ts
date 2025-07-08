@@ -299,7 +299,7 @@ export class DatabaseStorage implements IStorage {
     skills?: string[];
     difficulty?: number[];
     prepTests?: number[];
-  }, limit: number = 50): Promise<LsatQuestion[]> {
+  }, limit: number = 10000): Promise<LsatQuestion[]> {
     try {
       const conditions = [eq(lsatQuestions.section_type, 'Logical Reasoning')];
       
@@ -356,7 +356,7 @@ export class DatabaseStorage implements IStorage {
     questionCategories?: string[];
     difficulty?: number[];
     prepTests?: number[];
-  }, limit: number = 50): Promise<LsatQuestion[]> {
+  }, limit: number = 10000): Promise<LsatQuestion[]> {
     try {
       const conditions = [eq(lsatQuestions.section_type, 'Reading Comprehension')];
       
@@ -420,7 +420,7 @@ export class DatabaseStorage implements IStorage {
     skills?: string[];
     difficulty?: number[];
     prepTests?: number[];
-  }, limit: number = 50): Promise<LrQuestion[]> {
+  }, limit: number = 10000): Promise<LrQuestion[]> {
     try {
       const conditions = [];
       
@@ -478,7 +478,7 @@ export class DatabaseStorage implements IStorage {
     questionCategories?: string[];
     difficulty?: number[];
     prepTests?: number[];
-  }, limit: number = 50): Promise<RcQuestion[]> {
+  }, limit: number = 10000): Promise<RcQuestion[]> {
     try {
       const conditions = [];
       
