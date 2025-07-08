@@ -136,6 +136,9 @@ Changelog:
 - July 07, 2025. Fixed RC Practice Mode bug by creating completely separate PracticeRC component and /practice-rc route
 - July 07, 2025. Redesigned Student Dashboard with modern UI: tabbed left sidebar, grouped action buttons, softer colors, improved typography
 - July 08, 2025. Added Calendly integration with three session length options (60min, 90min, 120min) with dedicated booking URLs
+- July 08, 2025. Revamped RC question selector to display passages as expandable cards with accordion-style dropdown toggles
+- July 08, 2025. Added passage-level selection that auto-selects all questions in a passage, with partial selection indicators
+- July 08, 2025. Implemented individual question selection within expanded passages for granular control
 ```
 
 ## User Preferences
