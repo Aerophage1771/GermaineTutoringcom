@@ -14,6 +14,7 @@ import Login from "@/pages/Login";
 import Dashboard from "@/pages/Dashboard";
 import PracticeTest from "@/pages/PracticeTest";
 import PracticeRC from "@/pages/PracticeRC";
+import ProblemLog from "@/pages/ProblemLog";
 
 function Router() {
   return (
@@ -26,6 +27,7 @@ function Router() {
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/practice-test" component={PracticeTest} />
       <Route path="/practice-rc" component={PracticeRC} />
+      <Route path="/problem-log" component={ProblemLog} />
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:slug" component={BlogPost} />
       <Route component={NotFound} />

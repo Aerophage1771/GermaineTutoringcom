@@ -59,16 +59,7 @@ export default function Dashboard() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Show loading spinner while checking authentication
-  if (isLoading || !user) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
-
-  // Dialog states
+  // Dialog states - moved before early return to fix hooks order
   const [isBookSessionOpen, setIsBookSessionOpen] = useState(false);
   const [isAddProblemOpen, setIsAddProblemOpen] = useState(false);
   const [isAddActivityOpen, setIsAddActivityOpen] = useState(false);
@@ -163,8 +154,13 @@ export default function Dashboard() {
     }
   });
 
-  if (!user) {
-    return <div>Loading...</div>;
+  // Show loading spinner while checking authentication - moved after all hooks
+  if (isLoading || !user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
   }
 
   // Calculations
@@ -385,17 +381,17 @@ export default function Dashboard() {
                 <Brain className="h-5 w-5 text-emerald-500" />
                 Practice & Review
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 {/* Practice LR */}
                 <Button 
                   size="lg" 
                   className="h-20 text-lg font-semibold bg-emerald-600 hover:bg-emerald-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
-                  onClick={() => setLocation("/practice-test")}
+                  onClick={() => setLocation("/practice-test?mode=lr")}
                 >
-                  <BookOpen className="h-6 w-6 mr-3" />
+                  <Brain className="h-6 w-6 mr-3" />
                   <div className="text-left">
                     <div>Practice Logical Reasoning</div>
-                    <div className="text-sm font-normal opacity-80">Work on LR questions</div>
+                    <div className="text-sm font-normal opacity-80">Browse and drill LR questions</div>
                   </div>
                 </Button>
 
@@ -405,133 +401,25 @@ export default function Dashboard() {
                   className="h-20 text-lg font-semibold bg-purple-600 hover:bg-purple-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
                   onClick={() => setLocation("/practice-rc")}
                 >
-                  <FileText className="h-6 w-6 mr-3" />
+                  <BookOpen className="h-6 w-6 mr-3" />
                   <div className="text-left">
                     <div>Practice Reading Comprehension</div>
-                    <div className="text-sm font-normal opacity-80">Work on RC passages</div>
+                    <div className="text-sm font-normal opacity-80">Browse RC passages and questions</div>
                   </div>
                 </Button>
 
                 {/* Problem Log */}
-                <Dialog open={isAddProblemOpen} onOpenChange={setIsAddProblemOpen}>
-                  <DialogTrigger asChild>
-                    <Button 
-                      size="lg" 
-                      variant="outline"
-                      className="h-20 text-lg font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105 rounded-xl"
-                    >
-                      <Target className="h-6 w-6 mr-3" />
-                      <div className="text-left">
-                        <div>Problem Log</div>
-                        <div className="text-sm font-normal opacity-70">Track difficult questions</div>
-                      </div>
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Add Problem to Log</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4">
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label>Prep Test</Label>
-                          <Input 
-                            value={problemForm.prep_test}
-                            onChange={(e) => setProblemForm({...problemForm, prep_test: e.target.value})}
-                            placeholder="e.g., 88"
-                          />
-                        </div>
-                        <div>
-                          <Label>Section #</Label>
-                          <Input 
-                            value={problemForm.section_number}
-                            onChange={(e) => setProblemForm({...problemForm, section_number: e.target.value})}
-                            placeholder="e.g., 1"
-                          />
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label>Question #</Label>
-                          <Input 
-                            value={problemForm.question_number}
-                            onChange={(e) => setProblemForm({...problemForm, question_number: e.target.value})}
-                            placeholder="e.g., 15"
-                          />
-                        </div>
-                        <div>
-                          <Label>Question Type</Label>
-                          <Select value={problemForm.question_type} onValueChange={(value) => setProblemForm({...problemForm, question_type: value})}>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select type" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="strengthen">Strengthen</SelectItem>
-                              <SelectItem value="weaken">Weaken</SelectItem>
-                              <SelectItem value="assumption">Assumption</SelectItem>
-                              <SelectItem value="inference">Inference</SelectItem>
-                              <SelectItem value="main-point">Main Point</SelectItem>
-                              <SelectItem value="parallel">Parallel Reasoning</SelectItem>
-                              <SelectItem value="flaw">Flaw</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-3 gap-4">
-                        <div>
-                          <Label>Difficulty (1-5)</Label>
-                          <Input 
-                            type="number" 
-                            min="1" 
-                            max="5"
-                            value={problemForm.difficulty}
-                            onChange={(e) => setProblemForm({...problemForm, difficulty: e.target.value})}
-                          />
-                        </div>
-                        <div>
-                          <Label>Correct?</Label>
-                          <Select value={problemForm.correct} onValueChange={(value) => setProblemForm({...problemForm, correct: value})}>
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="true">Correct</SelectItem>
-                              <SelectItem value="false">Incorrect</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div>
-                          <Label>Time (seconds)</Label>
-                          <Input 
-                            type="number"
-                            value={problemForm.time_spent}
-                            onChange={(e) => setProblemForm({...problemForm, time_spent: e.target.value})}
-                            placeholder="90"
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <Label>Notes</Label>
-                        <Textarea 
-                          value={problemForm.notes}
-                          onChange={(e) => setProblemForm({...problemForm, notes: e.target.value})}
-                          placeholder="What went wrong? Strategy notes..."
-                        />
-                      </div>
-                      <div className="flex gap-2">
-                        <Button 
-                          onClick={() => addProblemMutation.mutate(problemForm)}
-                          disabled={addProblemMutation.isPending}
-                        >
-                          Add Problem
-                        </Button>
-                        <Button variant="outline" onClick={() => setIsAddProblemOpen(false)}>
-                          Cancel
-                        </Button>
-                      </div>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                <Button 
+                  size="lg"
+                  onClick={() => setLocation("/problem-log")}
+                  className="h-20 text-lg font-semibold bg-orange-600 hover:bg-orange-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
+                >
+                  <FileText className="h-6 w-6 mr-3" />
+                  <div className="text-left">
+                    <div>Problem Log</div>
+                    <div className="text-sm font-normal opacity-80">Track issues and learning insights</div>
+                  </div>
+                </Button>
 
                 {/* Practice Activities */}
                 <Dialog open={isAddActivityOpen} onOpenChange={setIsAddActivityOpen}>
