@@ -43,16 +43,7 @@ export default function ProblemLog() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  // Show loading spinner while checking authentication
-  if (isLoading || !user) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
-
-  // State for add entry dialog
+  // State for add entry dialog - moved before early return
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [formData, setFormData] = useState<ProblemLogForm>({
     prep_test: "",
@@ -63,17 +54,17 @@ export default function ProblemLog() {
     rule_for_future: ""
   });
 
-  // Fetch problem log entries
+  // Fetch problem log entries - moved before early return
   const { data: problemLogEntries = [], isLoading: entriesLoading } = useQuery<ProblemLogEntry[]>({
     queryKey: ["/api/dashboard/problem-log"],
     enabled: !!user
   });
 
-  // Add new entry mutation
+  // Add new entry mutation - moved before early return
   const addEntryMutation = useMutation({
-    mutationFn: (data: ProblemLogForm) => apiRequest("/api/dashboard/problem-log", "POST", {
+    mutationFn: (data: ProblemLogForm) => apiRequest("POST", "/api/dashboard/problem-log", {
       ...data,
-      user_id: user.id
+      user_id: user?.id
     }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/dashboard/problem-log"] });
@@ -97,9 +88,9 @@ export default function ProblemLog() {
     }
   });
 
-  // Delete entry mutation
+  // Delete entry mutation - moved before early return
   const deleteEntryMutation = useMutation({
-    mutationFn: (id: number) => apiRequest(`/api/dashboard/problem-log/${id}`, "DELETE"),
+    mutationFn: (id: number) => apiRequest("DELETE", `/api/dashboard/problem-log/${id}`),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/dashboard/problem-log"] });
       toast({ title: "Problem log entry deleted successfully" });
@@ -112,6 +103,15 @@ export default function ProblemLog() {
       });
     }
   });
+
+  // Show loading spinner while checking authentication - moved after all hooks
+  if (isLoading || !user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
