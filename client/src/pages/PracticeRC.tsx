@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useLocation } from "wouter";
+import { useAuthRedirect } from "@/hooks/use-auth-redirect";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -59,7 +60,17 @@ const RC_QUESTION_CATEGORIES = [
 ];
 
 export default function PracticeRC() {
+  const { user, isLoading } = useAuthRedirect();
   const [location, setLocation] = useLocation();
+
+  // Show loading spinner while checking authentication
+  if (isLoading || !user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
   
   // RC filters
   const [rcFilters, setRCFilters] = useState<RCFilters>({
@@ -72,6 +83,11 @@ export default function PracticeRC() {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const questionsPerPage = 50;
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [rcFilters]);
 
   // Selected questions and passages for custom set creation
   const [selectedQuestions, setSelectedQuestions] = useState<SelectedQuestions>({});
@@ -442,9 +458,19 @@ export default function PracticeRC() {
                         Previous
                       </Button>
                       
-                      <div className="flex space-x-1">
+                      <div className="flex items-center space-x-1">
                         {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
-                          const pageNum = i + 1;
+                          let pageNum;
+                          if (totalPages <= 5) {
+                            pageNum = i + 1;
+                          } else if (currentPage <= 3) {
+                            pageNum = i + 1;
+                          } else if (currentPage >= totalPages - 2) {
+                            pageNum = totalPages - 4 + i;
+                          } else {
+                            pageNum = currentPage - 2 + i;
+                          }
+                          
                           return (
                             <Button
                               key={pageNum}

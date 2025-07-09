@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "@/lib/auth";
+import { useAuthRedirect } from "@/hooks/use-auth-redirect";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -52,10 +53,20 @@ interface PracticeActivity {
 }
 
 export default function Dashboard() {
-  const { user, logout } = useAuth();
+  const { user, isLoading } = useAuthRedirect();
+  const { logout } = useAuth();
   const [location, setLocation] = useLocation();
   const { toast } = useToast();
   const queryClient = useQueryClient();
+
+  // Show loading spinner while checking authentication
+  if (isLoading || !user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   // Dialog states
   const [isBookSessionOpen, setIsBookSessionOpen] = useState(false);

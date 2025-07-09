@@ -141,6 +141,9 @@ Changelog:
 - July 08, 2025. Implemented individual question selection within expanded passages for granular control
 - July 08, 2025. Removed 100-question hardcoded limits from all API endpoints - now accessing all 3,910 LR and 2,098 RC questions
 - July 08, 2025. Updated storage methods to support up to 10,000 questions per query for comprehensive database access
+- July 08, 2025. Added authentication redirect system for student-facing pages (Dashboard, PracticeTest, PracticeRC)
+- July 08, 2025. Enhanced pagination behavior to keep current page centered with ellipsis-style navigation beyond 5 pages
+- July 08, 2025. Implemented automatic pagination reset when filters are changed on practice pages
 ```
 
 ## User Preferences

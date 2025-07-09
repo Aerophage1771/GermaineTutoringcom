@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { useLocation } from "wouter";
+import { useAuthRedirect } from "@/hooks/use-auth-redirect";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -87,7 +88,17 @@ const RC_QUESTION_CATEGORIES = [
 ];
 
 export default function PracticeTest() {
+  const { user, isLoading } = useAuthRedirect();
   const [location, setLocation] = useLocation();
+
+  // Show loading spinner while checking authentication
+  if (isLoading || !user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
   
   // Get mode from URL parameters and log the full URL
   console.log('Full location:', location);
@@ -132,6 +143,11 @@ export default function PracticeTest() {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const questionsPerPage = 50;
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [browseFilters, rcFilters, practiceMode]);
 
   // Selected questions for custom set creation
   const [selectedQuestions, setSelectedQuestions] = useState<SelectedQuestions>({});
