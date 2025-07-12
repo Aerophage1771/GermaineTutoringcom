@@ -151,6 +151,8 @@ Changelog:
 - July 12, 2025. Created comprehensive LSAT Learning Library with 5 main sections and detailed subsections
 - July 12, 2025. Added Learning Library button to Dashboard practice section for easy access
 - July 12, 2025. Implemented modal-based content display system for subsection materials
+- July 12, 2025. Removed "Log Practice" and "access video tutorials" tiles from Dashboard
+- July 12, 2025. Updated Practice & Review section to display maximum 2 buttons per row for better readability
 ```
 
 ## User Preferences
