@@ -13,8 +13,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Clock, Plus, Play, BookOpen, Target, TrendingUp, Calendar, Archive, BarChart3, Trash2, Brain, FileText, Video, MessageCircle } from "lucide-react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Clock, Plus, Play, BookOpen, Target, Calendar, Archive, BarChart3, Trash2, Brain, FileText, MessageCircle } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { apiRequest } from "@/lib/queryClient";
 
 // Types
@@ -41,17 +41,6 @@ interface ProblemLog {
   created_at: string;
 }
 
-interface PracticeActivity {
-  id: number;
-  user_id: number;
-  activity_type: string;
-  duration: number;
-  questions_attempted: number;
-  questions_correct: number;
-  date: string;
-  notes?: string;
-}
-
 export default function Dashboard() {
   const { user, isLoading } = useAuthRedirect();
   const { logout } = useAuth();
@@ -62,7 +51,6 @@ export default function Dashboard() {
   // Dialog states - moved before early return to fix hooks order
   const [isBookSessionOpen, setIsBookSessionOpen] = useState(false);
   const [isAddProblemOpen, setIsAddProblemOpen] = useState(false);
-  const [isAddActivityOpen, setIsAddActivityOpen] = useState(false);
 
   // Problem log form state
   const [problemForm, setProblemForm] = useState({
@@ -76,15 +64,6 @@ export default function Dashboard() {
     notes: ""
   });
 
-  // Practice activity form state
-  const [activityForm, setActivityForm] = useState({
-    activity_type: "",
-    duration: "",
-    questions_attempted: "",
-    questions_correct: "",
-    notes: ""
-  });
-
   // Data queries - must be called before any early returns
   const { data: sessions = [] } = useQuery<Session[]>({
     queryKey: ["/api/dashboard/sessions"],
@@ -93,11 +72,6 @@ export default function Dashboard() {
 
   const { data: problemLog = [] } = useQuery<ProblemLog[]>({
     queryKey: ["/api/dashboard/problem-log"],
-    enabled: !!user
-  });
-
-  const { data: practiceActivities = [] } = useQuery<PracticeActivity[]>({
-    queryKey: ["/api/dashboard/practice-activities"],
     enabled: !!user
   });
 
@@ -121,25 +95,6 @@ export default function Dashboard() {
     },
     onError: (error: any) => {
       toast({ title: "Error adding problem", description: error.message, variant: "destructive" });
-    }
-  });
-
-  const addActivityMutation = useMutation({
-    mutationFn: (data: any) => apiRequest("/api/dashboard/practice-activities", "POST", data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/dashboard/practice-activities"] });
-      setIsAddActivityOpen(false);
-      setActivityForm({
-        activity_type: "",
-        duration: "",
-        questions_attempted: "",
-        questions_correct: "",
-        notes: ""
-      });
-      toast({ title: "Activity added successfully" });
-    },
-    onError: (error: any) => {
-      toast({ title: "Error adding activity", description: error.message, variant: "destructive" });
     }
   });
 
@@ -312,6 +267,9 @@ export default function Dashboard() {
                   <DialogContent className="sm:max-w-md">
                     <DialogHeader>
                       <DialogTitle>Choose Session Length</DialogTitle>
+                      <DialogDescription>
+                        Select the duration for your tutoring session
+                      </DialogDescription>
                     </DialogHeader>
                     <div className="grid gap-4">
                       <Button 
@@ -433,93 +391,6 @@ export default function Dashboard() {
                     <div className="text-sm font-normal opacity-80">Track issues and learning insights</div>
                   </div>
                 </Button>
-
-                {/* Practice Activities */}
-                <Dialog open={isAddActivityOpen} onOpenChange={setIsAddActivityOpen}>
-                  <DialogTrigger asChild>
-                    <Button 
-                      size="lg" 
-                      variant="outline"
-                      className="h-20 text-lg font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105 rounded-xl"
-                    >
-                      <TrendingUp className="h-6 w-6 mr-3" />
-                      <div className="text-left">
-                        <div>Log Practice</div>
-                        <div className="text-sm font-normal opacity-70">Record practice sessions</div>
-                      </div>
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent>
-                    <DialogHeader>
-                      <DialogTitle>Log Practice Activity</DialogTitle>
-                    </DialogHeader>
-                    <div className="space-y-4">
-                      <div>
-                        <Label>Activity Type</Label>
-                        <Select value={activityForm.activity_type} onValueChange={(value) => setActivityForm({...activityForm, activity_type: value})}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select activity" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="timed-section">Timed Section</SelectItem>
-                            <SelectItem value="untimed-practice">Untimed Practice</SelectItem>
-                            <SelectItem value="drilling">Question Drilling</SelectItem>
-                            <SelectItem value="review">Review Session</SelectItem>
-                            <SelectItem value="full-test">Full Practice Test</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                      <div className="grid grid-cols-2 gap-4">
-                        <div>
-                          <Label>Duration (minutes)</Label>
-                          <Input 
-                            type="number"
-                            value={activityForm.duration}
-                            onChange={(e) => setActivityForm({...activityForm, duration: e.target.value})}
-                            placeholder="35"
-                          />
-                        </div>
-                        <div>
-                          <Label>Questions Attempted</Label>
-                          <Input 
-                            type="number"
-                            value={activityForm.questions_attempted}
-                            onChange={(e) => setActivityForm({...activityForm, questions_attempted: e.target.value})}
-                            placeholder="25"
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <Label>Questions Correct</Label>
-                        <Input 
-                          type="number"
-                          value={activityForm.questions_correct}
-                          onChange={(e) => setActivityForm({...activityForm, questions_correct: e.target.value})}
-                          placeholder="20"
-                        />
-                      </div>
-                      <div>
-                        <Label>Notes</Label>
-                        <Textarea 
-                          value={activityForm.notes}
-                          onChange={(e) => setActivityForm({...activityForm, notes: e.target.value})}
-                          placeholder="How did it go? What to focus on next..."
-                        />
-                      </div>
-                      <div className="flex gap-2">
-                        <Button 
-                          onClick={() => addActivityMutation.mutate(activityForm)}
-                          disabled={addActivityMutation.isPending}
-                        >
-                          Log Activity
-                        </Button>
-                        <Button variant="outline" onClick={() => setIsAddActivityOpen(false)}>
-                          Cancel
-                        </Button>
-                      </div>
-                    </div>
-                  </DialogContent>
-                </Dialog>
               </div>
             </div>
 
@@ -529,20 +400,8 @@ export default function Dashboard() {
                 <Archive className="h-5 w-5 text-orange-500" />
                 Resources & Tools
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Learning Library */}
-                <Button 
-                  size="lg" 
-                  variant="outline"
-                  className="h-20 text-lg font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105 rounded-xl"
-                  onClick={() => window.open('https://www.khanacademy.org/prep/lsat', '_blank')}
-                >
-                  <Video className="h-6 w-6 mr-3" />
-                  <div className="text-left">
-                    <div>Learning Library</div>
-                    <div className="text-sm font-normal opacity-70">Access video tutorials</div>
-                  </div>
-                </Button>
+              <div className="grid grid-cols-1 gap-4">
+
 
                 {/* Contact Tutor */}
                 <Button 
