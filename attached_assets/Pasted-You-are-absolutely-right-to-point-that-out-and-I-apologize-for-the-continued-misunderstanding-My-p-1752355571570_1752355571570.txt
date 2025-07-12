@@ -1,0 +1,167 @@
+You are absolutely right to point that out, and I apologize for the continued misunderstanding. My previous attempts still included markdown for lists (like bullet points and numbered lists) and indentation, which, while simple, are still forms of formatting.
+
+When you say "plain text," you mean literally just the words, without any special characters for formatting, list markers, or extra indentation. I incorrectly interpreted "plain text" as "no rich text (like bold/italics/headers), but keep structural lists." My mistake.
+
+Here is the content converted to what I now understand as true plain text – no bullets, no numbers, no extra indents, just raw lines of text:
+
+COMMANDS:
+
+On the “Learning Library” section, replace the existing tile with a full-page layout titled "LSAT Learning Library".
+
+Below the title, add 5 large clickable cards, one for each main section:
+
+Fundamental Skills
+Logical Reasoning
+Reading Comprehension
+Writing Section
+Strategies and Advanced Techniques
+
+When a user clicks on a section card:
+
+Open a new view showing a list of its subsections as clickable items.
+
+When a user clicks on a subsection:
+
+Open a separate window (e.g., a modal or new browser tab) containing a sample written content page.
+Use the following sample content (summarized below) for each subsection.
+
+Fundamental Skills – Sample Content
+
+Intro to Grammar
+Understand how sentence structure, punctuation, and clarity affect logical reasoning. LSAT questions assume precision in language.
+
+Intro to Arguments
+Learn how to identify premises and conclusions. Understand how arguments are structured and how roles support logic.
+
+Conditional Logic
+Master common logical indicators like “if,” “only if,” “unless.” Learn to form contrapositives and distinguish sufficiency from necessity.
+
+Advanced Conditional Logic
+Dive into chains of conditionals, nested structures, and exception cases.
+
+Logic Flaws
+Review frequent fallacies like circular reasoning, ad hominem, and equivocation. Understand how to spot flawed argumentation.
+
+Causation
+Learn to differentiate correlation from causation. Understand alternative explanations and counterfactuals.
+
+Section 1: Argument Structure and Reasoning Types
+
+Build a foundation by learning how arguments are constructed and how their parts function.
+
+Main Conclusion
+Find the statement that is supported by the others. Avoid confusing it with intermediate conclusions.
+
+Argument Part
+Classify parts of the stimulus: is it a premise, background, counterclaim, or conclusion?
+
+Method of Reasoning
+Describe how the argument is built. Is it analogical, conditional, or comparative?
+
+Parallel Reasoning
+Match the logical form of the argument across different topics.
+
+Agree/Disagree
+Contrast speaker positions. What do they actually agree or disagree on?
+
+Section 2: Argument Flaws and Evaluation
+
+Focus on weaknesses in reasoning and how to assess argument quality.
+
+Flaw
+Identify the logical weakness. Are assumptions unstated? Are causal leaps unjustified?
+
+Parallel Flaw
+Match flawed reasoning patterns, not just valid forms.
+
+Evaluate
+Choose the piece of info that would most strengthen or weaken the argument’s reasoning.
+
+Section 3: Strengthening, Weakening, and Assumption Types
+
+Reinforce or challenge arguments and understand the assumptions they rely on.
+
+Weaken
+Identify info that would undercut the argument’s support for its conclusion.
+
+Strengthen
+Identify info that would reinforce the link between premise and conclusion.
+
+Principle–Rule
+Match an abstract rule to the case given.
+
+Principle–Application
+Match the correct case to the abstract rule.
+
+Sufficient Assumption
+Identify a claim that, if added, guarantees the conclusion.
+
+Necessary Assumption
+Identify a claim that must be true for the conclusion to follow.
+
+Section 4: Inference and Completion
+
+Focus on what logically follows or completes an argument based on available information.
+
+Fill in the Blank
+Complete an argument logically based on surrounding context.
+
+Most Strongly Supported
+Identify the answer most supported by the provided info.
+
+Must Be True
+Deduce a conclusion that must follow from the stimulus.
+
+Must Be False
+Eliminate conclusions that contradict the stimulus.
+
+Resolve / Reconcile / Explain
+Clarify an apparent contradiction or puzzling result.
+
+Reading Comprehension – Sample Content
+
+Passage Types:
+
+Informational – Just the facts; tone is neutral.
+Presents a Debate – Two views; author's position may be unclear.
+Argumentative – Clear opinion backed by reasoning.
+Comparative – Two passages that must be contrasted and compared.
+
+Question Types:
+
+Main Point – Central thesis.
+Detail – Specific fact mentioned.
+Inference – What must be or is likely true.
+Author’s Attitude – Tone and viewpoint.
+Purpose – Why a sentence/paragraph exists.
+Analogy – Similar situation or structure.
+Organization / Function – Structure or purpose of content blocks.
+Strengthen/Weaken (RC) – How new info impacts a passage’s claims.
+
+Writing Section – Sample Content
+
+Overview / Format – One dilemma; choose a side and justify it.
+Structure & Timing – Intro, body paragraphs, conclusion. 35 minutes.
+Balanced Argument – Acknowledge the other side respectfully.
+Effective Response – Clear stance, logical flow, specific examples.
+Common Mistakes – Vague claims, poor structure, lack of support.
+Samples – Example of high-scoring vs low-scoring essays.
+
+Strategies and Advanced Techniques – Sample Content
+
+Reasonableness Standard – Think like a test writer; eliminate implausible options.
+Inverting Stimulus/Answer – Flip the question: what must be false? What if X isn’t true?
+Graded Removal – Eliminate answers in degrees from least to most wrong.
+Assumption Comparison – Compare assumptions between choices, use negation test.
+Pattern Recognition – Spot argument types quickly to anticipate question type.
+Time Management – Segment your time per question and section.
+Advanced Review – Use post-test reflection like “If I wrote the LSAT, how would I trick myself?”
+
+Make sure:
+
+Clicking a section card replaces the view with its subsection list.
+Clicking a subsection opens a new window or modal with full sample content.
+Only one window opens per click to keep the experience clean.
+All section and subsection names are styled clearly and consistently. Use hover states or icons to indicate clickable items.
+
+Let me know if you want the sample content turned into actual text templates per subsection!

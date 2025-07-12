@@ -37,7 +37,9 @@ GermaineTutoring.com is a premium LSAT tutoring website for Germaine Washington,
 3. **Tutoring Programs** (`/programs`) - Detailed program comparison and pricing information
 4. **Blog** (`/blog`) - LSAT strategy blog listing
 5. **Blog Post** (`/blog/:slug`) - Individual blog post pages with MDX support
-6. **404 Page** - Custom not found page
+6. **Learning Library** (`/learning-library`) - Comprehensive LSAT study materials organized by section
+7. **Problem Log** (`/problem-log`) - Student issue tracking and learning insights
+8. **404 Page** - Custom not found page
 
 ### Major Sections
 - **Hero Section**: Credibility establishment with key stats and CTA
@@ -47,6 +49,8 @@ GermaineTutoring.com is a premium LSAT tutoring website for Germaine Washington,
 - **Results Section**: Student testimonials and success statistics
 - **FAQ Section**: Collapsible answers to common questions
 - **Guides Section**: Lead magnet with subscription-gated PDF downloads
+- **Learning Library**: Comprehensive study materials with 5 main sections (Fundamental Skills, Logical Reasoning, Reading Comprehension, Writing Section, Strategies and Advanced Techniques)
+- **Problem Log**: Issue tracking system for students to log and review difficult questions
 
 ### Database Schema
 - **Users**: Basic user authentication (template remnant)
@@ -144,6 +148,9 @@ Changelog:
 - July 08, 2025. Added authentication redirect system for student-facing pages (Dashboard, PracticeTest, PracticeRC)
 - July 08, 2025. Enhanced pagination behavior to keep current page centered with ellipsis-style navigation beyond 5 pages
 - July 08, 2025. Implemented automatic pagination reset when filters are changed on practice pages
+- July 12, 2025. Created comprehensive LSAT Learning Library with 5 main sections and detailed subsections
+- July 12, 2025. Added Learning Library button to Dashboard practice section for easy access
+- July 12, 2025. Implemented modal-based content display system for subsection materials
 ```
 
 ## User Preferences

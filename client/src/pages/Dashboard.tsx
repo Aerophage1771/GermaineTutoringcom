@@ -381,7 +381,7 @@ export default function Dashboard() {
                 <Brain className="h-5 w-5 text-emerald-500" />
                 Practice & Review
               </h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 {/* Practice LR */}
                 <Button 
                   size="lg" 
@@ -405,6 +405,19 @@ export default function Dashboard() {
                   <div className="text-left">
                     <div>Practice Reading Comprehension</div>
                     <div className="text-sm font-normal opacity-80">Browse RC passages and questions</div>
+                  </div>
+                </Button>
+
+                {/* Learning Library */}
+                <Button 
+                  size="lg"
+                  onClick={() => setLocation("/learning-library")}
+                  className="h-20 text-lg font-semibold bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
+                >
+                  <BookOpen className="h-6 w-6 mr-3" />
+                  <div className="text-left">
+                    <div>Learning Library</div>
+                    <div className="text-sm font-normal opacity-80">Study materials and concepts</div>
                   </div>
                 </Button>
 

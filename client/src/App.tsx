@@ -15,6 +15,7 @@ import Dashboard from "@/pages/Dashboard";
 import PracticeTest from "@/pages/PracticeTest";
 import PracticeRC from "@/pages/PracticeRC";
 import ProblemLog from "@/pages/ProblemLog";
+import LearningLibrary from "@/pages/LearningLibrary";
 
 function Router() {
   return (
@@ -28,6 +29,7 @@ function Router() {
       <Route path="/practice-test" component={PracticeTest} />
       <Route path="/practice-rc" component={PracticeRC} />
       <Route path="/problem-log" component={ProblemLog} />
+      <Route path="/learning-library" component={LearningLibrary} />
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:slug" component={BlogPost} />
       <Route component={NotFound} />
