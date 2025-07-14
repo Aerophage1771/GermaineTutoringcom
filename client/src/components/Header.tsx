@@ -125,9 +125,8 @@ const Header = () => {
               <Link href="/programs">
                 <button 
                   onClick={scrollToTop}
-                  className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors relative">
+                  className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
                   Tutoring Programs
-                  <span className="absolute -top-1 -right-2 bg-red-500 text-white text-xs px-1 rounded-full">!</span>
                 </button>
               </Link>
               <Link href="/blog">
@@ -145,17 +144,12 @@ const Header = () => {
                   Student Log-In
                 </button>
               </Link>
-              <div className="flex items-center space-x-2">
-                <span className="text-red-600 font-semibold text-xs hidden lg:block">
-                  Prices increase July 19!
-                </span>
-                <button 
-                  onClick={openCalendly} 
-                  className="bg-accent hover:bg-accent/90 text-primary font-bold px-5 py-2 rounded-lg transition-colors text-sm lg:text-base"
-                >
-                  Schedule Consultation
-                </button>
-              </div>
+              <button 
+                onClick={openCalendly} 
+                className="bg-accent hover:bg-accent/90 text-primary font-bold px-5 py-2 rounded-lg transition-colors text-sm lg:text-base"
+              >
+                Schedule Consultation
+              </button>
             </>
           )}
         </nav>
@@ -199,18 +193,15 @@ const Header = () => {
                 </button>
               </Link>
               <Link href="/programs">
-                <div className="flex items-center justify-between">
-                  <button 
-                    onClick={() => {
-                      scrollToTop();
-                      setMobileMenuOpen(false);
-                    }}
-                    className="text-foreground hover:text-primary font-medium transition-colors text-left"
-                  >
-                    Tutoring Programs
-                  </button>
-                  <span className="text-red-600 font-semibold text-xs">Prices increase July 19!</span>
-                </div>
+                <button 
+                  onClick={() => {
+                    scrollToTop();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="text-foreground hover:text-primary font-medium transition-colors text-left"
+                >
+                  Tutoring Programs
+                </button>
               </Link>
               <Link href="/blog">
                 <button 
