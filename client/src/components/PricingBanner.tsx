@@ -20,14 +20,17 @@ export function PricingBanner() {
     <div className="bg-black text-white py-3 px-4">
       <div className="container mx-auto flex flex-col md:flex-row items-center justify-between text-center md:text-left">
         <div className="flex-1 mb-3 md:mb-0">
-          <span className="font-semibold text-lg">Legacy Pricing Through July 19</span>
+          <div className="font-semibold text-lg mb-1">Legacy Pricing Ends Saturday, July 19</div>
+          <div className="text-sm opacity-90">
+            Tutoring rates are increasing by $100–$300 as new course content rolls out. 
+            Enroll now to lock in legacy pricing — 8- and 24-hour plans include full access to the LSAT strategy library.
+          </div>
         </div>
         <div>
           <Button 
-            variant="outline" 
             size="sm"
             onClick={handleViewPlans}
-            className="border-white text-white hover:bg-white hover:text-black"
+            className="bg-white text-black border border-white hover:bg-gray-100"
           >
             View Plans
           </Button>
