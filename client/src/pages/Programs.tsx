@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PricingBanner } from "@/components/PricingBanner";
+import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 
 interface Feature {
@@ -41,7 +43,9 @@ const Programs = () => {
         { included: false, text: "Permanent Question Explanation Database Access" },
         { included: false, text: "Custom Strategy Materials" },
         { included: true, text: "Email & Text Support" },
-        { included: false, text: "Priority in New Material Creation/Selection" }
+        { included: false, text: "Priority in New Material Creation/Selection" },
+        { included: false, text: "Course not included", bonus: true },
+        { included: true, text: "Price increasing to $299 on July 19", bonus: true }
       ],
       buttonText: "Purchase Session",
       highlighted: false
@@ -62,7 +66,9 @@ const Programs = () => {
         { included: true, text: "Permanent Question Explanation Database Access", bonus: true },
         { included: true, text: "Custom Strategy Materials" },
         { included: true, text: "Email & Text Support" },
-        { included: false, text: "Priority in New Material Creation/Selection" }
+        { included: false, text: "Priority in New Material Creation/Selection" },
+        { included: true, text: "New LSAT content library included (for signups before July 19)", bonus: true },
+        { included: true, text: "Price increasing to $999 on July 19", bonus: true }
       ],
       buttonText: "Enroll in Course",
       highlighted: false
@@ -83,7 +89,9 @@ const Programs = () => {
         { included: true, text: "Permanent Full Question Explanation Database Access", bonus: true },
         { included: true, text: "Custom Strategy Materials" },
         { included: true, text: "Email & Text Support" },
-        { included: true, text: "Priority in New Material Creation/Selection" }
+        { included: true, text: "Priority in New Material Creation/Selection" },
+        { included: true, text: "New LSAT content library included (for signups before July 19)", bonus: true },
+        { included: true, text: "Price increasing to $2,099 on July 19", bonus: true }
       ],
       buttonText: "Enroll in Mastery",
       highlighted: true
@@ -109,6 +117,7 @@ const Programs = () => {
 
   return (
     <div className="bg-background min-h-screen">
+      <PricingBanner />
       <Header />
       
       <main className="py-20">
@@ -134,6 +143,45 @@ const Programs = () => {
               <div className="flex items-center">
                 <i className="fas fa-check-circle text-accent mr-2"></i>
                 <span>Proven methodology</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Pricing Update Section */}
+        <section className="container mx-auto px-4 mb-12">
+          <div className="max-w-4xl mx-auto">
+            <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 mb-8">
+              <h2 className="text-2xl font-bold text-amber-800 mb-4">
+                📅 Pricing Update Coming July 19th:
+              </h2>
+              <div className="grid md:grid-cols-3 gap-4 mb-4">
+                <div className="bg-white rounded-lg p-4 border border-amber-200">
+                  <h3 className="font-semibold text-amber-800">2-Hour Session</h3>
+                  <p className="text-amber-700">
+                    <span className="line-through">$199</span> → <strong>$299</strong>
+                  </p>
+                </div>
+                <div className="bg-white rounded-lg p-4 border border-amber-200">
+                  <h3 className="font-semibold text-amber-800">8-Hour Course</h3>
+                  <p className="text-amber-700">
+                    <span className="line-through">$699</span> → <strong>$999</strong>
+                  </p>
+                </div>
+                <div className="bg-white rounded-lg p-4 border border-amber-200">
+                  <h3 className="font-semibold text-amber-800">24-Hour Program</h3>
+                  <p className="text-amber-700">
+                    <span className="line-through">$1,799</span> → <strong>$2,099</strong>
+                  </p>
+                </div>
+              </div>
+              <div className="text-amber-800">
+                <p className="mb-2">
+                  <strong>Students who enroll before the 19th keep current pricing.</strong>
+                </p>
+                <p>
+                  The 8-hour and 24-hour plans will also include full access to my new LSAT content and strategy library — free for early signups.
+                </p>
               </div>
             </div>
           </div>
@@ -217,6 +265,35 @@ const Programs = () => {
                 </div>
               </div>
             ))}
+          </div>
+        </section>
+
+        {/* Optional CTA */}
+        <section className="container mx-auto px-4 mb-16">
+          <div className="max-w-3xl mx-auto text-center">
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-8">
+              <div className="text-3xl mb-4">🕒</div>
+              <h3 className="text-2xl font-bold text-blue-800 mb-4">
+                Still deciding? Book now to lock in current pricing before July 19.
+              </h3>
+              <p className="text-blue-700 mb-6 text-lg">
+                The new content library goes live soon, and early students get it included with the 8- and 24-hour plans.
+              </p>
+              <Button 
+                variant="outline" 
+                size="lg"
+                onClick={() => {
+                  if (window.Calendly) {
+                    window.Calendly.initPopupWidget({ 
+                      url: 'https://calendly.com/germaine-washington-tutoring/2-hour-lsat-tutoring' 
+                    });
+                  }
+                }}
+                className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white text-lg px-8 py-3"
+              >
+                I Need a Custom Plan
+              </Button>
+            </div>
           </div>
         </section>
 
