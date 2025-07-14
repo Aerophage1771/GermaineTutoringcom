@@ -27,7 +27,7 @@ export function PricingBanner() {
             variant="outline" 
             size="sm"
             onClick={handleViewPlans}
-            className="border-white text-white hover:bg-white hover:text-black"
+            className="border-white text-white bg-transparent hover:bg-white hover:text-black font-semibold"
           >
             View Plans
           </Button>
