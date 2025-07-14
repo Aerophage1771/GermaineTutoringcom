@@ -170,7 +170,7 @@ const MethodologyResults = () => {
                   </div>
                   <h3 className="font-heading font-bold text-primary text-2xl mb-4">Duplicate</h3>
                   <p className="text-foreground leading-relaxed mb-6">
-                    You practice the strategies independently until they become automatic, with my guidance and support.
+                    You practice the strategies until they become automatic, with my guidance and support.
                   </p>
                   <div className="space-y-3 text-left">
                     <div className="flex items-start">
@@ -212,43 +212,28 @@ const MethodologyResults = () => {
                         Logical Reasoning: Foundation of Success
                       </h3>
                       <p className="text-foreground leading-relaxed mb-6">
-                        Master the 50% of your LSAT score with systematic approach to argument analysis and question-type recognition.
+                        Master the 50% of your LSAT score with systematic approach to argument analysis and question-type recognition. Logical Reasoning success requires understanding how arguments work, recognizing patterns, and developing efficient problem-solving strategies.
                       </p>
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div>
-                          <h4 className="font-semibold text-primary mb-2">Core Strategies</h4>
-                          <ul className="space-y-2 text-foreground/80">
-                            <li className="flex items-start">
-                              <i className="fas fa-chevron-right text-accent mt-1 mr-2 text-xs"></i>
-                              <span>Argument structure identification</span>
-                            </li>
-                            <li className="flex items-start">
-                              <i className="fas fa-chevron-right text-accent mt-1 mr-2 text-xs"></i>
-                              <span>Question-type specific approaches</span>
-                            </li>
-                            <li className="flex items-start">
-                              <i className="fas fa-chevron-right text-accent mt-1 mr-2 text-xs"></i>
-                              <span>Efficient answer choice elimination</span>
-                            </li>
-                          </ul>
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-primary mb-2">Expected Progress</h4>
-                          <ul className="space-y-2 text-foreground/80">
-                            <li className="flex items-start">
-                              <i className="fas fa-chart-up text-accent mt-1 mr-2"></i>
-                              <span>-1 to -3 per section average</span>
-                            </li>
-                            <li className="flex items-start">
-                              <i className="fas fa-chart-up text-accent mt-1 mr-2"></i>
-                              <span>1:20 average per question</span>
-                            </li>
-                            <li className="flex items-start">
-                              <i className="fas fa-chart-up text-accent mt-1 mr-2"></i>
-                              <span>90%+ accuracy on trained question types</span>
-                            </li>
-                          </ul>
-                        </div>
+                      <div className="mb-6">
+                        <h4 className="font-semibold text-primary mb-4">Core Strategies</h4>
+                        <ul className="space-y-3 text-foreground/80">
+                          <li className="flex items-start">
+                            <i className="fas fa-chevron-right text-accent mt-1 mr-3 text-xs"></i>
+                            <span><strong>Argument structure identification:</strong> Learn to quickly identify premises, conclusions, and assumptions. Understanding the logical flow helps you predict what the question will ask and where to look for answers.</span>
+                          </li>
+                          <li className="flex items-start">
+                            <i className="fas fa-chevron-right text-accent mt-1 mr-3 text-xs"></i>
+                            <span><strong>Question-type specific approaches:</strong> Each question type (strengthen, weaken, assumption, inference, etc.) has specific patterns and optimal solving strategies. Master these patterns to work faster and more accurately.</span>
+                          </li>
+                          <li className="flex items-start">
+                            <i className="fas fa-chevron-right text-accent mt-1 mr-3 text-xs"></i>
+                            <span><strong>Efficient answer choice elimination:</strong> Develop systematic approaches to eliminate wrong answers first, making the correct choice obvious even when you're unsure of the perfect answer.</span>
+                          </li>
+                          <li className="flex items-start">
+                            <i className="fas fa-chevron-right text-accent mt-1 mr-3 text-xs"></i>
+                            <span><strong>Time management techniques:</strong> Balance thorough understanding with pace. Learn when to move quickly and when to invest extra time for maximum point return.</span>
+                          </li>
+                        </ul>
                       </div>
                     </div>
                   </div>
@@ -265,43 +250,28 @@ const MethodologyResults = () => {
                         Reading Comprehension: Strategic Reading
                       </h3>
                       <p className="text-foreground leading-relaxed mb-6">
-                        Transform your reading approach to maximize comprehension while minimizing time investment.
+                        Transform your reading approach to maximize comprehension while minimizing time investment. Reading Comprehension success comes from strategic reading that balances speed with understanding, allowing you to confidently answer questions about complex academic passages.
                       </p>
-                      <div className="grid md:grid-cols-2 gap-6">
-                        <div>
-                          <h4 className="font-semibold text-primary mb-2">Core Strategies</h4>
-                          <ul className="space-y-2 text-foreground/80">
-                            <li className="flex items-start">
-                              <i className="fas fa-chevron-right text-accent mt-1 mr-2 text-xs"></i>
-                              <span>Passage mapping techniques</span>
-                            </li>
-                            <li className="flex items-start">
-                              <i className="fas fa-chevron-right text-accent mt-1 mr-2 text-xs"></i>
-                              <span>Author perspective identification</span>
-                            </li>
-                            <li className="flex items-start">
-                              <i className="fas fa-chevron-right text-accent mt-1 mr-2 text-xs"></i>
-                              <span>Question anticipation methods</span>
-                            </li>
-                          </ul>
-                        </div>
-                        <div>
-                          <h4 className="font-semibold text-primary mb-2">Expected Progress</h4>
-                          <ul className="space-y-2 text-foreground/80">
-                            <li className="flex items-start">
-                              <i className="fas fa-chart-up text-accent mt-1 mr-2"></i>
-                              <span>-2 to -4 per section typical</span>
-                            </li>
-                            <li className="flex items-start">
-                              <i className="fas fa-chart-up text-accent mt-1 mr-2"></i>
-                              <span>3-4 minutes per passage</span>
-                            </li>
-                            <li className="flex items-start">
-                              <i className="fas fa-chart-up text-accent mt-1 mr-2"></i>
-                              <span>85%+ accuracy on practiced passages</span>
-                            </li>
-                          </ul>
-                        </div>
+                      <div className="mb-6">
+                        <h4 className="font-semibold text-primary mb-4">Core Strategies</h4>
+                        <ul className="space-y-3 text-foreground/80">
+                          <li className="flex items-start">
+                            <i className="fas fa-chevron-right text-accent mt-1 mr-3 text-xs"></i>
+                            <span><strong>Passage mapping techniques:</strong> Create mental roadmaps as you read, tracking main ideas, supporting details, and structural relationships. This helps you quickly locate information when answering questions.</span>
+                          </li>
+                          <li className="flex items-start">
+                            <i className="fas fa-chevron-right text-accent mt-1 mr-3 text-xs"></i>
+                            <span><strong>Author perspective identification:</strong> Understand not just what the author says, but their attitude, tone, and purpose. This insight is crucial for inference and main point questions.</span>
+                          </li>
+                          <li className="flex items-start">
+                            <i className="fas fa-chevron-right text-accent mt-1 mr-3 text-xs"></i>
+                            <span><strong>Question anticipation methods:</strong> While reading, predict what questions might be asked. This active reading approach helps you focus on the most important information.</span>
+                          </li>
+                          <li className="flex items-start">
+                            <i className="fas fa-chevron-right text-accent mt-1 mr-3 text-xs"></i>
+                            <span><strong>Comparative passage strategies:</strong> Master the unique challenges of comparative passages by understanding relationships between texts and efficiently managing increased complexity.</span>
+                          </li>
+                        </ul>
                       </div>
                     </div>
                   </div>
