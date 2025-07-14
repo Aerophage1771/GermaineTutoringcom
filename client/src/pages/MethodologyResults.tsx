@@ -212,7 +212,7 @@ const MethodologyResults = () => {
                         Logical Reasoning: Foundation of Success
                       </h3>
                       <p className="text-foreground leading-relaxed mb-6">
-                        Master the 50% of your LSAT score with systematic approach to argument analysis and question-type recognition. Logical Reasoning success requires understanding how arguments work, recognizing patterns, and developing efficient problem-solving strategies.
+                        Master the biggest part of your LSAT score with systematic approach to argument analysis and question-type recognition. Logical Reasoning success requires understanding how arguments work, recognizing patterns, and developing efficient problem-solving strategies.
                       </p>
                       <div className="mb-6">
                         <h4 className="font-semibold text-primary mb-4">Core Strategies</h4>
@@ -438,7 +438,7 @@ const MethodologyResults = () => {
                 <i className="fas fa-arrow-right ml-3"></i>
               </button>
               <p className="mt-6 text-white/70 text-sm">
-                Start your journey to 170+ scores
+                Start your journey to a 170+ score
               </p>
             </div>
           </div>
