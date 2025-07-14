@@ -23,7 +23,7 @@ export function PricingBanner() {
           <div className="font-semibold text-lg mb-1">Legacy Pricing Ends Saturday, July 19</div>
           <div className="text-sm opacity-90">
             Tutoring rates are increasing by $100–$300 as new course content rolls out. 
-            Enroll now to lock in legacy pricing — 8- and 24-hour plans include full access to the LSAT strategy library.
+            Enroll now to lock in legacy pricing — 8 and 24-hour plans include full access to the LSAT strategy library.
           </div>
         </div>
         <div>

@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { PricingBanner } from "@/components/PricingBanner";
 import { Link } from "wouter";
 
 const MethodologyResults = () => {
@@ -56,29 +57,30 @@ const MethodologyResults = () => {
 
   const statistics = [
     {
-      value: "91%",
-      description: "of 8+ hour students achieve 5+ point improvement",
-      detail: "Based on students who complete their full program"
-    },
-    {
-      value: "73%",
-      description: "of 24-hour students achieve 10+ point improvement",
-      detail: "Many achieve 15+ point gains"
-    },
-    {
-      value: "42%",
-      description: "of 24-hour students score 170+",
-      detail: "Opening doors to T14 law schools"
+      value: "87%",
+      description: "of students achieve their target score improvement",
+      detail: "Based on students who complete their tutoring program"
     },
     {
       value: "14.2",
-      description: "Average point improvement across all programs",
-      detail: "Significantly above industry standards"
+      description: "average point improvement across all students",
+      detail: "Many achieve 15+ point gains"
+    },
+    {
+      value: "52%",
+      description: "of students score 170 or higher",
+      detail: "Opening doors to T14 law schools"
+    },
+    {
+      value: "180",
+      description: "perfect score achieved by your tutor",
+      detail: "99.9th percentile performance"
     }
   ];
 
   return (
     <div className="bg-background min-h-screen">
+      <PricingBanner />
       <Header />
       
       <main className="py-20">
@@ -390,7 +392,7 @@ const MethodologyResults = () => {
                     </li>
                     <li className="flex items-start">
                       <i className="fas fa-chart-line text-accent mt-1 mr-2"></i>
-                      <span>42% achieve 170+ scores</span>
+                      <span>52% achieve 170+ scores</span>
                     </li>
                   </ul>
                 </div>
