@@ -30,10 +30,10 @@ const Programs = () => {
     {
       title: "2-Hour LSAT Acceleration Session",
       description: "Strategic session focused on rapidly improving performance and uncovering opportunities for growth on the LSAT",
-      price: "$199 (Save $100 before July 19)",
+      price: "$199",
       duration: "2 hours",
       hourly: "$99.50",
-      savings: "Price will increase to $299",
+      savings: null,
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 2 Hours" },
         { included: false, text: "Focused Diagnostic & Initial Strategy Session" },
@@ -44,7 +44,8 @@ const Programs = () => {
         { included: false, text: "Custom Strategy Materials" },
         { included: true, text: "Email & Text Support" },
         { included: false, text: "Priority in New Material Creation/Selection" },
-        { included: false, text: "Course not included", bonus: true }
+        { included: false, text: "Course not included", bonus: true },
+        { included: true, text: "Price increasing to $299 on July 19", bonus: true }
       ],
       buttonText: "Purchase Session",
       highlighted: false
@@ -52,10 +53,10 @@ const Programs = () => {
     {
       title: "8-Hour LSAT Elevation Course",
       description: "For students targeting a 5–10 point gain. Focused section work, strategy drills, and a custom study plan.",
-      price: "$699 (Save $300 before July 19)",
+      price: "$699",
       duration: "8 hours",
       hourly: "$87.38",
-      savings: "Includes full LSAT content library • Price will increase to $999",
+      savings: "(12.5% savings)",
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 8 Hours" },
         { included: true, text: "Focused Diagnostic & Strategy Call" },
@@ -65,7 +66,9 @@ const Programs = () => {
         { included: true, text: "Permanent Question Explanation Database Access", bonus: true },
         { included: true, text: "Custom Strategy Materials" },
         { included: true, text: "Email & Text Support" },
-        { included: false, text: "Priority in New Material Creation/Selection" }
+        { included: false, text: "Priority in New Material Creation/Selection" },
+        { included: true, text: "New LSAT content library included (for signups before July 19)", bonus: true },
+        { included: true, text: "Price increasing to $999 on July 19", bonus: true }
       ],
       buttonText: "Enroll in Course",
       highlighted: false
@@ -73,10 +76,10 @@ const Programs = () => {
     {
       title: "24-Hour LSAT Mastery Program",
       description: "For 10+ point improvements or 170+ goals. Intensive coaching, advanced strategy, and full-section mastery.",
-      price: "$1,799 (Save $300 before July 19)",
+      price: "$1,799",
       duration: "24 hours",
       hourly: "$74.96",
-      savings: "Includes full LSAT content library • Price will increase to $2,099",
+      savings: "(25% savings)",
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 24 Hours" },
         { included: true, text: "Focused Diagnostic & Initial Strategy Session" },
@@ -86,7 +89,9 @@ const Programs = () => {
         { included: true, text: "Permanent Full Question Explanation Database Access", bonus: true },
         { included: true, text: "Custom Strategy Materials" },
         { included: true, text: "Email & Text Support" },
-        { included: true, text: "Priority in New Material Creation/Selection" }
+        { included: true, text: "Priority in New Material Creation/Selection" },
+        { included: true, text: "New LSAT content library included (for signups before July 19)", bonus: true },
+        { included: true, text: "Price increasing to $2,099 on July 19", bonus: true }
       ],
       buttonText: "Enroll in Mastery",
       highlighted: true
