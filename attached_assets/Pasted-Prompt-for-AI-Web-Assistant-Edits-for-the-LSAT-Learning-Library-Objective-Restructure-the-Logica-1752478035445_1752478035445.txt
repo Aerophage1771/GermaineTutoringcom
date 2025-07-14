@@ -1,0 +1,116 @@
+Prompt for AI/Web Assistant: Edits for the LSAT Learning Library
+
+Objective:
+Restructure the "Logical Reasoning" library page to improve its pedagogical flow and user experience. The current flat list of 18 topics should be reorganized into logical "families" of question types, making the content more intuitive to navigate and less overwhelming for the user.
+Specific Edits for the "Logical Reasoning" Page:
+1. Implement a Grouped Accordion Layout
+
+Instead of the current single, long list, restructure the page content into a series of collapsible accordions. Each accordion will represent a "family" of related question types.
+
+    Behavior:
+
+        By default, all accordions should be collapsed, showing only the section title and subtitle.
+
+        Clicking on an accordion header should smoothly expand it to reveal the list of module links for that family.
+
+        Clicking an already-open accordion should collapse it.
+
+2. Reorganize All 18 Topics into Four "Families"
+
+Group the existing topic links into the following four accordion sections. Please use the exact titles, subtitles, and module groupings provided below.
+
+Accordion 1:
+
+    Title: Part 1: The Deconstruction Family
+
+    Subtitle: Learn to analyze what an argument is and how it’s built.
+
+    Modules Inside:
+
+        Main Conclusion
+
+        Argument Part (Role of a Statement)
+
+        Method of Reasoning
+
+        Flaw
+
+Accordion 2:
+
+    Title: Part 2: The Assumption & Support Family
+
+    Subtitle: Master the art of finding unstated links and evaluating evidence.
+
+    Modules Inside:
+
+        Necessary Assumption
+
+        Sufficient Assumption
+
+        Strengthen
+
+        Weaken
+
+        Evaluate
+
+Accordion 3:
+
+    Title: Part 3: The Inference & Application Family
+
+    Subtitle: Draw valid conclusions and apply general principles to new situations.
+
+    Modules Inside:
+
+        Must Be True
+
+        Most Strongly Supported
+
+        Must Be False
+
+        Fill in the Blank
+
+        Principle-Rule & Principle-Application (Combine the two existing "Principle" topics into one comprehensive module)
+
+Accordion 4:
+
+    Title: Part 4: The Structural & Situational Family
+
+    Subtitle: Match logical structures and resolve complex scenarios.
+
+    Modules Inside:
+
+        Parallel Reasoning & Parallel Flaw (Combine into one module)
+
+        Paradox
+
+        Agree/Disagree
+
+3. Enhance the Module Links (List Items)
+
+For each link inside the accordions, please enhance the presentation to improve scannability and clarity.
+
+    Add Unique Icons: Assign a simple, intuitive icon to each question type link. The icon should appear to the left of the module title.
+
+        Main Conclusion: 🎯 (Target)
+
+        Flaw: 🔍 (Magnifying glass over a crack)
+
+        Strengthen: 💪 (Flexed bicep)
+
+        Weaken: 🛡️ (Cracked shield)
+
+        Parallel Reasoning: ↔️ (Double-sided arrow)
+
+        Paradox: ❓ (Question mark)
+
+        Agree/Disagree: 💬 (Speech bubbles)
+
+        ...and so on for all types.
+
+    Revise Descriptions: Ensure the short description below each module title is concise and action-oriented. The existing descriptions are very good; use them as a model for any combined modules. For example:
+
+        For the new "Parallel Reasoning & Parallel Flaw" module: "Match the logical form of an argument across different topics. Master the skill of identifying underlying logical structures, both valid and flawed."
+
+Desired Outcome:
+
+The final "Logical Reasoning" page should transform from a long, undifferentiated list into a structured, interactive syllabus. Users should be able to see the high-level organization of the subject at a glance and then expand the sections to find the specific topic they need, guided by clear titles and visual icons. This change will make the library feel more organized, professional, and pedagogically sound.

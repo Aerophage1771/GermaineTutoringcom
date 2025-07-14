@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { 
   Home, 
   BookOpen, 
@@ -21,6 +22,13 @@ import {
 interface Subsection {
   title: string;
   content: string;
+  icon?: string;
+}
+
+interface AccordionFamily {
+  title: string;
+  subtitle: string;
+  modules: Subsection[];
 }
 
 interface Section {
@@ -28,7 +36,8 @@ interface Section {
   description: string;
   icon: React.ComponentType<{ className?: string }>;
   color: string;
-  subsections: Subsection[];
+  subsections?: Subsection[];
+  accordionFamilies?: AccordionFamily[];
 }
 
 const sections: Section[] = [
@@ -69,86 +78,115 @@ const sections: Section[] = [
     description: "Master argument analysis and logical thinking",
     icon: Brain,
     color: "bg-emerald-600 hover:bg-emerald-700",
-    subsections: [
-      // Section 1: Argument Structure and Reasoning Types
+    accordionFamilies: [
       {
-        title: "Main Conclusion",
-        content: "Find the statement that is supported by the others. Avoid confusing it with intermediate conclusions. Learn to identify the primary claim an argument is trying to establish, distinguish between main and subsidiary conclusions, and recognize how supporting premises work together to establish the central point."
+        title: "Part 1: The Deconstruction Family",
+        subtitle: "Learn to analyze what an argument is and how it's built.",
+        modules: [
+          {
+            title: "Main Conclusion",
+            icon: "🎯",
+            content: "Find the statement that is supported by the others. Avoid confusing it with intermediate conclusions. Learn to identify the primary claim an argument is trying to establish, distinguish between main and subsidiary conclusions, and recognize how supporting premises work together to establish the central point."
+          },
+          {
+            title: "Argument Part (Role of a Statement)",
+            icon: "🔧",
+            content: "Classify parts of the stimulus: is it a premise, background, counterclaim, or conclusion? Develop skills in parsing complex arguments, identifying the role each statement plays, and understanding how different components contribute to the overall argumentative structure."
+          },
+          {
+            title: "Method of Reasoning",
+            icon: "🗂️",
+            content: "Describe how the argument is built. Is it analogical, conditional, or comparative? Learn to recognize different argumentative strategies, understand how authors construct their reasoning, and identify the logical techniques used to support conclusions."
+          },
+          {
+            title: "Flaw",
+            icon: "🔍",
+            content: "Identify the logical weakness. Are assumptions unstated? Are causal leaps unjustified? Learn to spot errors in reasoning, recognize unsupported assumptions, and identify gaps in logic that undermine argument validity."
+          }
+        ]
       },
       {
-        title: "Argument Part",
-        content: "Classify parts of the stimulus: is it a premise, background, counterclaim, or conclusion? Develop skills in parsing complex arguments, identifying the role each statement plays, and understanding how different components contribute to the overall argumentative structure."
+        title: "Part 2: The Assumption & Support Family",
+        subtitle: "Master the art of finding unstated links and evaluating evidence.",
+        modules: [
+          {
+            title: "Necessary Assumption",
+            icon: "🔗",
+            content: "Identify a claim that must be true for the conclusion to follow. Learn to recognize unstated assumptions that arguments depend upon, without which the reasoning would fail."
+          },
+          {
+            title: "Sufficient Assumption",
+            icon: "✅",
+            content: "Identify a claim that, if added, guarantees the conclusion. Master finding assumptions that would make an argument logically valid, ensuring the conclusion follows necessarily from the premises."
+          },
+          {
+            title: "Strengthen",
+            icon: "💪",
+            content: "Identify info that would reinforce the link between premise and conclusion. Learn to recognize what additional support would make an argument more convincing and logically sound."
+          },
+          {
+            title: "Weaken",
+            icon: "🛡️",
+            content: "Identify info that would undercut the argument's support for its conclusion. Master techniques for recognizing what evidence or reasoning would damage an argument's persuasive force and logical foundation."
+          },
+          {
+            title: "Evaluate",
+            icon: "⚖️",
+            content: "Choose the piece of info that would most strengthen or weaken the argument's reasoning. Learn to assess what additional information would be most relevant to determining an argument's validity and strength."
+          }
+        ]
       },
       {
-        title: "Method of Reasoning",
-        content: "Describe how the argument is built. Is it analogical, conditional, or comparative? Learn to recognize different argumentative strategies, understand how authors construct their reasoning, and identify the logical techniques used to support conclusions."
+        title: "Part 3: The Inference & Application Family",
+        subtitle: "Draw valid conclusions and apply general principles to new situations.",
+        modules: [
+          {
+            title: "Must Be True",
+            icon: "✔️",
+            content: "Deduce a conclusion that must follow from the stimulus. Master logical deduction skills to identify what necessarily follows from the given information."
+          },
+          {
+            title: "Most Strongly Supported",
+            icon: "📊",
+            content: "Identify the answer most supported by the provided info. Learn to evaluate which conclusions have the strongest evidentiary support from the given premises."
+          },
+          {
+            title: "Must Be False",
+            icon: "❌",
+            content: "Eliminate conclusions that contradict the stimulus. Learn to identify statements that are incompatible with the given information and cannot be true."
+          },
+          {
+            title: "Fill in the Blank",
+            icon: "📝",
+            content: "Complete an argument logically based on surrounding context. Develop skills in understanding argument flow and identifying what conclusion or premise would best complete the logical structure."
+          },
+          {
+            title: "Principle-Rule & Principle-Application",
+            icon: "📋",
+            content: "Match abstract rules to specific cases and vice versa. Develop skills in applying general principles to specific situations and identifying which situations exemplify or violate general principles and abstract guidelines."
+          }
+        ]
       },
       {
-        title: "Parallel Reasoning",
-        content: "Match the logical form of the argument across different topics. Master the skill of identifying underlying logical structures, recognizing when different arguments share the same reasoning pattern despite having different subject matter."
-      },
-      {
-        title: "Agree/Disagree",
-        content: "Contrast speaker positions. What do they actually agree or disagree on? Develop skills in identifying points of convergence and divergence between different viewpoints, understanding nuanced positions, and recognizing areas of agreement within broader disagreements."
-      },
-      // Section 2: Argument Flaws and Evaluation
-      {
-        title: "Flaw",
-        content: "Identify the logical weakness. Are assumptions unstated? Are causal leaps unjustified? Learn to spot errors in reasoning, recognize unsupported assumptions, and identify gaps in logic that undermine argument validity."
-      },
-      {
-        title: "Parallel Flaw",
-        content: "Match flawed reasoning patterns, not just valid forms. Develop the ability to recognize when different arguments share the same type of logical error, regardless of their content area or specific claims."
-      },
-      {
-        title: "Evaluate",
-        content: "Choose the piece of info that would most strengthen or weaken the argument's reasoning. Learn to assess what additional information would be most relevant to determining an argument's validity and strength."
-      },
-      // Section 3: Strengthening, Weakening, and Assumption Types
-      {
-        title: "Weaken",
-        content: "Identify info that would undercut the argument's support for its conclusion. Master techniques for recognizing what evidence or reasoning would damage an argument's persuasive force and logical foundation."
-      },
-      {
-        title: "Strengthen",
-        content: "Identify info that would reinforce the link between premise and conclusion. Learn to recognize what additional support would make an argument more convincing and logically sound."
-      },
-      {
-        title: "Principle–Rule",
-        content: "Match an abstract rule to the case given. Develop skills in applying general principles to specific situations and recognizing how broad rules apply to particular circumstances."
-      },
-      {
-        title: "Principle–Application",
-        content: "Match the correct case to the abstract rule. Learn to identify which specific situations exemplify or violate general principles and abstract guidelines."
-      },
-      {
-        title: "Sufficient Assumption",
-        content: "Identify a claim that, if added, guarantees the conclusion. Master finding assumptions that would make an argument logically valid, ensuring the conclusion follows necessarily from the premises."
-      },
-      {
-        title: "Necessary Assumption",
-        content: "Identify a claim that must be true for the conclusion to follow. Learn to recognize unstated assumptions that arguments depend upon, without which the reasoning would fail."
-      },
-      // Section 4: Inference and Completion
-      {
-        title: "Fill in the Blank",
-        content: "Complete an argument logically based on surrounding context. Develop skills in understanding argument flow and identifying what conclusion or premise would best complete the logical structure."
-      },
-      {
-        title: "Most Strongly Supported",
-        content: "Identify the answer most supported by the provided info. Learn to evaluate which conclusions have the strongest evidentiary support from the given premises."
-      },
-      {
-        title: "Must Be True",
-        content: "Deduce a conclusion that must follow from the stimulus. Master logical deduction skills to identify what necessarily follows from the given information."
-      },
-      {
-        title: "Must Be False",
-        content: "Eliminate conclusions that contradict the stimulus. Learn to identify statements that are incompatible with the given information and cannot be true."
-      },
-      {
-        title: "Resolve / Reconcile / Explain",
-        content: "Clarify an apparent contradiction or puzzling result. Develop skills in finding explanations that make seemingly contradictory information coherent and understandable."
+        title: "Part 4: The Structural & Situational Family",
+        subtitle: "Match logical structures and resolve complex scenarios.",
+        modules: [
+          {
+            title: "Parallel Reasoning & Parallel Flaw",
+            icon: "↔️",
+            content: "Match the logical form of an argument across different topics. Master the skill of identifying underlying logical structures, both valid and flawed, recognizing when different arguments share the same reasoning pattern despite having different subject matter."
+          },
+          {
+            title: "Paradox",
+            icon: "❓",
+            content: "Clarify an apparent contradiction or puzzling result. Develop skills in finding explanations that make seemingly contradictory information coherent and understandable."
+          },
+          {
+            title: "Agree/Disagree",
+            icon: "💬",
+            content: "Contrast speaker positions. What do they actually agree or disagree on? Develop skills in identifying points of convergence and divergence between different viewpoints, understanding nuanced positions, and recognizing areas of agreement within broader disagreements."
+          }
+        ]
       }
     ]
   },
@@ -375,7 +413,7 @@ export default function LearningLibrary() {
                   </p>
                   <div className="flex items-center justify-between">
                     <Badge variant="secondary" className="text-sm">
-                      {section.subsections.length} topics
+                      {section.subsections?.length || section.accordionFamilies?.reduce((acc, family) => acc + family.modules.length, 0) || 0} topics
                     </Badge>
                     <ChevronRight className="h-5 w-5 text-gray-400" />
                   </div>
@@ -384,11 +422,63 @@ export default function LearningLibrary() {
             );
           })}
         </div>
+      ) : selectedSection.accordionFamilies ? (
+        // Accordion Families View (Logical Reasoning)
+        <div className="space-y-6">
+          <Accordion type="multiple" className="w-full space-y-4">
+            {selectedSection.accordionFamilies.map((family, familyIndex) => (
+              <AccordionItem 
+                key={familyIndex} 
+                value={`family-${familyIndex}`}
+                className="border border-gray-200 rounded-lg px-6 py-2 bg-white shadow-sm"
+              >
+                <AccordionTrigger className="hover:no-underline py-4">
+                  <div className="text-left">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                      {family.title}
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {family.subtitle}
+                    </p>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent className="pb-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-2">
+                    {family.modules.map((module, moduleIndex) => (
+                      <Card 
+                        key={moduleIndex}
+                        className="cursor-pointer transition-all duration-200 hover:shadow-md hover:scale-[1.02] border border-gray-100 bg-gray-50"
+                        onClick={() => handleSubsectionClick(module)}
+                      >
+                        <CardContent className="p-4">
+                          <div className="flex items-start space-x-3">
+                            <span className="text-xl flex-shrink-0 mt-0.5">
+                              {module.icon}
+                            </span>
+                            <div className="flex-1 min-w-0">
+                              <h4 className="font-medium text-gray-900 mb-1 text-sm">
+                                {module.title}
+                              </h4>
+                              <p className="text-xs text-gray-600 line-clamp-2">
+                                {module.content.substring(0, 80)}...
+                              </p>
+                            </div>
+                            <ChevronRight className="h-4 w-4 text-gray-400 flex-shrink-0 mt-1" />
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </div>
       ) : (
-        // Subsection List View
+        // Traditional Subsection List View
         <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {selectedSection.subsections.map((subsection, index) => (
+            {selectedSection.subsections?.map((subsection, index) => (
               <Card 
                 key={index}
                 className="cursor-pointer transition-all duration-200 hover:shadow-md hover:scale-[1.02] border border-gray-200"
@@ -406,7 +496,7 @@ export default function LearningLibrary() {
                   </p>
                 </CardContent>
               </Card>
-            ))}
+            )) || []}
           </div>
         </div>
       )}

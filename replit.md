@@ -153,6 +153,10 @@ Changelog:
 - July 12, 2025. Implemented modal-based content display system for subsection materials
 - July 12, 2025. Removed "Log Practice" and "access video tutorials" tiles from Dashboard
 - July 12, 2025. Updated Practice & Review section to display maximum 2 buttons per row for better readability
+- July 14, 2025. Restructured Logical Reasoning section with grouped accordion layout featuring 4 pedagogical families
+- July 14, 2025. Organized 18 LR topics into collapsible accordion families: Deconstruction, Assumption & Support, Inference & Application, Structural & Situational
+- July 14, 2025. Added unique icons to each question type module and combined related topics (Principle-Rule & Principle-Application, Parallel Reasoning & Parallel Flaw)
+- July 14, 2025. Implemented accordion-based content organization for improved pedagogical flow and user experience
 ```
 
 ## User Preferences
