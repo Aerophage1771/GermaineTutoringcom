@@ -1,0 +1,72 @@
+Section 1: Argument Structure and Reasoning Types
+
+Build a foundation by learning how arguments are constructed and how their parts function.
+
+    Main Conclusion
+    Find the statement that is supported by the others. Avoid confusing it with intermediate conclusions.
+
+    Argument Part
+    Classify parts of the stimulus: is it a premise, background, counterclaim, or conclusion?
+
+    Method of Reasoning
+    Describe how the argument is built. Is it analogical, conditional, or comparative?
+
+    Parallel Reasoning
+    Match the logical form of the argument across different topics.
+
+    Agree/Disagree
+    Contrast speaker positions. What do they actually agree or disagree on?
+
+Section 2: Argument Flaws and Evaluation
+
+Focus on weaknesses in reasoning and how to assess argument quality.
+
+    Flaw
+    Identify the logical weakness. Are assumptions unstated? Are causal leaps unjustified?
+
+    Parallel Flaw
+    Match flawed reasoning patterns, not just valid forms.
+
+    Evaluate
+    Choose the piece of info that would most strengthen or weaken the argument’s reasoning.
+
+Section 3: Strengthening, Weakening, and Assumption Types
+
+Reinforce or challenge arguments and understand the assumptions they rely on.
+
+    Weaken
+    Identify info that would undercut the argument’s support for its conclusion.
+
+    Strengthen
+    Identify info that would reinforce the link between premise and conclusion.
+
+    Principle–Rule
+    Match an abstract rule to the case given.
+
+    Principle–Application
+    Match the correct case to the abstract rule.
+
+    Sufficient Assumption
+    Identify a claim that, if added, guarantees the conclusion.
+
+    Necessary Assumption
+    Identify a claim that must be true for the conclusion to follow.
+
+Section 4: Inference and Completion
+
+Focus on what logically follows or completes an argument based on available information.
+
+    Fill in the Blank
+    Complete an argument logically based on surrounding context.
+
+    Most Strongly Supported
+    Identify the answer most supported by the provided info.
+
+    Must Be True
+    Deduce a conclusion that must follow from the stimulus.
+
+    Must Be False
+    Eliminate conclusions that contradict the stimulus.
+
+    Resolve / Reconcile / Explain
+    Clarify an apparent contradiction or puzzling result.

@@ -80,8 +80,8 @@ const sections: Section[] = [
     color: "bg-emerald-600 hover:bg-emerald-700",
     accordionFamilies: [
       {
-        title: "Part 1: The Deconstruction Family",
-        subtitle: "Learn to analyze what an argument is and how it's built.",
+        title: "Section 1: Argument Structure and Reasoning Types",
+        subtitle: "Build a foundation by learning how arguments are constructed and how their parts function.",
         modules: [
           {
             title: "Main Conclusion",
@@ -89,7 +89,7 @@ const sections: Section[] = [
             content: "Find the statement that is supported by the others. Avoid confusing it with intermediate conclusions. Learn to identify the primary claim an argument is trying to establish, distinguish between main and subsidiary conclusions, and recognize how supporting premises work together to establish the central point."
           },
           {
-            title: "Argument Part (Role of a Statement)",
+            title: "Argument Part",
             icon: "🔧",
             content: "Classify parts of the stimulus: is it a premise, background, counterclaim, or conclusion? Develop skills in parsing complex arguments, identifying the role each statement plays, and understanding how different components contribute to the overall argumentative structure."
           },
@@ -99,35 +99,30 @@ const sections: Section[] = [
             content: "Describe how the argument is built. Is it analogical, conditional, or comparative? Learn to recognize different argumentative strategies, understand how authors construct their reasoning, and identify the logical techniques used to support conclusions."
           },
           {
-            title: "Flaw",
-            icon: "🔍",
-            content: "Identify the logical weakness. Are assumptions unstated? Are causal leaps unjustified? Learn to spot errors in reasoning, recognize unsupported assumptions, and identify gaps in logic that undermine argument validity."
+            title: "Parallel Reasoning",
+            icon: "↔️",
+            content: "Match the logical form of the argument across different topics. Master the skill of identifying underlying logical structures, recognizing when different arguments share the same reasoning pattern despite having different subject matter."
+          },
+          {
+            title: "Agree/Disagree",
+            icon: "💬",
+            content: "Contrast speaker positions. What do they actually agree or disagree on? Develop skills in identifying points of convergence and divergence between different viewpoints, understanding nuanced positions, and recognizing areas of agreement within broader disagreements."
           }
         ]
       },
       {
-        title: "Part 2: The Assumption & Support Family",
-        subtitle: "Master the art of finding unstated links and evaluating evidence.",
+        title: "Section 2: Argument Flaws and Evaluation",
+        subtitle: "Focus on weaknesses in reasoning and how to assess argument quality.",
         modules: [
           {
-            title: "Necessary Assumption",
-            icon: "🔗",
-            content: "Identify a claim that must be true for the conclusion to follow. Learn to recognize unstated assumptions that arguments depend upon, without which the reasoning would fail."
+            title: "Flaw",
+            icon: "🔍",
+            content: "Identify the logical weakness. Are assumptions unstated? Are causal leaps unjustified? Learn to spot errors in reasoning, recognize unsupported assumptions, and identify gaps in logic that undermine argument validity."
           },
           {
-            title: "Sufficient Assumption",
-            icon: "✅",
-            content: "Identify a claim that, if added, guarantees the conclusion. Master finding assumptions that would make an argument logically valid, ensuring the conclusion follows necessarily from the premises."
-          },
-          {
-            title: "Strengthen",
-            icon: "💪",
-            content: "Identify info that would reinforce the link between premise and conclusion. Learn to recognize what additional support would make an argument more convincing and logically sound."
-          },
-          {
-            title: "Weaken",
-            icon: "🛡️",
-            content: "Identify info that would undercut the argument's support for its conclusion. Master techniques for recognizing what evidence or reasoning would damage an argument's persuasive force and logical foundation."
+            title: "Parallel Flaw",
+            icon: "🔄",
+            content: "Match flawed reasoning patterns, not just valid forms. Develop the ability to recognize when different arguments share the same type of logical error, regardless of their content area or specific claims."
           },
           {
             title: "Evaluate",
@@ -137,13 +132,49 @@ const sections: Section[] = [
         ]
       },
       {
-        title: "Part 3: The Inference & Application Family",
-        subtitle: "Draw valid conclusions and apply general principles to new situations.",
+        title: "Section 3: Strengthening, Weakening, and Assumption Types",
+        subtitle: "Reinforce or challenge arguments and understand the assumptions they rely on.",
         modules: [
           {
-            title: "Must Be True",
-            icon: "✔️",
-            content: "Deduce a conclusion that must follow from the stimulus. Master logical deduction skills to identify what necessarily follows from the given information."
+            title: "Weaken",
+            icon: "🛡️",
+            content: "Identify info that would undercut the argument's support for its conclusion. Master techniques for recognizing what evidence or reasoning would damage an argument's persuasive force and logical foundation."
+          },
+          {
+            title: "Strengthen",
+            icon: "💪",
+            content: "Identify info that would reinforce the link between premise and conclusion. Learn to recognize what additional support would make an argument more convincing and logically sound."
+          },
+          {
+            title: "Principle–Rule",
+            icon: "📋",
+            content: "Match an abstract rule to the case given. Develop skills in applying general principles to specific situations and recognizing how broad rules apply to particular circumstances."
+          },
+          {
+            title: "Principle–Application",
+            icon: "📝",
+            content: "Match the correct case to the abstract rule. Learn to identify which specific situations exemplify or violate general principles and abstract guidelines."
+          },
+          {
+            title: "Sufficient Assumption",
+            icon: "✅",
+            content: "Identify a claim that, if added, guarantees the conclusion. Master finding assumptions that would make an argument logically valid, ensuring the conclusion follows necessarily from the premises."
+          },
+          {
+            title: "Necessary Assumption",
+            icon: "🔗",
+            content: "Identify a claim that must be true for the conclusion to follow. Learn to recognize unstated assumptions that arguments depend upon, without which the reasoning would fail."
+          }
+        ]
+      },
+      {
+        title: "Section 4: Inference and Completion",
+        subtitle: "Focus on what logically follows or completes an argument based on available information.",
+        modules: [
+          {
+            title: "Fill in the Blank",
+            icon: "📝",
+            content: "Complete an argument logically based on surrounding context. Develop skills in understanding argument flow and identifying what conclusion or premise would best complete the logical structure."
           },
           {
             title: "Most Strongly Supported",
@@ -151,40 +182,19 @@ const sections: Section[] = [
             content: "Identify the answer most supported by the provided info. Learn to evaluate which conclusions have the strongest evidentiary support from the given premises."
           },
           {
+            title: "Must Be True",
+            icon: "✔️",
+            content: "Deduce a conclusion that must follow from the stimulus. Master logical deduction skills to identify what necessarily follows from the given information."
+          },
+          {
             title: "Must Be False",
             icon: "❌",
             content: "Eliminate conclusions that contradict the stimulus. Learn to identify statements that are incompatible with the given information and cannot be true."
           },
           {
-            title: "Fill in the Blank",
-            icon: "📝",
-            content: "Complete an argument logically based on surrounding context. Develop skills in understanding argument flow and identifying what conclusion or premise would best complete the logical structure."
-          },
-          {
-            title: "Principle-Rule & Principle-Application",
-            icon: "📋",
-            content: "Match abstract rules to specific cases and vice versa. Develop skills in applying general principles to specific situations and identifying which situations exemplify or violate general principles and abstract guidelines."
-          }
-        ]
-      },
-      {
-        title: "Part 4: The Structural & Situational Family",
-        subtitle: "Match logical structures and resolve complex scenarios.",
-        modules: [
-          {
-            title: "Parallel Reasoning & Parallel Flaw",
-            icon: "↔️",
-            content: "Match the logical form of an argument across different topics. Master the skill of identifying underlying logical structures, both valid and flawed, recognizing when different arguments share the same reasoning pattern despite having different subject matter."
-          },
-          {
-            title: "Paradox",
+            title: "Resolve / Reconcile / Explain",
             icon: "❓",
             content: "Clarify an apparent contradiction or puzzling result. Develop skills in finding explanations that make seemingly contradictory information coherent and understandable."
-          },
-          {
-            title: "Agree/Disagree",
-            icon: "💬",
-            content: "Contrast speaker positions. What do they actually agree or disagree on? Develop skills in identifying points of convergence and divergence between different viewpoints, understanding nuanced positions, and recognizing areas of agreement within broader disagreements."
           }
         ]
       }
