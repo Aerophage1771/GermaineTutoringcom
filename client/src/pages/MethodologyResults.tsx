@@ -42,7 +42,7 @@ const MethodologyResults = () => {
       scoreBefore: 167,
       scoreAfter: 177,
       improvement: "+10",
-      school: "University of Chicago",
+      school: "USC - Gould",
       text: "Already scoring in the 160s, I needed precision improvements. Germaine identified subtle weaknesses in my approach that were costing me those crucial final points. The difference between 167 and 177 changed everything."
     },
     {
@@ -50,7 +50,7 @@ const MethodologyResults = () => {
       scoreBefore: 158,
       scoreAfter: 171,
       improvement: "+13",
-      school: "NYU Law School",
+      school: "ASU Law",
       text: "The 24-hour program transformed my approach completely. From struggling with timing to finishing sections with minutes to spare, the improvement was dramatic. Worth every penny."
     }
   ];
