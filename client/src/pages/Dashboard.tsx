@@ -366,6 +366,19 @@ export default function Dashboard() {
                   </div>
                 </Button>
 
+                {/* Create Practice Set */}
+                <Button 
+                  size="lg" 
+                  className="h-20 text-lg font-semibold bg-blue-600 hover:bg-blue-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
+                  onClick={() => setLocation("/create-set")}
+                >
+                  <Plus className="h-6 w-6 mr-3" />
+                  <div className="text-left">
+                    <div>Create Practice Set</div>
+                    <div className="text-sm font-normal opacity-80">Build custom question sets</div>
+                  </div>
+                </Button>
+
                 {/* Learning Library */}
                 <Button 
                   size="lg"

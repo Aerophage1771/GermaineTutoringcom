@@ -73,6 +73,56 @@ export const insertProblemLogSchema = createInsertSchema(problemLog).pick({
 export type InsertProblemLog = z.infer<typeof insertProblemLogSchema>;
 export type ProblemLog = typeof problemLog.$inferSelect;
 
+// Practice sets for organized question practice
+export const practiceSets = pgTable("practice_sets", {
+  id: text("id").primaryKey(), // UUID string
+  user_id: integer("user_id").references(() => users.id).notNull(),
+  name: text("name").notNull(),
+  type: text("type").notNull(), // 'lr' or 'rc'
+  question_ids: text("question_ids").notNull(), // JSON array of question IDs
+  created_at: timestamp("created_at").defaultNow(),
+  updated_at: timestamp("updated_at").defaultNow(),
+});
+
+export const insertPracticeSetSchema = createInsertSchema(practiceSets).pick({
+  id: true,
+  user_id: true,
+  name: true,
+  type: true,
+  question_ids: true,
+});
+
+export type InsertPracticeSet = z.infer<typeof insertPracticeSetSchema>;
+export type PracticeSet = typeof practiceSets.$inferSelect;
+
+// Enhanced question details table for practice mode
+export const questionDetails = pgTable("question_details", {
+  id: serial("id").primaryKey(),
+  question_id: text("question_id").notNull().unique(),
+  question_text: text("question_text").notNull(),
+  answer_choices: text("answer_choices").notNull(), // JSON object with A,B,C,D,E
+  correct_answer: text("correct_answer").notNull(),
+  explanation: text("explanation").notNull(),
+  passage_text: text("passage_text"), // For RC questions
+  skills: text("skills"),
+  question_type: text("question_type"),
+  created_at: timestamp("created_at").defaultNow(),
+});
+
+export const insertQuestionDetailsSchema = createInsertSchema(questionDetails).pick({
+  question_id: true,
+  question_text: true,
+  answer_choices: true,
+  correct_answer: true,
+  explanation: true,
+  passage_text: true,
+  skills: true,
+  question_type: true,
+});
+
+export type InsertQuestionDetails = z.infer<typeof insertQuestionDetailsSchema>;
+export type QuestionDetails = typeof questionDetails.$inferSelect;
+
 // Practice activities and test results
 export const practiceActivities = pgTable("practice_activities", {
   id: serial("id").primaryKey(),

@@ -482,6 +482,106 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Practice set routes
+  app.get("/api/practice/sets", async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      
+      const sets = await storage.getPracticeSets(req.session.userId);
+      res.json(sets);
+    } catch (error) {
+      console.error("Error fetching practice sets:", error);
+      res.status(500).json({ message: "Failed to fetch practice sets" });
+    }
+  });
+
+  app.post("/api/practice/sets", async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      
+      const { name, type, questionIds } = req.body;
+      
+      if (!name || !type || !Array.isArray(questionIds) || questionIds.length === 0) {
+        return res.status(400).json({ message: "Name, type, and questionIds are required" });
+      }
+      
+      const set = await storage.createPracticeSet({
+        name,
+        type,
+        questionIds,
+        userId: req.session.userId
+      });
+      
+      res.status(201).json(set);
+    } catch (error) {
+      console.error("Error creating practice set:", error);
+      res.status(500).json({ message: "Failed to create practice set" });
+    }
+  });
+
+  app.get("/api/practice/set/:id", async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      
+      const { id } = req.params;
+      const set = await storage.getPracticeSet(id, req.session.userId);
+      
+      if (!set) {
+        return res.status(404).json({ message: "Practice set not found" });
+      }
+      
+      res.json(set);
+    } catch (error) {
+      console.error("Error fetching practice set:", error);
+      res.status(500).json({ message: "Failed to fetch practice set" });
+    }
+  });
+
+  // Practice question routes with full question data
+  app.get("/api/lsat/questions", async (req, res) => {
+    try {
+      const { type, filters, search, page = '1' } = req.query;
+      
+      const questions = await storage.getQuestionsWithDetails({
+        type: type as 'lr' | 'rc',
+        filters: filters ? JSON.parse(filters as string) : {},
+        search: search as string,
+        page: parseInt(page as string)
+      });
+      
+      res.json(questions);
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+      res.status(500).json({ message: "Failed to fetch questions" });
+    }
+  });
+
+  // Practice activity tracking
+  app.post("/api/practice/activity", async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      
+      const validatedData = insertPracticeActivitySchema.parse({
+        ...req.body,
+        userId: req.session.userId
+      });
+      
+      const activity = await storage.logPracticeActivity(validatedData);
+      res.status(201).json(activity);
+    } catch (error) {
+      console.error("Error logging practice activity:", error);
+      res.status(500).json({ message: "Failed to log practice activity" });
+    }
+  });
+
   const httpServer = createServer(app);
   return httpServer;
 }

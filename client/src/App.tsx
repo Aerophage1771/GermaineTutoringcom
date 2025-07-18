@@ -15,6 +15,8 @@ import Login from "@/pages/Login";
 import Dashboard from "@/pages/Dashboard";
 import PracticeTest from "@/pages/PracticeTest";
 import PracticeRC from "@/pages/PracticeRC";
+import QuestionPractice from "@/pages/QuestionPractice";
+import QuestionSetCreator from "@/pages/QuestionSetCreator";
 import ProblemLog from "@/pages/ProblemLog";
 import LearningLibrary from "@/pages/LearningLibrary";
 
@@ -29,6 +31,8 @@ function Router() {
       <Route path="/dashboard" component={Dashboard} />
       <Route path="/practice-test" component={PracticeTest} />
       <Route path="/practice-rc" component={PracticeRC} />
+      <Route path="/question-practice" component={QuestionPractice} />
+      <Route path="/create-set" component={QuestionSetCreator} />
       <Route path="/problem-log" component={ProblemLog} />
       <Route path="/learning-library" component={LearningLibrary} />
       <Route path="/blog" component={Blog} />
