@@ -34,7 +34,7 @@ const MethodologyResults = () => {
       scoreAfter: 168,
       improvement: "+17",
       school: "Columbia Law School",
-      text: "Starting with a 151 diagnostic, I thought 160s were a pipe dream. Germaine's systematic approach broke down every question type into learnable patterns. Six months later, I had options I never imagined."
+      text: "Starting with a 151, I thought 160s were a pipe dream. Germaine's clear step-by-step lessons broke down every question type into easier patterns. After 6 weeks of tutoring, I scored 3 points above my goal!"
     },
     {
       name: "Michael R.",
@@ -42,7 +42,7 @@ const MethodologyResults = () => {
       scoreAfter: 177,
       improvement: "+10",
       school: "USC - Gould",
-      text: "Already scoring in the 160s, I needed precision improvements. Germaine identified subtle weaknesses in my approach that were costing me those crucial final points. The difference between 167 and 177 changed everything."
+      text: "I was already in the 160s, but something felt off. Germaine picked up on these little things in my approach that I didn’t even realize were holding me back. That shift from a 167 to a 177? Total game-changer"
     },
     {
       name: "Emily C.",
@@ -50,7 +50,7 @@ const MethodologyResults = () => {
       scoreAfter: 171,
       improvement: "+13",
       school: "ASU Law",
-      text: "The 24-hour program transformed my approach completely. From struggling with timing to finishing sections with minutes to spare, the improvement was dramatic. Worth every penny."
+      text: "Completely changed how I take the test. I used to be scrambling to finish and now I’m wrapping up with time to spare. Huge difference. Honestly worth every penny."
     }
   ];
 
