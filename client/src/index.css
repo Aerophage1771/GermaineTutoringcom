@@ -114,3 +114,11 @@
     font-family: 'Open Sans', sans-serif;
   }
 }
+
+/* Remove automatic quotation marks from blockquotes */
+@layer components {
+  .prose blockquote:before,
+  .prose blockquote:after {
+    content: none !important;
+  }
+}

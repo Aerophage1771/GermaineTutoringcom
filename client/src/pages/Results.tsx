@@ -137,7 +137,7 @@ const Results = () => {
                       </div>
                     </div>
                     <p className="text-foreground leading-relaxed mb-4">
-                      "{testimonial.text}"
+                      {testimonial.text}
                     </p>
                     <p className="text-foreground/70 text-sm italic">
                       {testimonial.extendedText}
