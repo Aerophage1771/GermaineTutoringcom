@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { PricingBanner } from "@/components/PricingBanner";
 import { Link } from "wouter";
 
 const MethodologyResults = () => {
@@ -80,7 +79,6 @@ const MethodologyResults = () => {
 
   return (
     <div className="bg-background min-h-screen">
-      <PricingBanner />
       <Header />
       
       <main className="py-20">

@@ -1,5 +1,4 @@
 import Header from "@/components/Header";
-import { PricingBanner } from "@/components/PricingBanner";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import MethodologySection from "@/components/MethodologySection";
@@ -12,7 +11,6 @@ import Footer from "@/components/Footer";
 const Home = () => {
   return (
     <div className="bg-background">
-      <PricingBanner />
       <Header />
       <main>
         <HeroSection />

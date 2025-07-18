@@ -1,7 +1,6 @@
 import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { PricingBanner } from "@/components/PricingBanner";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 
@@ -30,9 +29,9 @@ const Programs = () => {
     {
       title: "2-Hour LSAT Acceleration Session",
       description: "Strategic session focused on rapidly improving performance and uncovering opportunities for growth on the LSAT",
-      price: "$199",
+      price: "$299",
       duration: "2 hours",
-      hourly: "$99.50",
+      hourly: "$149.50",
       savings: null,
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 2 Hours" },
@@ -44,8 +43,7 @@ const Programs = () => {
         { included: false, text: "Custom Strategy Materials" },
         { included: true, text: "Email & Text Support" },
         { included: false, text: "Priority in New Material Creation/Selection" },
-        { included: false, text: "Course not included", bonus: true },
-        { included: true, text: "Price increasing to $299 on July 19", bonus: true }
+        { included: false, text: "Course not included", bonus: true }
       ],
       buttonText: "Purchase Session",
       highlighted: false
@@ -53,9 +51,9 @@ const Programs = () => {
     {
       title: "8-Hour LSAT Elevation Course",
       description: "For students targeting a 5–10 point gain. Focused section work, strategy drills, and a custom study plan.",
-      price: "$699",
+      price: "$999",
       duration: "8 hours",
-      hourly: "$87.38",
+      hourly: "$124.88",
       savings: "(12.5% savings)",
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 8 Hours" },
@@ -67,8 +65,7 @@ const Programs = () => {
         { included: true, text: "Custom Strategy Materials" },
         { included: true, text: "Email & Text Support" },
         { included: false, text: "Priority in New Material Creation/Selection" },
-        { included: true, text: "New LSAT content library included (for signups before July 19)", bonus: true },
-        { included: true, text: "Price increasing to $999 on July 19", bonus: true }
+        { included: true, text: "LSAT content library included", bonus: true }
       ],
       buttonText: "Enroll in Course",
       highlighted: false
@@ -76,9 +73,9 @@ const Programs = () => {
     {
       title: "24-Hour LSAT Mastery Program",
       description: "For 10+ point improvements or 170+ goals. Intensive coaching, advanced strategy, and full-section mastery.",
-      price: "$1,799",
+      price: "$2,099",
       duration: "24 hours",
-      hourly: "$74.96",
+      hourly: "$87.46",
       savings: "(25% savings)",
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 24 Hours" },
@@ -90,8 +87,7 @@ const Programs = () => {
         { included: true, text: "Custom Strategy Materials" },
         { included: true, text: "Email & Text Support" },
         { included: true, text: "Priority in New Material Creation/Selection" },
-        { included: true, text: "New LSAT content library included (for signups before July 19)", bonus: true },
-        { included: true, text: "Price increasing to $2,099 on July 19", bonus: true }
+        { included: true, text: "LSAT content library included", bonus: true }
       ],
       buttonText: "Enroll in Mastery",
       highlighted: true
@@ -117,7 +113,6 @@ const Programs = () => {
 
   return (
     <div className="bg-background min-h-screen">
-      <PricingBanner />
       <Header />
       
       <main className="py-20">
@@ -148,44 +143,7 @@ const Programs = () => {
           </div>
         </section>
 
-        {/* Pricing Update Section */}
-        <section className="container mx-auto px-4 mb-12">
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-amber-50 border border-amber-200 rounded-lg p-6 mb-8">
-              <h2 className="text-2xl font-bold text-amber-800 mb-4">
-                📅 Pricing Update Coming July 19th:
-              </h2>
-              <div className="grid md:grid-cols-3 gap-4 mb-4">
-                <div className="bg-white rounded-lg p-4 border border-amber-200">
-                  <h3 className="font-semibold text-amber-800">2-Hour Session</h3>
-                  <p className="text-amber-700">
-                    <span className="line-through">$199</span> → <strong>$299</strong>
-                  </p>
-                </div>
-                <div className="bg-white rounded-lg p-4 border border-amber-200">
-                  <h3 className="font-semibold text-amber-800">8-Hour Course</h3>
-                  <p className="text-amber-700">
-                    <span className="line-through">$699</span> → <strong>$999</strong>
-                  </p>
-                </div>
-                <div className="bg-white rounded-lg p-4 border border-amber-200">
-                  <h3 className="font-semibold text-amber-800">24-Hour Program</h3>
-                  <p className="text-amber-700">
-                    <span className="line-through">$1,799</span> → <strong>$2,099</strong>
-                  </p>
-                </div>
-              </div>
-              <div className="text-amber-800">
-                <p className="mb-2">
-                  <strong>Students who enroll before the 19th keep current pricing.</strong>
-                </p>
-                <p>
-                  The 8-hour and 24-hour plans will also include full access to my new LSAT content and strategy library — free for early signups.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
+
 
         {/* Program Cards */}
         <section className="container mx-auto px-4 mb-20">
@@ -268,34 +226,7 @@ const Programs = () => {
           </div>
         </section>
 
-        {/* Optional CTA */}
-        <section className="container mx-auto px-4 mb-16">
-          <div className="max-w-3xl mx-auto text-center">
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-8">
-              <div className="text-3xl mb-4">🕒</div>
-              <h3 className="text-2xl font-bold text-blue-800 mb-4">
-                Still deciding? Book now to lock in current pricing before July 19.
-              </h3>
-              <p className="text-blue-700 mb-6 text-lg">
-                The new content library goes live soon, and early students get it included with the 8- and 24-hour plans.
-              </p>
-              <Button 
-                variant="outline" 
-                size="lg"
-                onClick={() => {
-                  if (window.Calendly) {
-                    window.Calendly.initPopupWidget({ 
-                      url: 'https://calendly.com/germaine-washington-tutoring/2-hour-lsat-tutoring' 
-                    });
-                  }
-                }}
-                className="border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white text-lg px-8 py-3"
-              >
-                I Need a Custom Plan
-              </Button>
-            </div>
-          </div>
-        </section>
+
 
         {/* Comparison Table */}
         <section className="bg-muted/30 py-20">
@@ -324,9 +255,9 @@ const Programs = () => {
                     </tr>
                     <tr className="border-b bg-muted/10">
                       <td className="p-4 font-medium">Price per Hour</td>
-                      <td className="p-4 text-center">$99.50</td>
-                      <td className="p-4 text-center">$87.38</td>
-                      <td className="p-4 text-center font-semibold text-accent">$74.96</td>
+                      <td className="p-4 text-center">$149.50</td>
+                      <td className="p-4 text-center">$124.88</td>
+                      <td className="p-4 text-center font-semibold text-accent">$87.46</td>
                     </tr>
                     <tr className="border-b">
                       <td className="p-4 font-medium">Best For</td>

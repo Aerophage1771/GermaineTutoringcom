@@ -53,9 +53,9 @@ const ProgramsSection = () => {
     {
       title: "2-Hour LSAT Acceleration Session",
       description: "Strategic session focused on rapidly improving performance and uncovering opportunities for growth on the LSAT",
-      price: "$199",
+      price: "$299",
       duration: "2 hours",
-      hourly: "$99.50",
+      hourly: "$149.50",
       savings: null,
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 2 Hours" },
@@ -74,9 +74,9 @@ const ProgramsSection = () => {
     {
       title: "8-Hour LSAT Elevation Course",
       description: "For students targeting a 5–10 point gain. Focused section work, strategy drills, and a custom study plan.",
-      price: "$699",
+      price: "$999",
       duration: "8 hours",
-      hourly: "$87.38",
+      hourly: "$124.88",
       savings: "(12.5% savings)",
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 8 Hours" },
@@ -95,9 +95,9 @@ const ProgramsSection = () => {
     {
       title: "24-Hour LSAT Mastery Program",
       description: "For 10+ point improvements or 170+ goals. Intensive coaching, advanced strategy, and full-section mastery.",
-      price: "$1,799",
+      price: "$2,099",
       duration: "24 hours",
-      hourly: "$74.96",
+      hourly: "$87.46",
       savings: "(25% savings)",
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 24 Hours" },
