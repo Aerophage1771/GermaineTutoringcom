@@ -62,7 +62,7 @@ const ResultsSection = () => {
                   </div>
                 </div>
                 <p className="text-foreground leading-relaxed">
-                  {testimonial.text}
+                  "{testimonial.text}"
                 </p>
               </div>
             ))}

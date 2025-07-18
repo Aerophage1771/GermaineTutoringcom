@@ -304,7 +304,7 @@ const MethodologyResults = () => {
                       </div>
                     </div>
                     <p className="text-foreground leading-relaxed mb-4">
-                      {testimonial.text}
+                      "{testimonial.text}"
                     </p>
                     <div className="bg-accent/10 rounded-lg p-3 text-center">
                       <p className="text-accent text-sm font-semibold">{testimonial.school}</p>
