@@ -54,7 +54,7 @@ const Programs = () => {
       price: "$999",
       duration: "8 hours",
       hourly: "$124.88",
-      savings: "(12.5% savings)",
+      savings: "(16.5% savings)",
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 8 Hours" },
         { included: true, text: "Focused Diagnostic & Strategy Call" },
@@ -73,10 +73,10 @@ const Programs = () => {
     {
       title: "24-Hour LSAT Mastery Program",
       description: "For 10+ point improvements or 170+ goals. Intensive coaching, advanced strategy, and full-section mastery.",
-      price: "$2,099",
+      price: "$2,399",
       duration: "24 hours",
-      hourly: "$87.46",
-      savings: "(25% savings)",
+      hourly: "$99.96",
+      savings: "(33% savings)",
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 24 Hours" },
         { included: true, text: "Focused Diagnostic & Initial Strategy Session" },
@@ -257,7 +257,7 @@ const Programs = () => {
                       <td className="p-4 font-medium">Price per Hour</td>
                       <td className="p-4 text-center">$149.50</td>
                       <td className="p-4 text-center">$124.88</td>
-                      <td className="p-4 text-center font-semibold text-accent">$87.46</td>
+                      <td className="p-4 text-center font-semibold text-accent">$99.96</td>
                     </tr>
                     <tr className="border-b">
                       <td className="p-4 font-medium">Best For</td>

@@ -158,8 +158,9 @@ Changelog:
 - July 14, 2025. Added unique icons to each question type module and separated related topics for clearer organization
 - July 14, 2025. Implemented accordion-based content organization with pedagogically sound progression from basic argument structure to advanced inference skills
 - July 18, 2025. Removed all promotional pricing content and updated to final pricing structure
-- July 18, 2025. Updated pricing to new levels: 2-Hour ($299), 8-Hour ($999), 24-Hour ($2,099)
+- July 18, 2025. Updated pricing to new levels: 2-Hour ($299), 8-Hour ($999), 24-Hour ($2,399)
 - July 18, 2025. Removed PricingBanner component and July 19 deadline messaging throughout the platform
+- July 18, 2025. Updated savings percentages relative to 2-hour session rate: 8-Hour (16.5% savings), 24-Hour (33% savings)
 ```
 
 ## User Preferences
