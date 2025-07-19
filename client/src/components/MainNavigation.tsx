@@ -23,7 +23,7 @@ export function MainNavigation({ showBackButton = false, backPath = "/dashboard"
     },
     {
       id: 'simulate-tests',
-      label: 'Simulate Tests, Realistic Test Mode',
+      label: 'Simulate Tests',
       icon: TestTube,
       path: '/simulate-tests',
       description: 'Full-length timed practice tests'
