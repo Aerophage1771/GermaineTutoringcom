@@ -53,25 +53,6 @@ export default function ExploreTests() {
     search: ''
   });
 
-  // Generate PT 101-158 data
-  const prepTests: PrepTest[] = Array.from({ length: 58 }, (_, i) => ({
-    id: i + 101,
-    test_number: i + 101,
-    sections: 4,
-    total_questions: 100 + Math.floor(Math.random() * 5), // 100-104 questions
-    time_limit: 175, // 2 hours 55 minutes
-    available: true
-  }));
-
-  // Show loading spinner while checking authentication
-  if (isLoading || !user) {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
-
   // Mock data for Browse Sets - in production this would use real filters
   const { data: questions = [], isLoading: questionsLoading } = useQuery<Question[]>({
     queryKey: ['/api/lsat/questions', filters, currentPage, activeTab],
@@ -92,6 +73,25 @@ export default function ExploreTests() {
       return response.json();
     }
   });
+
+  // Generate PT 101-158 data
+  const prepTests: PrepTest[] = Array.from({ length: 58 }, (_, i) => ({
+    id: i + 101,
+    test_number: i + 101,
+    sections: 4,
+    total_questions: 100 + Math.floor(Math.random() * 5), // 100-104 questions
+    time_limit: 175, // 2 hours 55 minutes
+    available: true
+  }));
+
+  // Show loading spinner while checking authentication
+  if (isLoading || !user) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    );
+  }
 
   const toggleQuestionSelection = (questionId: number) => {
     const newSelected = new Set(selectedQuestions);
