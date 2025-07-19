@@ -1,6 +1,8 @@
+import { useState } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Zap, BookOpen, TestTube, BarChart3, ArrowLeft } from "lucide-react";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Zap, BookOpen, TestTube, BarChart3, ArrowLeft, Menu, X } from "lucide-react";
 
 interface MainNavigationProps {
   showBackButton?: boolean;
@@ -9,6 +11,7 @@ interface MainNavigationProps {
 
 export function MainNavigation({ showBackButton = false, backPath = "/dashboard" }: MainNavigationProps) {
   const [location, setLocation] = useLocation();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   
   const navItems = [
     {
@@ -49,47 +52,96 @@ export function MainNavigation({ showBackButton = false, backPath = "/dashboard"
   };
 
   return (
-    <div className="bg-white border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-6">
-        <nav className="flex space-x-1">
-          {showBackButton && (
-            <Button
-              variant="ghost"
-              className="h-16 px-6 rounded-none border-b-2 border-transparent hover:bg-gray-50 hover:text-gray-900"
-              onClick={() => setLocation(backPath)}
-            >
-              <div className="flex flex-col items-center space-y-1">
-                <ArrowLeft className="h-5 w-5" />
-                <span className="text-sm font-medium">Back</span>
-                <span className="text-xs opacity-70">Dashboard</span>
-              </div>
-            </Button>
-          )}
-          {navItems.map((item) => {
-            const Icon = item.icon;
-            const active = isActive(item.path);
+    <>
+      {/* Top Navigation Bar */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex items-center justify-between h-16">
+            <div className="flex items-center space-x-4">
+              {showBackButton && (
+                <Button
+                  variant="ghost"
+                  className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+                  onClick={() => setLocation(backPath)}
+                >
+                  <ArrowLeft className="h-4 w-4" />
+                  <span>Back to Dashboard</span>
+                </Button>
+              )}
+            </div>
             
-            return (
-              <Button
-                key={item.id}
-                variant="ghost"
-                className={`h-16 px-6 rounded-none border-b-2 transition-all ${
-                  active
-                    ? 'border-blue-500 bg-blue-50 text-blue-700'
-                    : 'border-transparent hover:bg-gray-50 hover:text-gray-900'
-                }`}
-                onClick={() => setLocation(item.path)}
-              >
-                <div className="flex flex-col items-center space-y-1">
-                  <Icon className="h-5 w-5" />
-                  <span className="text-sm font-medium">{item.label}</span>
-                  <span className="text-xs opacity-70">{item.description}</span>
+            {/* Sidebar Toggle */}
+            <Sheet open={sidebarOpen} onOpenChange={setSidebarOpen}>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="sm" className="flex items-center space-x-2">
+                  <Menu className="h-4 w-4" />
+                  <span>Practice Menu</span>
+                </Button>
+              </SheetTrigger>
+              
+              <SheetContent side="right" className="w-80 p-0">
+                <div className="flex flex-col h-full">
+                  {/* Sidebar Header */}
+                  <div className="border-b border-gray-200 p-6">
+                    <div className="flex items-center justify-between">
+                      <h2 className="text-lg font-semibold text-gray-900">Practice Menu</h2>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => setSidebarOpen(false)}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    <p className="text-sm text-gray-600 mt-1">Choose your practice mode</p>
+                  </div>
+                  
+                  {/* Navigation Items */}
+                  <div className="flex-1 p-6">
+                    <nav className="space-y-2">
+                      {navItems.map((item) => {
+                        const Icon = item.icon;
+                        const active = isActive(item.path);
+                        
+                        return (
+                          <Button
+                            key={item.id}
+                            variant="ghost"
+                            className={`w-full justify-start h-auto p-4 transition-all ${
+                              active
+                                ? 'bg-blue-50 text-blue-700 border border-blue-200'
+                                : 'hover:bg-gray-50 hover:text-gray-900'
+                            }`}
+                            onClick={() => {
+                              setLocation(item.path);
+                              setSidebarOpen(false);
+                            }}
+                          >
+                            <div className="flex items-start space-x-3 w-full">
+                              <Icon className={`h-5 w-5 mt-0.5 ${active ? 'text-blue-600' : 'text-gray-500'}`} />
+                              <div className="flex-1 text-left">
+                                <div className="font-medium">{item.label}</div>
+                                <div className="text-xs text-gray-500 mt-0.5">{item.description}</div>
+                              </div>
+                            </div>
+                          </Button>
+                        );
+                      })}
+                    </nav>
+                  </div>
+                  
+                  {/* Sidebar Footer */}
+                  <div className="border-t border-gray-200 p-6">
+                    <div className="text-xs text-gray-500">
+                      Navigate between different practice modes using the menu above.
+                    </div>
+                  </div>
                 </div>
-              </Button>
-            );
-          })}
-        </nav>
+              </SheetContent>
+            </Sheet>
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
