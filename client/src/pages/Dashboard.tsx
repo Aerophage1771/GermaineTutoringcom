@@ -343,16 +343,16 @@ export default function Dashboard() {
                 Practice & Review
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Practice Tests */}
+                {/* Practice - Combined */}
                 <Button 
                   size="lg" 
                   className="h-20 text-lg font-semibold bg-green-600 hover:bg-green-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
-                  onClick={() => setLocation("/practice-tests")}
+                  onClick={() => setLocation("/train-me")}
                 >
                   <Play className="h-6 w-6 mr-3" />
                   <div className="text-left">
                     <div>Practice</div>
-                    <div className="text-sm font-normal opacity-80">Full-length LSAT practice tests</div>
+                    <div className="text-sm font-normal opacity-80">Smart drills and question practice</div>
                   </div>
                 </Button>
 
