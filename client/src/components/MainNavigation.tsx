@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Zap, BookOpen, TestTube, BarChart3, ArrowLeft, Menu, X } from "lucide-react";
+import { Zap, BookOpen, TestTube, BarChart3, ArrowLeft, Menu, X, Settings } from "lucide-react";
 
 interface MainNavigationProps {
   showBackButton?: boolean;
@@ -22,18 +22,25 @@ export function MainNavigation({ showBackButton = false, backPath = "/dashboard"
       description: 'Smart practice mode'
     },
     {
-      id: 'explore-tests',
-      label: 'Explore Tests',
-      icon: BookOpen,
-      path: '/explore-tests',
-      description: 'Browse sets & simulate tests'
+      id: 'simulate-tests',
+      label: 'Simulate Tests, Realistic Test Mode',
+      icon: TestTube,
+      path: '/simulate-tests',
+      description: 'Full-length timed practice tests'
     },
     {
-      id: 'simulate-test',
-      label: 'Simulate Test',
-      icon: TestTube,
-      path: '/practice-test',
-      description: 'Realistic test mode'
+      id: 'explore-questions',
+      label: 'Explore Questions',
+      icon: BookOpen,
+      path: '/explore-questions',
+      description: 'Free play mode'
+    },
+    {
+      id: 'custom-sets',
+      label: 'Custom Sets',
+      icon: Settings,
+      path: '/custom-sets',
+      description: 'Create & browse question sets'
     },
     {
       id: 'progress',
@@ -45,11 +52,8 @@ export function MainNavigation({ showBackButton = false, backPath = "/dashboard"
   ];
 
   const isActive = (path: string) => {
-    if (path === '/practice-test') {
-      return location.startsWith('/practice-test') || location.startsWith('/practice-rc');
-    }
-    if (path === '/explore-tests') {
-      return location.startsWith('/explore-tests') || location.startsWith('/simulate-test');
+    if (path === '/simulate-tests') {
+      return location.startsWith('/simulate-tests') || location.startsWith('/simulate-test');
     }
     return location.startsWith(path);
   };

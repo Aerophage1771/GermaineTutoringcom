@@ -176,11 +176,14 @@ Changelog:
 - July 19, 2025. Reorganized dashboard with separate "Practice" section and simplified "Practice & Review" with only 2 main tiles
 - July 19, 2025. MAJOR PLATFORM RESTRUCTURING: Removed Practice, Create Problem Set, Practice RC, Problem Log sections from MainDashboard
 - July 19, 2025. Replaced "View Analytics" button with "Session Summaries" button and removed Session Summaries section display
-- July 19, 2025. Renamed ExploreSets to ExploreTests with comprehensive subtabbed layout (Browse Sets + Simulate Test)
-- July 19, 2025. Added PT 101-158 full-length test simulation with LawHub-style interface features
-- July 19, 2025. Implemented LawHub-style test features: timed sections, question flagging, section navigation, review mode
-- July 19, 2025. Created separate databases for Logical Reasoning and Reading Comprehension with sample question data
-- July 19, 2025. Updated navigation structure to point to new ExploreTests instead of ExploreSets
+- July 19, 2025. MAJOR NAVIGATION RESTRUCTURING: Implemented streamlined 5-section practice navigation
+- July 19, 2025. Created new navigation structure: Train Me → Simulate Tests, Realistic Test Mode → Explore Questions → Custom Sets → Progress
+- July 19, 2025. Renamed "Explore Tests" to "Explore Questions" (free play mode for question browsing and filtering)
+- July 19, 2025. Created new "Simulate Tests, Realistic Test Mode" page with PT 101-158 full-length test simulation
+- July 19, 2025. Created new "Custom Sets" page with comprehensive set creation tools and browse previous sets functionality
+- July 19, 2025. Moved "Browse Sets" functionality from ExploreTests to Custom Sets as second tab
+- July 19, 2025. Updated MainNavigation.tsx with new 5-section structure and proper routing
+- July 19, 2025. Fixed React hooks ordering issues in ExploreTests.tsx that caused "rendered more hooks" errors
 ```
 
 ## User Preferences
