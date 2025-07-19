@@ -1,8 +1,13 @@
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Zap, BookOpen, TestTube, BarChart3 } from "lucide-react";
+import { Zap, BookOpen, TestTube, BarChart3, ArrowLeft } from "lucide-react";
 
-export function MainNavigation() {
+interface MainNavigationProps {
+  showBackButton?: boolean;
+  backPath?: string;
+}
+
+export function MainNavigation({ showBackButton = false, backPath = "/dashboard" }: MainNavigationProps) {
   const [location, setLocation] = useLocation();
   
   const navItems = [
@@ -47,6 +52,19 @@ export function MainNavigation() {
     <div className="bg-white border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-6">
         <nav className="flex space-x-1">
+          {showBackButton && (
+            <Button
+              variant="ghost"
+              className="h-16 px-6 rounded-none border-b-2 border-transparent hover:bg-gray-50 hover:text-gray-900"
+              onClick={() => setLocation(backPath)}
+            >
+              <div className="flex flex-col items-center space-y-1">
+                <ArrowLeft className="h-5 w-5" />
+                <span className="text-sm font-medium">Back</span>
+                <span className="text-xs opacity-70">Dashboard</span>
+              </div>
+            </Button>
+          )}
           {navItems.map((item) => {
             const Icon = item.icon;
             const active = isActive(item.path);

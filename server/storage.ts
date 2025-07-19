@@ -537,15 +537,9 @@ export class DatabaseStorage implements IStorage {
       }
       
       // Group by passage and order questions within each passage
-      let query = db
+      const query = db
         .select()
-        .from(rcQuestions);
-      
-      if (conditions.length > 0) {
-        query = query.where(and(...conditions));
-      }
-      
-      const questions = await query
+        .from(rcQuestions)
         .orderBy(
           rcQuestions.prep_test_number, 
           rcQuestions.section_number, 
@@ -553,6 +547,10 @@ export class DatabaseStorage implements IStorage {
           rcQuestions.question_number_in_passage
         )
         .limit(limit);
+      
+      const questions = conditions.length > 0 
+        ? await query.where(and(...conditions))
+        : await query;
       
       return questions;
     } catch (error) {

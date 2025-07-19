@@ -233,7 +233,7 @@ export default function PracticeTest() {
             onClick={() => setLocation("/dashboard")}
             className="flex items-center"
           >
-            <Home className="h-4 w-4 mr-2" />
+            <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Dashboard
           </Button>
           <h1 className="text-3xl font-bold text-gray-900">

@@ -167,6 +167,10 @@ Changelog:
 - July 19, 2025. Developed Progress page with performance analytics, weakest areas tracking, missed question journal, and activity log
 - July 19, 2025. Added MainNavigation component with 4-tab system: Train Me, Explore Sets, Simulate Test, Progress
 - July 19, 2025. Integrated smart drill creation API endpoint for auto-generated practice sets based on user analytics
+- July 19, 2025. Removed main navigation tabs from dashboard and moved to practice-only navigation structure
+- July 19, 2025. Updated all practice pages (Train Me, Explore Sets, Progress, Question Practice, etc.) with back navigation
+- July 19, 2025. Fixed database errors in RC question queries for improved practice functionality
+- July 19, 2025. Reorganized dashboard with separate "Practice" section and simplified "Practice & Review" with only 2 main tiles
 ```
 
 ## User Preferences

@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Progress } from "@/components/ui/progress";
-import { Clock, ChevronLeft, ChevronRight, Home, BookOpen, Brain, Eye, RotateCcw, Check, X } from "lucide-react";
+import { Clock, ChevronLeft, ChevronRight, Home, BookOpen, Brain, Eye, RotateCcw, Check, X, ArrowLeft } from "lucide-react";
 
 interface Question {
   id: number;
@@ -161,8 +161,8 @@ export default function QuestionPractice() {
               size="sm"
               onClick={() => setLocation('/dashboard')}
             >
-              <Home className="h-4 w-4 mr-2" />
-              Dashboard
+              <ArrowLeft className="h-4 w-4 mr-2" />
+              Back to Dashboard
             </Button>
             <Separator orientation="vertical" className="h-6" />
             <div className="flex items-center space-x-2">

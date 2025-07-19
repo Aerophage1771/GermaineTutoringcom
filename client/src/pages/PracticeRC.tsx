@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Home, BookOpen, Eye, Users, ChevronDown, ChevronRight } from "lucide-react";
+import { Home, BookOpen, Eye, Users, ChevronDown, ChevronRight, ArrowLeft } from "lucide-react";
 
 interface RCQuestion {
   id: number;
@@ -194,7 +194,7 @@ export default function PracticeRC() {
               onClick={() => setLocation("/dashboard")}
               className="flex items-center"
             >
-              <Home className="h-4 w-4 mr-2" />
+              <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Dashboard
             </Button>
             <h1 className="text-3xl font-bold text-gray-900">

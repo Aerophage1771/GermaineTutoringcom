@@ -16,7 +16,8 @@ import {
   Lightbulb,
   ChevronRight,
   GraduationCap,
-  PenTool
+  PenTool,
+  ArrowLeft
 } from "lucide-react";
 
 interface Subsection {
@@ -373,7 +374,7 @@ export default function LearningLibrary() {
               onClick={() => setLocation("/dashboard")}
               className="flex items-center"
             >
-              <Home className="h-4 w-4 mr-2" />
+              <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Dashboard
             </Button>
             {selectedSection && (
