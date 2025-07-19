@@ -175,7 +175,7 @@ Changelog:
 - July 19, 2025. Fixed database errors in RC question queries for improved practice functionality
 - July 19, 2025. Reorganized dashboard with separate "Practice" section and simplified "Practice & Review" with only 2 main tiles
 - July 19, 2025. MAJOR PLATFORM RESTRUCTURING: Removed Practice, Create Problem Set, Practice RC, Problem Log sections from MainDashboard
-- July 19, 2025. Added Session Summaries section to MainDashboard showing detailed session history and progress
+- July 19, 2025. Replaced "View Analytics" button with "Session Summaries" button and removed Session Summaries section display
 - July 19, 2025. Renamed ExploreSets to ExploreTests with comprehensive subtabbed layout (Browse Sets + Simulate Test)
 - July 19, 2025. Added PT 101-158 full-length test simulation with LawHub-style interface features
 - July 19, 2025. Implemented LawHub-style test features: timed sections, question flagging, section navigation, review mode

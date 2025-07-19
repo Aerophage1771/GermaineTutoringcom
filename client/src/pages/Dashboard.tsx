@@ -318,73 +318,23 @@ export default function Dashboard() {
                   </DialogContent>
                 </Dialog>
 
-                {/* Session Analytics */}
+                {/* Session Summaries */}
                 <Button 
                   size="lg" 
                   variant="outline"
                   className="h-20 text-lg font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105 rounded-xl"
-                  onClick={() => setLocation("/analytics")}
+                  onClick={() => setLocation("/sessions")}
                 >
-                  <BarChart3 className="h-6 w-6 mr-3" />
+                  <FileText className="h-6 w-6 mr-3" />
                   <div className="text-left">
-                    <div>View Analytics</div>
-                    <div className="text-sm font-normal opacity-70">Track your progress</div>
+                    <div>Session Summaries</div>
+                    <div className="text-sm font-normal opacity-70">View session details and notes</div>
                   </div>
                 </Button>
               </div>
             </div>
 
-            {/* Session Summaries Section */}
-            <div>
-              <h2 className="text-lg font-medium text-gray-800 mb-4 flex items-center gap-2">
-                <FileText className="h-5 w-5 text-blue-500" />
-                Session Summaries
-              </h2>
-              <div className="space-y-4">
-                {sessionHistory.length > 0 ? (
-                  <div className="grid gap-4">
-                    {sessionHistory.slice(0, 5).map((session) => (
-                      <Card key={session.id} className="border-l-4 border-blue-500 shadow-sm hover:shadow-md transition-shadow">
-                        <CardContent className="p-4">
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-3 mb-2">
-                                <Clock className="h-4 w-4 text-blue-600" />
-                                <h3 className="font-semibold text-gray-900">
-                                  {session.topic || `Session ${session.id}`}
-                                </h3>
-                                <Badge variant="outline" className="text-xs">
-                                  {session.duration}h
-                                </Badge>
-                              </div>
-                              <div className="text-sm text-gray-600 mb-2">
-                                {formatDate(session.date)}
-                              </div>
-                              {session.notes && (
-                                <div className="text-sm text-gray-700 bg-gray-50 p-3 rounded-lg">
-                                  {session.notes}
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        </CardContent>
-                      </Card>
-                    ))}
-                  </div>
-                ) : (
-                  <Card className="border-dashed border-2 border-gray-300">
-                    <CardContent className="flex flex-col items-center justify-center py-12">
-                      <FileText className="h-12 w-12 text-gray-400 mb-4" />
-                      <h3 className="text-lg font-medium text-gray-600 mb-2">No Session Summaries Yet</h3>
-                      <p className="text-sm text-gray-500 text-center max-w-md">
-                        Your session summaries will appear here after you complete tutoring sessions. 
-                        Each summary will include key topics covered and your progress.
-                      </p>
-                    </CardContent>
-                  </Card>
-                )}
-              </div>
-            </div>
+
 
             {/* Practice & Review Section - Simplified */}
             <div>
