@@ -335,11 +335,11 @@ export default function Dashboard() {
               </div>
             </div>
 
-            {/* Practice & Review Section */}
+            {/* Practice Section */}
             <div>
               <h2 className="text-lg font-medium text-gray-800 mb-4 flex items-center gap-2">
-                <Brain className="h-5 w-5 text-emerald-500" />
-                Practice & Review
+                <Target className="h-5 w-5 text-green-500" />
+                Practice
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Practice LR */}
@@ -381,19 +381,6 @@ export default function Dashboard() {
                   </div>
                 </Button>
 
-                {/* Learning Library */}
-                <Button 
-                  size="lg"
-                  onClick={() => setLocation("/learning-library")}
-                  className="h-20 text-lg font-semibold bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
-                >
-                  <BookOpen className="h-6 w-6 mr-3" />
-                  <div className="text-left">
-                    <div>Learning Library</div>
-                    <div className="text-sm font-normal opacity-80">Study materials and concepts</div>
-                  </div>
-                </Button>
-
                 {/* Problem Log */}
                 <Button 
                   size="lg"
@@ -404,6 +391,41 @@ export default function Dashboard() {
                   <div className="text-left">
                     <div>Problem Log</div>
                     <div className="text-sm font-normal opacity-80">Track issues and learning insights</div>
+                  </div>
+                </Button>
+              </div>
+            </div>
+
+            {/* Practice & Review Section - Simplified */}
+            <div>
+              <h2 className="text-lg font-medium text-gray-800 mb-4 flex items-center gap-2">
+                <Brain className="h-5 w-5 text-emerald-500" />
+                Practice & Review
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Practice - Combined */}
+                <Button 
+                  size="lg" 
+                  className="h-20 text-lg font-semibold bg-green-600 hover:bg-green-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
+                  onClick={() => setLocation("/train-me")}
+                >
+                  <Play className="h-6 w-6 mr-3" />
+                  <div className="text-left">
+                    <div>Practice</div>
+                    <div className="text-sm font-normal opacity-80">Smart drills and question practice</div>
+                  </div>
+                </Button>
+
+                {/* Learning Library */}
+                <Button 
+                  size="lg"
+                  onClick={() => setLocation("/learning-library")}
+                  className="h-20 text-lg font-semibold bg-indigo-600 hover:bg-indigo-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
+                >
+                  <BookOpen className="h-6 w-6 mr-3" />
+                  <div className="text-left">
+                    <div>Learning Library</div>
+                    <div className="text-sm font-normal opacity-80">Study materials and concepts</div>
                   </div>
                 </Button>
               </div>
