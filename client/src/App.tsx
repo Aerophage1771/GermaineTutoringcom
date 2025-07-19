@@ -19,6 +19,9 @@ import QuestionPractice from "@/pages/QuestionPractice";
 import QuestionSetCreator from "@/pages/QuestionSetCreator";
 import ProblemLog from "@/pages/ProblemLog";
 import LearningLibrary from "@/pages/LearningLibrary";
+import TrainMe from "@/pages/TrainMe";
+import ExploreSets from "@/pages/ExploreSets";
+import Progress from "@/pages/Progress";
 
 function Router() {
   return (
@@ -35,6 +38,9 @@ function Router() {
       <Route path="/create-set" component={QuestionSetCreator} />
       <Route path="/problem-log" component={ProblemLog} />
       <Route path="/learning-library" component={LearningLibrary} />
+      <Route path="/train-me" component={TrainMe} />
+      <Route path="/explore-sets" component={ExploreSets} />
+      <Route path="/progress" component={Progress} />
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:slug" component={BlogPost} />
       <Route component={NotFound} />

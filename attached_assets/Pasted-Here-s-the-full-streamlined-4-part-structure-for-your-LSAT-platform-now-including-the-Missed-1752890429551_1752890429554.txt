@@ -1,0 +1,193 @@
+Here’s the full, streamlined **4-part structure** for your LSAT platform, now including the **Missed Question Journal** as a core feature of the **Progress** section. This version balances flexibility and focus, giving students just enough choice without overloading them.
+
+---
+
+## 🔁 1. **Train Me**
+
+**Smart Practice Mode**
+*“Just help me improve. No decisions.”*
+
+**Main Features:**
+
+* **Start Smart Practice**
+
+  * Auto-generates a short mixed drill (5–10 Qs)
+  * Targets: missed tags, timing issues, weak recent performance
+
+* **Quick Focus Drills**
+
+  * Top 3 suggested topics (e.g., Flaw, Main Point, Causation)
+  * One-click “Start 5 Qs” buttons
+
+* **Reinforce Missed Questions**
+
+  * Uses spaced repetition to revisit questions the student has missed previously
+  * “Let’s make it stick” message with retry prompts
+
+**Optional Toggles (collapsed by default):**
+
+* Choose difficulty: Easy / Mixed / Hard
+* Question count
+* Include flagged questions?
+
+---
+
+## 📚 2. **Explore Sets**
+
+**Manual Search & Drill Builder**
+*“Let me build exactly what I need.”*
+
+**Main Features:**
+
+* **Filter System:**
+
+  * PT range
+  * Section (LR / RC / LG \[archived])
+  * Question type
+  * Difficulty
+  * Tags
+  * Status: Missed / Flagged / Unseen
+
+* **Question List Display:**
+
+  * View question ID, type, accuracy, tags
+  * Add to custom set \[+]
+  * Save set, export as CSV/JSON/PDF
+
+* **Set Actions:**
+
+  * “Start Drill”
+  * “Save for Later”
+  * “Export” (PDF or digital format)
+
+**Modes:**
+
+* Compact table or card-based previews
+* Toggle between results and active selection panel
+
+---
+
+## 🧪 3. **Simulate Test**
+
+**Realistic Test Mode**
+*“I want to test myself under real conditions.”*
+
+**Main Options:**
+
+* **Take Full PrepTest**
+
+  * Choose PT #
+  * Select format (Traditional / Flex)
+  * Time settings: Standard or Accommodated
+  * Optional: Enable Blind Review toggle
+
+* **Take One Section**
+
+  * Choose LR or RC
+  * Timed or Untimed
+
+* **Resume In-Progress Test**
+
+**Post-Test Summary:**
+
+* Raw score + scaled score estimate
+* Timing chart per question
+* Answer key with correct/incorrect indicators
+* “Drill Similar Questions” button
+
+---
+
+## 📊 4. **Progress**
+
+**Analytics, Review, and Reflection Hub**
+*“What’s working? What’s not? What should I fix?”*
+
+### A. **Performance Snapshot**
+
+* **Accuracy Over Time**
+
+  * Per section (LR, RC)
+  * Optional breakdown by question type or tag
+
+* **Pacing Trends**
+
+  * Avg seconds per Q
+  * Slowest question types
+
+* **Scaled Score Estimate**
+
+  * Based on latest full tests
+  * Includes confidence band (e.g., 160–164)
+
+---
+
+### B. **Weakest Areas**
+
+* Top 3 underperforming tags
+* Each shows:
+
+  * Accuracy %
+  * Time trend
+  * “Practice Again” button
+
+---
+
+### C. **Missed Question Journal**
+
+*A dedicated home for every question the student got wrong.*
+
+* **Default View:**
+
+  * Chronological list (newest to oldest)
+  * Shows: Q ID, PT, type, user answer, correct answer, time taken
+
+* **Tools for Each Entry:**
+
+  * **Add Note** – personal reflection
+  * **Mark as Understood** – clears from default view
+  * **Redo Now** – retake with scratchpad
+  * **Tag Error Type** – e.g., “bad inference,” “rushed read,” “diagram mistake”
+
+* **Filters:**
+
+  * Section (LR, RC)
+  * Tag
+  * Error Type (user-labeled)
+  * Days since last seen
+
+* **Spaced Repetition Mode**
+
+  * Prioritizes questions you’ve missed multiple times
+  * Reminds you to revisit when enough time has passed
+
+---
+
+### D. **Activity Log**
+
+* Lists every:
+
+  * Drill
+  * Test
+  * Missed Question Review
+  * Note or flag added
+
+* Each log item links to:
+
+  * “View Summary”
+  * “Redo”
+  * “Add to Custom Set”
+
+---
+
+## Recap: Tab-by-Tab Overview
+
+| Tab  | Name              | Core Intent              | Primary User Action                          |
+| ---- | ----------------- | ------------------------ | -------------------------------------------- |
+| 🔁 1 | **Train Me**      | Just-in-time improvement | Start Smart Practice                         |
+| 📚 2 | **Explore Sets**  | Manual targeting         | Build and launch a custom drill              |
+| 🧪 3 | **Simulate Test** | Benchmark performance    | Take or review a full PT or section          |
+| 📊 4 | **Progress**      | Analyze + reflect        | Use analytics, journal, and weak-area drills |
+
+---
+
+Let me know if you’d like wireframes, component specs, or content strategy for onboarding screens tied to each tab.

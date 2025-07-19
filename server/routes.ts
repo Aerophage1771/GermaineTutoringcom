@@ -455,6 +455,63 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Smart drill creation endpoint
+  app.post('/api/practice/smart-drill', async (req, res) => {
+    if (!req.session.userId) {
+      return res.status(401).json({ message: 'Authentication required' });
+    }
+
+    try {
+      const { type, difficulty, questionCount, includeFlagged, topic } = req.body;
+      const userId = req.session.userId;
+
+      let filters: any = {
+        questionTypes: [],
+        skills: [],
+        difficulty: [],
+        prepTests: []
+      };
+
+      // Apply difficulty filter if specified
+      if (difficulty && difficulty !== 'mixed') {
+        const difficultyMap = { easy: [1, 2], hard: [4, 5] };
+        filters.difficulty = difficultyMap[difficulty as keyof typeof difficultyMap] || [];
+      }
+
+      // For topic-specific drills
+      if (type === 'topic' && topic) {
+        filters.questionTypes = [topic];
+      }
+
+      // Get questions based on type
+      let questions;
+      if (type === 'spaced-repetition') {
+        // For spaced repetition, we'd typically get missed questions
+        // For now, just get a random set
+        questions = await storage.getLRQuestions(filters, 1000);
+        questions = questions.slice(0, questionCount || 12);
+      } else {
+        // Smart practice or topic drill
+        questions = await storage.getLRQuestions(filters, 1000);
+        // Shuffle and take requested count
+        questions = questions.sort(() => Math.random() - 0.5).slice(0, questionCount || 5);
+      }
+
+      // Create practice set
+      const practiceSet = await storage.createPracticeSet({
+        name: `${type === 'smart' ? 'Smart Practice' : type === 'topic' ? `${topic} Focus` : 'Spaced Repetition'} - ${new Date().toLocaleDateString()}`,
+        type: 'lr',
+        questionIds: questions.map(q => q.id),
+        userId
+      });
+
+      res.json(practiceSet);
+    } catch (error) {
+      console.error('Error creating smart drill:', error);
+      res.status(500).json({ message: 'Failed to create practice drill' });
+    }
+  });
+
   // Blog routes
   app.get("/api/blog/posts", async (req, res) => {
     try {
