@@ -38,8 +38,9 @@ GermaineTutoring.com is a premium LSAT tutoring website for Germaine Washington,
 4. **Blog** (`/blog`) - LSAT strategy blog listing
 5. **Blog Post** (`/blog/:slug`) - Individual blog post pages with MDX support
 6. **Learning Library** (`/learning-library`) - Comprehensive LSAT study materials organized by section
-7. **Problem Log** (`/problem-log`) - Student issue tracking and learning insights
-8. **404 Page** - Custom not found page
+7. **Explore Tests** (`/explore-tests`) - Unified interface for browsing question sets and simulating full practice tests
+8. **Test Simulation** (`/simulate-test/:testNumber`) - LawHub-style test interface for PT 101-158 with timing, flagging, and review
+9. **404 Page** - Custom not found page
 
 ### Major Sections
 - **Hero Section**: Credibility establishment with key stats and CTA
@@ -50,7 +51,9 @@ GermaineTutoring.com is a premium LSAT tutoring website for Germaine Washington,
 - **FAQ Section**: Collapsible answers to common questions
 - **Guides Section**: Lead magnet with subscription-gated PDF downloads
 - **Learning Library**: Comprehensive study materials with 5 main sections (Fundamental Skills, Logical Reasoning, Reading Comprehension, Writing Section, Strategies and Advanced Techniques)
-- **Problem Log**: Issue tracking system for students to log and review difficult questions
+- **Session Summaries**: Dashboard section displaying detailed history of completed tutoring sessions with topics and notes
+- **Explore Tests**: Unified interface combining question browsing and full practice test simulation capabilities
+- **Test Simulation**: LawHub-style interface for PT 101-158 with realistic timing, question flagging, section navigation, and comprehensive review features
 
 ### Database Schema
 - **Users**: Basic user authentication (template remnant)
@@ -171,6 +174,13 @@ Changelog:
 - July 19, 2025. Updated all practice pages (Train Me, Explore Sets, Progress, Question Practice, etc.) with back navigation
 - July 19, 2025. Fixed database errors in RC question queries for improved practice functionality
 - July 19, 2025. Reorganized dashboard with separate "Practice" section and simplified "Practice & Review" with only 2 main tiles
+- July 19, 2025. MAJOR PLATFORM RESTRUCTURING: Removed Practice, Create Problem Set, Practice RC, Problem Log sections from MainDashboard
+- July 19, 2025. Added Session Summaries section to MainDashboard showing detailed session history and progress
+- July 19, 2025. Renamed ExploreSets to ExploreTests with comprehensive subtabbed layout (Browse Sets + Simulate Test)
+- July 19, 2025. Added PT 101-158 full-length test simulation with LawHub-style interface features
+- July 19, 2025. Implemented LawHub-style test features: timed sections, question flagging, section navigation, review mode
+- July 19, 2025. Created separate databases for Logical Reasoning and Reading Comprehension with sample question data
+- July 19, 2025. Updated navigation structure to point to new ExploreTests instead of ExploreSets
 ```
 
 ## User Preferences

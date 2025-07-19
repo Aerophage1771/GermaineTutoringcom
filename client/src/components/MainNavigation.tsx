@@ -22,11 +22,11 @@ export function MainNavigation({ showBackButton = false, backPath = "/dashboard"
       description: 'Smart practice mode'
     },
     {
-      id: 'explore-sets',
-      label: 'Explore Sets',
+      id: 'explore-tests',
+      label: 'Explore Tests',
       icon: BookOpen,
-      path: '/explore-sets',
-      description: 'Manual search & builder'
+      path: '/explore-tests',
+      description: 'Browse sets & simulate tests'
     },
     {
       id: 'simulate-test',
@@ -47,6 +47,9 @@ export function MainNavigation({ showBackButton = false, backPath = "/dashboard"
   const isActive = (path: string) => {
     if (path === '/practice-test') {
       return location.startsWith('/practice-test') || location.startsWith('/practice-rc');
+    }
+    if (path === '/explore-tests') {
+      return location.startsWith('/explore-tests') || location.startsWith('/simulate-test');
     }
     return location.startsWith(path);
   };

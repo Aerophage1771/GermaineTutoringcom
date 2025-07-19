@@ -20,7 +20,8 @@ import QuestionSetCreator from "@/pages/QuestionSetCreator";
 import ProblemLog from "@/pages/ProblemLog";
 import LearningLibrary from "@/pages/LearningLibrary";
 import TrainMe from "@/pages/TrainMe";
-import ExploreSets from "@/pages/ExploreSets";
+import ExploreTests from "@/pages/ExploreTests";
+import SimulateTestInterface from "@/pages/SimulateTestInterface";
 import Progress from "@/pages/Progress";
 
 function Router() {
@@ -39,7 +40,8 @@ function Router() {
       <Route path="/problem-log" component={ProblemLog} />
       <Route path="/learning-library" component={LearningLibrary} />
       <Route path="/train-me" component={TrainMe} />
-      <Route path="/explore-sets" component={ExploreSets} />
+      <Route path="/explore-tests" component={ExploreTests} />
+      <Route path="/simulate-test/:testNumber" component={SimulateTestInterface} />
       <Route path="/progress" component={Progress} />
       <Route path="/blog" component={Blog} />
       <Route path="/blog/:slug" component={BlogPost} />

@@ -536,7 +536,7 @@ export class DatabaseStorage implements IStorage {
         conditions.push(inArray(rcQuestions.prep_test_number, filters.prepTests));
       }
       
-      // Group by passage and order questions within each passage
+      // Build the base query
       let query = db
         .select()
         .from(rcQuestions)
@@ -547,6 +547,7 @@ export class DatabaseStorage implements IStorage {
           rcQuestions.question_number_in_passage
         );
       
+      // Apply conditions if any
       if (conditions.length > 0) {
         query = query.where(and(...conditions));
       }
@@ -629,7 +630,8 @@ export class DatabaseStorage implements IStorage {
         section_number: q.section_number,
         question_number_in_section: q.question_number_in_section,
         question_id: q.question_id,
-        question_difficulty: q.question_difficulty || q.passage_difficulty || 3,
+        question_difficulty: q.question_difficulty || 
+          ('passage_difficulty' in q ? q.passage_difficulty : null) || 3,
         question_text: `This is a sample question text for ${q.question_id}. In practice, this would contain the actual LSAT question content.`,
         answer_choices: {
           A: "Sample answer choice A",
@@ -640,11 +642,13 @@ export class DatabaseStorage implements IStorage {
         },
         correct_answer: "C",
         explanation: `This is a sample explanation for ${q.question_id}. The correct answer is C because...`,
-        question_type: q.question_type,
-        skills: q.skills,
-        passage_text: set.type === 'rc' ? `This is a sample passage text for ${q.passage_id || 'unknown'}. In practice, this would contain the actual Reading Comprehension passage.` : undefined,
-        passage_id: set.type === 'rc' ? q.passage_id : undefined,
-        question_number_in_passage: set.type === 'rc' ? q.question_number_in_passage : undefined
+        question_type: 'question_type' in q ? q.question_type : 
+          ('question_categories' in q ? q.question_categories : null),
+        skills: 'skills' in q ? q.skills : 
+          ('passage_categories' in q ? q.passage_categories : null),
+        passage_text: set.type === 'rc' ? `This is a sample passage text for ${('passage_id' in q) ? q.passage_id : 'unknown'}. In practice, this would contain the actual Reading Comprehension passage.` : undefined,
+        passage_id: set.type === 'rc' && 'passage_id' in q ? q.passage_id : undefined,
+        question_number_in_passage: set.type === 'rc' && 'question_number_in_passage' in q ? q.question_number_in_passage : undefined
       }));
       
       return {
@@ -678,11 +682,16 @@ export class DatabaseStorage implements IStorage {
       // Apply search filter if provided
       if (params.search && params.search.trim()) {
         const searchTerm = params.search.toLowerCase();
-        questions = questions.filter(q => 
-          q.question_id.toLowerCase().includes(searchTerm) ||
-          (q.question_type && q.question_type.toLowerCase().includes(searchTerm)) ||
-          (q.skills && q.skills.toLowerCase().includes(searchTerm))
-        );
+        questions = questions.filter(q => {
+          const questionType = 'question_type' in q ? q.question_type : 
+            ('question_categories' in q ? q.question_categories : null);
+          const skills = 'skills' in q ? q.skills : 
+            ('passage_categories' in q ? q.passage_categories : null);
+          
+          return q.question_id.toLowerCase().includes(searchTerm) ||
+            (questionType && questionType.toLowerCase().includes(searchTerm)) ||
+            (skills && skills.toLowerCase().includes(searchTerm));
+        });
       }
       
       // Apply pagination
