@@ -301,12 +301,37 @@ const MethodologyResults = () => {
                         <p className="text-foreground/70 font-medium">{testimonial.scoreBefore} → {testimonial.scoreAfter}</p>
                       </div>
                     </div>
-                    <p className="text-foreground leading-relaxed mb-4">
+                    <p className="text-foreground leading-relaxed">
                       {testimonial.text}
                     </p>
-                    <div className="bg-accent/10 rounded-lg p-3 text-center">
-                      <p className="text-accent text-sm font-semibold">{testimonial.school}</p>
-                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Law Schools Where Students Were Accepted */}
+        <section className="bg-gray-50 py-16">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto text-center">
+              <h2 className="font-heading font-bold text-primary text-3xl md:text-4xl mb-8">
+                Law Schools Where My Students Were Accepted
+              </h2>
+              <p className="text-foreground/80 text-lg mb-12">
+                My students have been accepted to top-tier law schools across the country
+              </p>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+                {[
+                  "Harvard Law School",
+                  "Yale Law School", 
+                  "Stanford Law School",
+                  "Columbia Law School",
+                  "USC - Gould",
+                  "ASU Law"
+                ].map((school, index) => (
+                  <div key={index} className="bg-white rounded-lg shadow-md p-6 text-center">
+                    <p className="font-semibold text-primary">{school}</p>
                   </div>
                 ))}
               </div>

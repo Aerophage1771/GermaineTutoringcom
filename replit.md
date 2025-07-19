@@ -185,6 +185,7 @@ Changelog:
 - July 19, 2025. Updated MainNavigation.tsx with new 5-section structure and proper routing
 - July 19, 2025. Fixed React hooks ordering issues in ExploreTests.tsx that caused "rendered more hooks" errors
 - July 19, 2025. Renamed navigation item from "Simulate Tests, Realistic Test Mode" to simply "Simulate Tests"
+- July 19, 2025. Modified methodology page: removed schools from individual testimonial cards and created dedicated "Law Schools Where Students Were Accepted" section
 ```
 
 ## User Preferences
