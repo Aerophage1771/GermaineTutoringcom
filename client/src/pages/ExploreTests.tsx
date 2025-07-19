@@ -74,8 +74,12 @@ export default function ExploreTests() {
 
   // Mock data for Browse Sets - in production this would use real filters
   const { data: questions = [], isLoading: questionsLoading } = useQuery<Question[]>({
-    queryKey: ['/api/lsat/questions', filters, currentPage],
+    queryKey: ['/api/lsat/questions', filters, currentPage, activeTab],
     queryFn: async () => {
+      if (activeTab !== 'browse-sets') {
+        return [];
+      }
+      
       const params = new URLSearchParams({
         type: filters.section === 'lr' ? 'lr' : 'rc',
         filters: JSON.stringify(filters),
@@ -86,8 +90,7 @@ export default function ExploreTests() {
       const response = await fetch(`/api/lsat/questions?${params}`);
       if (!response.ok) throw new Error('Failed to fetch questions');
       return response.json();
-    },
-    enabled: activeTab === 'browse-sets'
+    }
   });
 
   const toggleQuestionSelection = (questionId: number) => {
