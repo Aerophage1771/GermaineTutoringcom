@@ -6,8 +6,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Clock, Flag, ChevronLeft, ChevronRight, Grid3X3, CheckCircle, ArrowLeft, AlertTriangle } from "lucide-react";
+import { Clock, Flag, ChevronLeft, ChevronRight, Grid3X3, CheckCircle, ArrowLeft, AlertTriangle, Search, Type, Highlighter, Edit3, User } from "lucide-react";
 
 interface TestQuestion {
   id: number;
@@ -32,7 +33,7 @@ interface TestSection {
 
 export default function SimulateTestInterface() {
   const { user, isLoading } = useAuthRedirect();
-  const [match] = useRoute("/simulate-test/:testNumber");
+  const [match] = useRoute("/test/:testNumber");
   
   const testNumber = match?.testNumber ? parseInt(match.testNumber) : 101;
   
@@ -44,6 +45,9 @@ export default function SimulateTestInterface() {
   const [testStarted, setTestStarted] = useState(false);
   const [testCompleted, setTestCompleted] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
+  const [viewMode, setViewMode] = useState('questions'); // 'directions', 'passage', 'questions'
+  const [searchText, setSearchText] = useState('');
+  const [sectionStarted, setSectionStarted] = useState(false);
 
   // Mock test sections data - in production this would come from database
   const testSections: TestSection[] = [
@@ -224,8 +228,14 @@ export default function SimulateTestInterface() {
 
   const startTest = () => {
     setTestStarted(true);
-    setIsTimerRunning(true);
+    // Don't start timer until they click "Begin" on the section
     setTimeRemaining(testSections[0].time_limit * 60);
+  };
+
+  const startSection = () => {
+    setSectionStarted(true);
+    setIsTimerRunning(true);
+    setViewMode('questions');
   };
 
   const endTest = () => {
@@ -241,67 +251,102 @@ export default function SimulateTestInterface() {
     );
   }
 
+  // Test Overview Screen (before starting)
   if (!testStarted) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="max-w-4xl mx-auto p-6">
-          <Button 
-            variant="ghost" 
-            onClick={() => window.history.back()}
-            className="mb-6"
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Explore Tests
-          </Button>
+      <div className="min-h-screen" style={{ backgroundColor: '#2D3748' }}>
+        {/* Header */}
+        <div className="bg-white border-b border-gray-200">
+          <div className="max-w-6xl mx-auto px-6 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <span>Library</span>
+                <span>/</span>
+                <span>The Official LSAT PrepTest {testNumber}</span>
+              </div>
+              
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <User className="h-4 w-4" />
+                <span>Welcome, {user.username}</span>
+              </div>
+            </div>
+          </div>
+        </div>
 
-          <Card>
-            <CardHeader className="text-center">
-              <CardTitle className="text-2xl">Practice Test {testNumber}</CardTitle>
-              <p className="text-gray-600">
-                You are about to begin a full-length LSAT practice test. This test contains 4 sections 
-                with a total of approximately 100 questions.
-              </p>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {testSections.map((section, index) => (
-                  <Card key={section.id} className="border-2">
-                    <CardContent className="p-4">
-                      <h3 className="font-semibold mb-2">Section {index + 1}</h3>
-                      <p className="text-sm text-gray-600 mb-2">{section.name}</p>
-                      <div className="flex justify-between text-sm">
-                        <span>{section.total_questions} questions</span>
-                        <span>{section.time_limit} minutes</span>
+        {/* Main Content */}
+        <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
+          <div className="grid grid-cols-2 max-w-4xl w-full mx-8">
+            {/* Left Panel - Test Overview */}
+            <div className="bg-white p-8 rounded-l-lg">
+              <div className="text-center mb-8">
+                <h1 className="text-2xl font-bold text-gray-900 mb-4">
+                  The Official LSAT PrepTest {testNumber}
+                </h1>
+                
+                <div className="mb-8">
+                  <h3 className="text-sm font-medium text-gray-600 mb-4">Sections</h3>
+                  <div className="grid grid-cols-4 gap-2">
+                    {testSections.map((section, index) => (
+                      <div key={section.id} className="text-center">
+                        <Button
+                          size="sm"
+                          variant={index === 0 ? "default" : "outline"}
+                          className="w-full mb-2"
+                          disabled={index !== 0}
+                        >
+                          Section {index + 1}
+                        </Button>
+                        <div className="text-xs text-gray-600">
+                          <div>{index === 0 ? "advanced" : "not started"}</div>
+                          <div>{index === 0 ? "4/27" : ""}</div>
+                        </div>
                       </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+                    ))}
+                  </div>
+                </div>
 
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h4 className="font-semibold mb-2 flex items-center gap-2">
-                  <AlertTriangle className="h-5 w-5 text-blue-600" />
-                  Test Instructions
-                </h4>
-                <ul className="text-sm space-y-1 text-gray-700">
-                  <li>• Each section is timed separately</li>
-                  <li>• You can flag questions for review within each section</li>
-                  <li>• Once you move to the next section, you cannot return to previous sections</li>
-                  <li>• The test will automatically advance when time expires</li>
-                  <li>• You can pause the test at any time</li>
-                </ul>
+                <div className="flex justify-center">
+                  <div className="text-center">
+                    <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4 mx-auto">
+                      <div className="w-8 h-8 bg-blue-500 rounded-full"></div>
+                    </div>
+                    <div className="text-lg text-gray-600">🚀</div>
+                  </div>
+                </div>
               </div>
+            </div>
 
+            {/* Right Panel - Section 1 */}
+            <div className="bg-teal-600 text-white p-8 rounded-r-lg">
               <div className="text-center">
-                <Button 
+                <h2 className="text-3xl font-bold mb-4">Section 1</h2>
+                
+                <div className="mb-6">
+                  <div className="text-sm mb-2">Questions</div>
+                  <div className="text-2xl font-bold">27</div>
+                </div>
+
+                <Button
                   onClick={startTest}
-                  className="bg-blue-600 hover:bg-blue-700 px-8 py-3 text-lg"
+                  className="bg-gray-800 hover:bg-gray-900 text-white px-8 py-3 rounded-md mb-8"
                 >
-                  Start Practice Test
+                  Begin
                 </Button>
+
+                <div className="text-sm text-teal-100">
+                  <div className="mb-2 font-medium">Directions:</div>
+                  <p className="text-xs leading-relaxed">
+                    Each set of questions in this section is based on a single passage. 
+                    The questions are to be answered on the basis of what is stated or 
+                    implied in the passage. For some questions, more than one of the 
+                    choices could conceivably answer the question. However, you are to 
+                    choose the best answer; that is, choose the response that most 
+                    accurately and completely answers the question.
+                  </p>
+                </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </div>
     );
@@ -334,168 +379,274 @@ export default function SimulateTestInterface() {
     );
   }
 
+  // Section Instructions/Directions Screen
+  if (testStarted && !sectionStarted) {
+    const section = testSections[currentSection];
+    return (
+      <div className="min-h-screen" style={{ backgroundColor: '#2D3748' }}>
+        {/* Header */}
+        <div className="bg-white border-b border-gray-200">
+          <div className="max-w-6xl mx-auto px-6 py-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <span>Library</span>
+                <span>/</span>
+                <span>The Official LSAT PrepTest {testNumber}</span>
+                <span>/</span>
+                <span>Section {currentSection + 1}</span>
+              </div>
+              
+              <div className="flex items-center gap-4">
+                <Button variant="outline" size="sm">
+                  Pause Section
+                </Button>
+                <Button variant="outline" size="sm">
+                  Complete Section
+                </Button>
+                
+                <div className="flex items-center gap-2 text-sm text-gray-600">
+                  <User className="h-4 w-4" />
+                  <span>Welcome, {user.username}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex items-center justify-center min-h-[calc(100vh-80px)]">
+          <div className="max-w-2xl w-full mx-8">
+            <div className="bg-gray-100 p-8 rounded-lg">
+              {/* Toolbar */}
+              <div className="flex items-center gap-2 mb-6 pb-4 border-b border-gray-300">
+                <Button 
+                  size="sm" 
+                  variant={viewMode === 'questions' ? "default" : "outline"}
+                  onClick={() => setViewMode('questions')}
+                >
+                  Questions
+                </Button>
+                <div className="flex-1 flex items-center gap-2">
+                  <Input
+                    placeholder="Find Text, Type Here"
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
+                    className="flex-1"
+                  />
+                  <Button size="sm" variant="outline">
+                    <Search className="h-4 w-4" />
+                  </Button>
+                  <Button size="sm" variant="outline">
+                    <Type className="h-4 w-4" />
+                  </Button>
+                  <Button size="sm" variant="outline">
+                    <Highlighter className="h-4 w-4" />
+                  </Button>
+                  <Button size="sm" variant="outline">
+                    <Edit3 className="h-4 w-4" />
+                  </Button>
+                </div>
+                <div className="text-sm">
+                  Time Remaining: {formatTime(timeRemaining)}
+                </div>
+              </div>
+
+              {/* Directions Content */}
+              <div className="bg-white p-8 rounded-lg text-center">
+                <h2 className="text-xl font-bold mb-4">Section {currentSection + 1}</h2>
+                <div className="text-sm text-gray-600 mb-2">
+                  Total Section Time - {section.time_limit} minutes
+                </div>
+                <div className="text-sm text-gray-600 mb-6">
+                  {section.total_questions} Questions
+                </div>
+                
+                <div className="text-sm text-gray-700 leading-relaxed mb-8">
+                  <strong>Directions:</strong> Each question in this section is based on the reasoning presented in a brief passage. In answering the questions, you should not make assumptions that are by commonsense standards implausible, superfluous, or incompatible with the passage. For some questions, more than one of the choices could conceivably answer the question. However, you are to choose the best answer; that is, choose the response that most accurately and completely answers the question.
+                </div>
+
+                <Button
+                  onClick={startSection}
+                  className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-md"
+                >
+                  GO TO QUESTIONS
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const currentQuestionData = getCurrentQuestion();
   const section = testSections[currentSection];
   const progress = ((currentQuestion + 1) / section.total_questions) * 100;
 
+  // Main Test Interface
   return (
-    <div className="min-h-screen bg-white">
-      {/* Top Navigation Bar */}
-      <div className="bg-gray-50 border-b border-gray-200 p-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <h1 className="text-lg font-semibold">PT {testNumber} - Section {currentSection + 1}</h1>
-            <Badge variant="outline">{section.name}</Badge>
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <Clock className="h-4 w-4" />
-              <span className={`font-mono ${timeRemaining < 300 ? 'text-red-600' : 'text-gray-700'}`}>
-                {formatTime(timeRemaining)}
-              </span>
+    <div className="min-h-screen" style={{ backgroundColor: '#2D3748' }}>
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-6xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <span>Library</span>
+              <span>/</span>
+              <span>The Official LSAT PrepTest {testNumber}</span>
+              <span>/</span>
+              <span>Section {currentSection + 1}</span>
             </div>
             
-            <Button variant="outline" size="sm" onClick={() => setIsTimerRunning(!isTimerRunning)}>
-              {isTimerRunning ? 'Pause' : 'Resume'}
-            </Button>
-            
-            <Button variant="outline" size="sm" onClick={endTest}>
-              End Test
-            </Button>
-          </div>
-        </div>
-        
-        <div className="max-w-7xl mx-auto mt-2">
-          <Progress value={progress} className="h-2" />
-          <div className="flex justify-between text-sm text-gray-600 mt-1">
-            <span>Question {currentQuestion + 1} of {section.total_questions}</span>
-            <span>{Math.round(progress)}% Complete</span>
+            <div className="flex items-center gap-4">
+              <Button variant="outline" size="sm" onClick={() => setIsTimerRunning(!isTimerRunning)}>
+                Pause Section
+              </Button>
+              <Button variant="outline" size="sm" onClick={endTest}>
+                Complete Section
+              </Button>
+              
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <User className="h-4 w-4" />
+                <span>Welcome, {user.username}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto p-6 grid grid-cols-12 gap-6">
-        {/* Question Navigation Sidebar */}
-        <div className="col-span-2">
-          <Card>
-            <CardHeader className="pb-3">
-              <CardTitle className="text-sm">Section {currentSection + 1}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-5 gap-1">
-                {section.questions.map((question, index) => (
+      {/* Main Content */}
+      <div className="flex items-center justify-center min-h-[calc(100vh-80px)] p-6">
+        <div className="max-w-4xl w-full">
+          <div className="bg-gray-100 p-6 rounded-lg">
+            {/* Toolbar */}
+            <div className="flex items-center gap-2 mb-6 pb-4 border-b border-gray-300">
+              <Button 
+                size="sm" 
+                variant="outline"
+                onClick={() => setViewMode('directions')}
+              >
+                Directions
+              </Button>
+              <Button 
+                size="sm" 
+                variant={viewMode === 'passage' ? "default" : "outline"}
+                onClick={() => setViewMode('passage')}
+              >
+                Passage Only View
+              </Button>
+              <div className="flex-1 flex items-center gap-2">
+                <Input
+                  placeholder="Find Text, Type Here"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  className="flex-1"
+                />
+                <Button size="sm" variant="outline">
+                  <Search className="h-4 w-4" />
+                </Button>
+                <Button size="sm" variant="outline">
+                  <Type className="h-4 w-4" />
+                </Button>
+                <Button size="sm" variant="outline">
+                  <Highlighter className="h-4 w-4" />
+                </Button>
+                <Button size="sm" variant="outline">
+                  <Edit3 className="h-4 w-4" />
+                </Button>
+              </div>
+              <div className="text-sm">
+                Time Remaining: {formatTime(timeRemaining)}
+              </div>
+            </div>
+
+            {/* Content Area */}
+            <div className="bg-white rounded-lg p-6 min-h-[500px]">
+              <div className="grid grid-cols-2 gap-6 h-full">
+                {/* Left Side - Passage */}
+                {currentQuestionData?.passage_text && (
+                  <div>
+                    <h3 className="font-bold mb-4">Passage A</h3>
+                    <div className="text-sm leading-relaxed">
+                      {currentQuestionData.passage_text}
+                    </div>
+                  </div>
+                )}
+                
+                {/* Right Side - Question */}
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <Flag className="h-4 w-4 text-gray-400" />
+                    <span className="text-sm font-medium">
+                      {currentQuestion + 1}. {currentQuestionData?.question_text}
+                    </span>
+                  </div>
+                  
+                  <div className="space-y-3">
+                    {Object.entries(currentQuestionData?.answer_choices || {}).map(([letter, choice]) => (
+                      <label
+                        key={letter}
+                        className="flex items-start gap-3 cursor-pointer"
+                      >
+                        <div className="flex items-center gap-2">
+                          <input
+                            type="radio"
+                            name="answer"
+                            value={letter}
+                            checked={currentQuestionData?.selected_answer === letter}
+                            onChange={() => selectAnswer(letter)}
+                            className="mt-1"
+                          />
+                          <span className="w-6 h-6 rounded-full border border-gray-300 flex items-center justify-center text-xs">
+                            {letter}
+                          </span>
+                        </div>
+                        <div className="flex-1 text-sm">
+                          {choice}
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Navigation */}
+            <div className="flex items-center justify-between mt-6">
+              {/* Question Numbers */}
+              <div className="flex items-center gap-1">
+                {section.questions.map((_, index) => (
                   <Button
-                    key={question.id}
-                    variant={index === currentQuestion ? "default" : "outline"}
+                    key={index}
                     size="sm"
-                    className={`h-8 w-8 p-0 text-xs relative ${
-                      question.selected_answer ? 'bg-green-100 border-green-300' : ''
-                    }`}
+                    variant={index === currentQuestion ? "default" : "outline"}
+                    className="w-8 h-8 p-0 text-xs"
                     onClick={() => setCurrentQuestion(index)}
                   >
                     {index + 1}
-                    {question.is_flagged && (
-                      <Flag className="h-2 w-2 absolute -top-1 -right-1 text-orange-500 fill-current" />
-                    )}
                   </Button>
                 ))}
               </div>
-            </CardContent>
-          </Card>
-        </div>
-
-        {/* Main Question Area */}
-        <div className="col-span-10 space-y-6">
-          {/* Passage Text for RC Questions */}
-          {currentQuestionData?.passage_text && (
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-sm text-gray-600">Passage</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="prose prose-sm max-w-none text-sm leading-relaxed">
-                  {currentQuestionData.passage_text}
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* Question */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="text-lg">
-                  Question {currentQuestion + 1}
-                </CardTitle>
+              
+              {/* Navigation Arrows */}
+              <div className="flex gap-2">
                 <Button
-                  variant="outline"
                   size="sm"
-                  onClick={toggleFlag}
-                  className={currentQuestionData?.is_flagged ? 'bg-orange-100 border-orange-300' : ''}
+                  variant="outline"
+                  onClick={goToPreviousQuestion}
+                  disabled={currentQuestion === 0}
                 >
-                  <Flag className="h-4 w-4 mr-2" />
-                  {currentQuestionData?.is_flagged ? 'Flagged' : 'Flag'}
+                  <ChevronLeft className="h-4 w-4" />
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={goToNextQuestion}
+                  disabled={currentQuestion === section.questions.length - 1}
+                >
+                  <ChevronRight className="h-4 w-4" />
                 </Button>
               </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="prose prose-sm max-w-none">
-                {currentQuestionData?.question_text}
-              </div>
-
-              <Separator />
-
-              <div className="space-y-3">
-                {Object.entries(currentQuestionData?.answer_choices || {}).map(([letter, choice]) => (
-                  <label
-                    key={letter}
-                    className={`flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-colors ${
-                      currentQuestionData?.selected_answer === letter
-                        ? 'bg-blue-50 border-blue-300'
-                        : 'hover:bg-gray-50 border-gray-200'
-                    }`}
-                  >
-                    <input
-                      type="radio"
-                      name="answer"
-                      value={letter}
-                      checked={currentQuestionData?.selected_answer === letter}
-                      onChange={() => selectAnswer(letter)}
-                      className="mt-1"
-                    />
-                    <div className="flex-1">
-                      <span className="font-semibold mr-2">({letter})</span>
-                      {choice}
-                    </div>
-                  </label>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Navigation Buttons */}
-          <div className="flex justify-between">
-            <Button
-              variant="outline"
-              onClick={goToPreviousQuestion}
-              disabled={currentSection === 0 && currentQuestion === 0}
-            >
-              <ChevronLeft className="h-4 w-4 mr-2" />
-              Previous
-            </Button>
-
-            <div className="flex gap-2">
-              {currentSection < testSections.length - 1 || currentQuestion < section.questions.length - 1 ? (
-                <Button onClick={goToNextQuestion}>
-                  Next
-                  <ChevronRight className="h-4 w-4 ml-2" />
-                </Button>
-              ) : (
-                <Button onClick={endTest} className="bg-green-600 hover:bg-green-700">
-                  Finish Test
-                </Button>
-              )}
             </div>
           </div>
         </div>
