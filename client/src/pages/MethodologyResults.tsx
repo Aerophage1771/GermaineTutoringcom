@@ -64,16 +64,6 @@ const MethodologyResults = () => {
       value: "14.2",
       description: "average point improvement across all students",
       detail: "Many achieve 15+ point gains"
-    },
-    {
-      value: "52%",
-      description: "of students score 170 or higher",
-      detail: "Opening doors to T14 law schools"
-    },
-    {
-      value: "180",
-      description: "perfect score achieved by your tutor",
-      detail: "99.9th percentile performance"
     }
   ];
 
@@ -91,7 +81,7 @@ const MethodologyResults = () => {
             <p className="text-foreground text-xl leading-relaxed mb-8">
               Every high score is built on proven methodology. Learn how my systematic approach has helped hundreds of students achieve their target scores and get into their dream law schools.
             </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-3xl mx-auto">
+            <div className="grid grid-cols-2 gap-6 max-w-2xl mx-auto">
               {statistics.map((stat, index) => (
                 <div key={index} className="text-center">
                   <div className="text-4xl font-bold text-accent mb-2">{stat.value}</div>
@@ -383,10 +373,7 @@ const MethodologyResults = () => {
                       <i className="fas fa-chart-line text-accent mt-1 mr-2"></i>
                       <span>87% reach target scores</span>
                     </li>
-                    <li className="flex items-start">
-                      <i className="fas fa-chart-line text-accent mt-1 mr-2"></i>
-                      <span>52% achieve 170+ scores</span>
-                    </li>
+
                   </ul>
                 </div>
                 
@@ -417,10 +404,7 @@ const MethodologyResults = () => {
                     Learn from someone who mastered the test and understands the path to top scores.
                   </p>
                   <ul className="space-y-2 text-foreground/80">
-                    <li className="flex items-start">
-                      <i className="fas fa-star text-accent mt-1 mr-2"></i>
-                      <span>180 LSAT score (99.9th percentile)</span>
-                    </li>
+
                     <li className="flex items-start">
                       <i className="fas fa-star text-accent mt-1 mr-2"></i>
                       <span>Princeton Logic graduate</span>
@@ -461,7 +445,7 @@ const MethodologyResults = () => {
                 <i className="fas fa-arrow-right ml-3"></i>
               </button>
               <p className="mt-6 text-white/70 text-sm">
-                Start your journey to a 170+ score
+                Start your journey to your target score
               </p>
             </div>
           </div>
