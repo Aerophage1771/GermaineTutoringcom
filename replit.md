@@ -1,199 +1,64 @@
 # GermaineTutoring.com - Premium LSAT Tutoring Website
 
 ## Overview
+GermaineTutoring.com is a premium full-stack web application designed for Germaine Washington, a Princeton Logic graduate with a perfect 180 LSAT score, to offer high-end LSAT tutoring services. The platform aims to establish credibility and provide a seamless user experience for prospective LSAT students, offering comprehensive resources from detailed tutoring programs and a learning library to advanced practice tools and test simulations. The business vision is to provide a comprehensive, high-quality online tutoring experience that leverages modern web technologies to deliver an unparalleled learning environment.
 
-GermaineTutoring.com is a premium LSAT tutoring website for Germaine Washington, a Princeton Logic graduate with a perfect 180 LSAT score. The application is a full-stack web solution built with modern technologies to establish credibility and provide a seamless user experience for prospective LSAT students.
+## User Preferences
+Preferred communication style: Simple, everyday language.
 
 ## System Architecture
 
-### Frontend Architecture
+### Frontend
 - **Framework**: React 18 with TypeScript
-- **Routing**: Wouter for client-side routing
-- **Build Tool**: Vite for development and production builds
-- **Styling**: Tailwind CSS with custom theming
-- **UI Components**: Radix UI primitives with shadcn/ui component library
-- **State Management**: TanStack Query for server state management
+- **Routing**: Wouter
+- **Build Tool**: Vite
+- **Styling**: Tailwind CSS (custom theming), Radix UI primitives, shadcn/ui component library
+- **State Management**: TanStack Query
 - **Form Handling**: React Hook Form with Zod validation
+- **UI/UX Decisions**: Clean, modern design with a focus on usability. Features a consolidated Methodology & Results page, clear program comparisons, comprehensive learning library with modal content display, and LawHub-style test simulation interface. Uses Merriweather and Open Sans Google Fonts.
 
-### Backend Architecture
-- **Runtime**: Node.js with Express.js server
-- **Language**: TypeScript with ES modules
-- **Database ORM**: Drizzle ORM with PostgreSQL
-- **Database Provider**: Neon Database (serverless PostgreSQL)
+### Backend
+- **Runtime**: Node.js with Express.js
+- **Language**: TypeScript (ES modules)
+- **Database ORM**: Drizzle ORM
+- **Database**: PostgreSQL (Neon Database)
 - **API Design**: RESTful endpoints with JSON responses
 - **Session Management**: Express sessions with PostgreSQL storage
 
-### Development Environment
-- **Package Manager**: npm with lockfile version 3
-- **Development Server**: Vite dev server with HMR
-- **TypeScript**: Strict mode with modern ES features
-- **Linting**: ESLint integration (implied by shadcn/ui setup)
+### Key Features
+- **Core Pages**: Home, Methodology & Results, Tutoring Programs, Blog (with MDX support), Learning Library, Explore Tests, Test Simulation, 404 Page.
+- **Major Sections**: Hero, About (with Calendly integration), Methodology (Define, Demonstrate, Duplicate), Programs (three-tiered pricing), Results (testimonials), FAQ, Guides (subscription-gated), Learning Library (5 main sections), Session Summaries, Explore Tests (unified interface for browsing questions and simulating tests), Test Simulation (LawHub-style for PT 101-158).
+- **Authentication**: User authentication system (for student-facing pages like Dashboard, PracticeTest, PracticeRC).
+- **Practice Tools**:
+    - **LSAT Questions Database**: Comprehensive database of LSAT questions.
+    - **Practice Interface**: Configurable settings, question display, filtering by type, skills, difficulty, passage categories.
+    - **RC Practice**: Passage-based with specific filters and grouping.
+    - **Test Simulation**: Full-length test simulation for PT 101-158 with timing, flagging, and review.
+    - **Custom Sets**: Tools for creating and browsing practice sets.
+    - **Progress Tracking**: Performance analytics, weakest areas tracking, missed question journal, activity log.
 
-## Key Components
-
-### Core Pages
-1. **Home Page** (`/`) - Main landing page with hero, about, methodology, programs, results, CTA, and FAQ sections
-2. **Methodology & Results** (`/methodology`, `/results`) - Consolidated page combining teaching methodology and student success stories
-3. **Tutoring Programs** (`/programs`) - Detailed program comparison and pricing information
-4. **Blog** (`/blog`) - LSAT strategy blog listing
-5. **Blog Post** (`/blog/:slug`) - Individual blog post pages with MDX support
-6. **Learning Library** (`/learning-library`) - Comprehensive LSAT study materials organized by section
-7. **Explore Tests** (`/explore-tests`) - Unified interface for browsing question sets and simulating full practice tests
-8. **Test Simulation** (`/simulate-test/:testNumber`) - LawHub-style test interface for PT 101-158 with timing, flagging, and review
-9. **404 Page** - Custom not found page
-
-### Major Sections
-- **Hero Section**: Credibility establishment with key stats and CTA
-- **About Section**: Personal introduction with Calendly integration
-- **Methodology Section**: Three-step approach explanation (Define, Demonstrate, Duplicate)
-- **Programs Section**: Three-tiered pricing structure with feature comparison
-- **Results Section**: Student testimonials and success statistics
-- **FAQ Section**: Collapsible answers to common questions
-- **Guides Section**: Lead magnet with subscription-gated PDF downloads
-- **Learning Library**: Comprehensive study materials with 5 main sections (Fundamental Skills, Logical Reasoning, Reading Comprehension, Writing Section, Strategies and Advanced Techniques)
-- **Session Summaries**: Dashboard section displaying detailed history of completed tutoring sessions with topics and notes
-- **Explore Tests**: Unified interface combining question browsing and full practice test simulation capabilities
-- **Test Simulation**: LawHub-style interface for PT 101-158 with realistic timing, question flagging, section navigation, and comprehensive review features
-
-### Database Schema
-- **Users**: Basic user authentication (template remnant)
-- **Subscribers**: Email subscription tracking for lead generation
-- **Consultations**: Consultation booking requests with contact details and LSAT goals
-
-## Data Flow
-
-### User Interactions
-1. **Email Subscription**: Form submission → validation → database storage → confirmation
-2. **Consultation Booking**: Calendly integration for scheduling initial consultations
-3. **Guide Downloads**: Email subscription required → popup modal → lead capture
-4. **Blog Reading**: Static content served via API endpoints
-
-### External Integrations
-- **Calendly**: Widget-based scheduling system for consultation bookings
-- **Font Awesome**: Icon library for UI elements
-- **Google Fonts**: Merriweather and Open Sans font families
-- **Unsplash**: Image hosting for guide thumbnails
+### System Design Choices
+- Strict TypeScript mode.
+- Use of ESLint for code quality.
+- Optimized database tables (lr_questions, rc_questions) for performance.
+- Environment configuration via `NODE_ENV` and `DATABASE_URL`.
+- Modular file structure (`client/`, `server/`, `shared/`, `migrations/`, `attached_assets/`, `posts/`).
 
 ## External Dependencies
 
 ### Third-Party Services
-- **Neon Database**: Serverless PostgreSQL hosting
-- **Calendly**: Appointment scheduling platform
-- **LSAC Law Hub**: Referenced for official LSAT materials (content only)
+- **Neon Database**: Serverless PostgreSQL hosting.
+- **Calendly**: Appointment scheduling platform for consultation bookings.
+- **LSAC Law Hub**: Referenced for official LSAT materials (content only, not directly integrated as an API).
 
 ### Key Libraries
-- **UI Framework**: React + Radix UI + shadcn/ui components
-- **Database**: Drizzle ORM + Neon Database driver
-- **Validation**: Zod schemas for type-safe data validation
-- **Styling**: Tailwind CSS with custom color scheme
-- **Forms**: React Hook Form with resolver integration
-- **Date Handling**: date-fns library
-
-## Deployment Strategy
-
-### Build Process
-- **Frontend**: Vite builds React app to `dist/public`
-- **Backend**: esbuild bundles server code to `dist/index.js`
-- **Database**: Drizzle migrations in `migrations/` directory
-- **Environment**: Production/development configuration via NODE_ENV
-
-### File Structure
-```
-├── client/           # Frontend React application
-├── server/           # Backend Express server
-├── shared/           # Shared schemas and types
-├── migrations/       # Database migration files
-├── attached_assets/  # Content specifications and requirements
-└── posts/           # Blog content (MDX files)
-```
-
-### Environment Configuration
-- Database connection via `DATABASE_URL` environment variable
-- Development vs production builds with different optimizations
-- TypeScript path aliases for clean imports
-
-## Changelog
-
-```
-Changelog:
-- July 03, 2025. Initial setup
-- July 03, 2025. Consolidated Methodology and Results pages into single cohesive page
-- July 03, 2025. Updated header navigation - changed "Student Dashboard" to "Student Log-In" with prominence
-- July 03, 2025. Added Home button to header navigation
-- July 03, 2025. Removed all references to "Logic Games" throughout the application
-- July 04, 2025. Added complete authentication system with PostgreSQL database storage
-- July 04, 2025. Implemented two-column Dashboard layout with Account Summary, Session History, and large action buttons
-- July 04, 2025. Added Problem Log with auto-save inline editing and delete functionality
-- July 04, 2025. Created LSAT questions database with 6,008 questions imported from CSV metadata
-- July 04, 2025. Built Practice Test interface with configurable settings and question display system
-- July 04, 2025. Connected Dashboard Practice button to new testing interface
-- July 04, 2025. Split Practice into two separate dashboard sections: "Practice Logical Reasoning" and "Practice Reading Comprehension"
-- July 04, 2025. Redesigned Practice interface with free browsing as default and smart drilling option for LR only
-- July 04, 2025. Removed Reading Comprehension section generator and "never attempted questions" targeting criteria
-- July 04, 2025. Added comprehensive question filtering by type, skills, difficulty, and passage categories
-- July 05, 2025. Updated Reading Comprehension to be passage-based with RC-specific filters (passage categories, question categories)
-- July 05, 2025. Implemented proper RC filtering backend with passage grouping and ordering by passage structure
-- July 05, 2025. Fixed RC Practice Mode to properly load Reading Comprehension questions instead of Logical Reasoning
-- July 05, 2025. Added pagination system (50 questions per page) with Previous/Next navigation and page numbers
-- July 05, 2025. Added "Create Set from Selections" feature with checkboxes on question cards and selection counter
-- July 07, 2025. Fixed semicolon-delimited label parsing for proper filtering (e.g., "Inference; Purpose" now splits correctly)
-- July 07, 2025. Separated LR and RC into optimized dedicated tables (lr_questions, rc_questions) with performance indexes
-- July 07, 2025. Created migration from unified lsat_questions table to specialized tables with cleaner field names
-- July 07, 2025. Updated API endpoints to use new optimized tables while maintaining backward compatibility
-- July 07, 2025. Fixed RC Practice Mode bug by creating completely separate PracticeRC component and /practice-rc route
-- July 07, 2025. Redesigned Student Dashboard with modern UI: tabbed left sidebar, grouped action buttons, softer colors, improved typography
-- July 08, 2025. Added Calendly integration with three session length options (60min, 90min, 120min) with dedicated booking URLs
-- July 08, 2025. Revamped RC question selector to display passages as expandable cards with accordion-style dropdown toggles
-- July 08, 2025. Added passage-level selection that auto-selects all questions in a passage, with partial selection indicators
-- July 08, 2025. Implemented individual question selection within expanded passages for granular control
-- July 08, 2025. Removed 100-question hardcoded limits from all API endpoints - now accessing all 3,910 LR and 2,098 RC questions
-- July 08, 2025. Updated storage methods to support up to 10,000 questions per query for comprehensive database access
-- July 08, 2025. Added authentication redirect system for student-facing pages (Dashboard, PracticeTest, PracticeRC)
-- July 08, 2025. Enhanced pagination behavior to keep current page centered with ellipsis-style navigation beyond 5 pages
-- July 08, 2025. Implemented automatic pagination reset when filters are changed on practice pages
-- July 12, 2025. Created comprehensive LSAT Learning Library with 5 main sections and detailed subsections
-- July 12, 2025. Added Learning Library button to Dashboard practice section for easy access
-- July 12, 2025. Implemented modal-based content display system for subsection materials
-- July 12, 2025. Removed "Log Practice" and "access video tutorials" tiles from Dashboard
-- July 12, 2025. Updated Practice & Review section to display maximum 2 buttons per row for better readability
-- July 14, 2025. Restructured Logical Reasoning section with grouped accordion layout featuring 4 logical sections
-- July 14, 2025. Organized 19 LR topics into collapsible sections: Argument Structure & Reasoning Types (5), Argument Flaws & Evaluation (3), Strengthening/Weakening/Assumptions (6), Inference & Completion (5)
-- July 14, 2025. Added unique icons to each question type module and separated related topics for clearer organization
-- July 14, 2025. Implemented accordion-based content organization with pedagogically sound progression from basic argument structure to advanced inference skills
-- July 18, 2025. Removed all promotional pricing content and updated to final pricing structure
-- July 18, 2025. Updated pricing to new levels: 2-Hour ($299), 8-Hour ($999), 24-Hour ($2,399)
-- July 18, 2025. Removed PricingBanner component and July 19 deadline messaging throughout the platform
-- July 18, 2025. Updated savings percentages relative to 2-hour session rate: 8-Hour (16.5% savings), 24-Hour (33% savings)
-- July 19, 2025. Major architectural restructuring: Implemented streamlined 4-part tab structure mirroring 7Sage's design
-- July 19, 2025. Created Train Me page with smart practice mode, quick focus drills, and spaced repetition functionality
-- July 19, 2025. Built Explore Sets page with manual search & drill builder, advanced filtering, and question selection system
-- July 19, 2025. Developed Progress page with performance analytics, weakest areas tracking, missed question journal, and activity log
-- July 19, 2025. Added MainNavigation component with 4-tab system: Train Me, Explore Sets, Simulate Test, Progress
-- July 19, 2025. Integrated smart drill creation API endpoint for auto-generated practice sets based on user analytics
-- July 19, 2025. Removed main navigation tabs from dashboard and moved to practice-only navigation structure
-- July 19, 2025. Updated all practice pages (Train Me, Explore Sets, Progress, Question Practice, etc.) with back navigation
-- July 19, 2025. Fixed database errors in RC question queries for improved practice functionality
-- July 19, 2025. Reorganized dashboard with separate "Practice" section and simplified "Practice & Review" with only 2 main tiles
-- July 19, 2025. MAJOR PLATFORM RESTRUCTURING: Removed Practice, Create Problem Set, Practice RC, Problem Log sections from MainDashboard
-- July 19, 2025. Replaced "View Analytics" button with "Session Summaries" button and removed Session Summaries section display
-- July 19, 2025. MAJOR NAVIGATION RESTRUCTURING: Implemented streamlined 5-section practice navigation
-- July 19, 2025. Created new navigation structure: Train Me → Simulate Tests, Realistic Test Mode → Explore Questions → Custom Sets → Progress
-- July 19, 2025. Renamed "Explore Tests" to "Explore Questions" (free play mode for question browsing and filtering)
-- July 19, 2025. Created new "Simulate Tests, Realistic Test Mode" page with PT 101-158 full-length test simulation
-- July 19, 2025. Created new "Custom Sets" page with comprehensive set creation tools and browse previous sets functionality
-- July 19, 2025. Moved "Browse Sets" functionality from ExploreTests to Custom Sets as second tab
-- July 19, 2025. Updated MainNavigation.tsx with new 5-section structure and proper routing
-- July 19, 2025. Fixed React hooks ordering issues in ExploreTests.tsx that caused "rendered more hooks" errors
-- July 19, 2025. Renamed navigation item from "Simulate Tests, Realistic Test Mode" to simply "Simulate Tests"
-- July 19, 2025. Modified methodology page: removed schools from individual testimonial cards and created dedicated "Law Schools Where Students Were Accepted" section
-- July 19, 2025. Removed "170+ score" and "180 perfect score" statistics from methodology page, updated layout from 4-column to 2-column grid
-- July 19, 2025. Updated pricing: 2-Hour session increased from $299 to $399 ($199.50/hour), recalculated savings percentages: 8-Hour (37%), 24-Hour (50%)
-- July 19, 2025. Updated 8-Hour course pricing from $999 to $1,199 ($149.88/hour), recalculated savings to 25%
-- July 19, 2025. Reverted pricing structure back to original rates: 2-hour ($299), 8-hour ($999), 24-hour ($2,399)
-```
-
-## User Preferences
-
-```
-Preferred communication style: Simple, everyday language.
-```
+- **React**: Frontend UI library.
+- **Radix UI / shadcn/ui**: UI components.
+- **Drizzle ORM**: Database ORM.
+- **Zod**: Schema validation.
+- **Tailwind CSS**: Utility-first CSS framework.
+- **React Hook Form**: Form management.
+- **date-fns**: Date manipulation utility.
+- **Font Awesome**: Icon library.
+- **Google Fonts**: Custom fonts (Merriweather, Open Sans).
+- **Unsplash**: Image hosting (for guide thumbnails).
