@@ -51,10 +51,10 @@ const Programs = () => {
     {
       title: "8-Hour LSAT Elevation Course",
       description: "For students targeting a 5–10 point gain. Focused section work, strategy drills, and a custom study plan.",
-      price: "$999",
+      price: "$1,199",
       duration: "8 hours",
-      hourly: "$124.88",
-      savings: "(37% savings)",
+      hourly: "$149.88",
+      savings: "(25% savings)",
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 8 Hours" },
         { included: true, text: "Focused Diagnostic & Strategy Call" },
