@@ -10,7 +10,7 @@ const MethodologyResults = () => {
       scoreAfter: 172,
       improvement: "+17",
       school: "Harvard Law School",
-      text: "I was skeptical about going back to the basics at first, but in our first session, Germaine broke down my last practice test and showed me exactly where some wrong assumptions I had were leading me to miss problems I was 99% the way there on. That let me get through the test so much faster!"
+      text: "I was skeptical about going back to the basics at first, but in our first session, Germaine broke down my last practice test and showed me exactly where some wrong assumptions I had were leading me to miss problems I was 99% the way there on. That let me get through the test so much faster!",
     },
     {
       name: "Taylor M.",
@@ -18,7 +18,7 @@ const MethodologyResults = () => {
       scoreAfter: 173,
       improvement: "+14",
       school: "Yale Law School",
-      text: "I initially started just with LR but the RC was actually the place where I saw the most growth. Mr. Washington explained that I was actually rushing through the passages, but that ended up costing me time on the questions themselves. And when I slowed down my passages actually both got faster and I went from -7/-8 to like -2 in a month."
+      text: "I initially started just with LR but the RC was actually the place where I saw the most growth. Mr. Washington explained that I was actually rushing through the passages, but that ended up costing me time on the questions themselves. And when I slowed down my passages actually both got faster and I went from -7/-8 to like -2 in a month.",
     },
     {
       name: "Jordan P.",
@@ -26,7 +26,7 @@ const MethodologyResults = () => {
       scoreAfter: 174,
       improvement: "+11",
       school: "Stanford Law School",
-      text: "Rockstar tutor. The strategies were nice and all but the best part was Germaine really made me feel like a score I never thought possible was in reach. His confidence in me was contagious and I actually kinda stopped dreading working on the LSAT :P"
+      text: "Rockstar tutor. The strategies were nice and all but the best part was Germaine really made me feel like a score I never thought possible was in reach. His confidence in me was contagious and I actually kinda stopped dreading working on the LSAT :P",
     },
     {
       name: "Sarah L.",
@@ -34,7 +34,7 @@ const MethodologyResults = () => {
       scoreAfter: 168,
       improvement: "+17",
       school: "Columbia Law School",
-      text: "Starting with a 151, I thought 160s were a pipe dream. Germaine's clear step-by-step lessons broke down every question type into easier patterns. After 6 weeks of tutoring, I scored 3 points above my goal!"
+      text: "Starting with a 151, I thought 160s were a pipe dream. Germaine's clear step-by-step lessons broke down every question type into easier patterns. After 6 weeks of tutoring, I scored 3 points above my goal!",
     },
     {
       name: "Michael R.",
@@ -42,7 +42,7 @@ const MethodologyResults = () => {
       scoreAfter: 177,
       improvement: "+10",
       school: "USC - Gould",
-      text: "I was already in the 160s, but something felt off. Germaine picked up on these little things in my approach that I didn’t even realize were holding me back. That shift from a 167 to a 177? Total game-changer"
+      text: "I was already in the 160s, but something felt off. Germaine picked up on these little things in my approach that I didn’t even realize were holding me back. That shift from a 167 to a 177? Total game-changer",
     },
     {
       name: "Emily C.",
@@ -50,27 +50,27 @@ const MethodologyResults = () => {
       scoreAfter: 171,
       improvement: "+13",
       school: "ASU Law",
-      text: "Completely changed how I take the test. I used to be scrambling to finish and now I’m wrapping up with time to spare. Huge difference. Honestly worth every penny."
-    }
+      text: "Completely changed how I take the test. I used to be scrambling to finish and now I’m wrapping up with time to spare. Huge difference. Honestly worth every penny.",
+    },
   ];
 
   const statistics = [
     {
       value: "87%",
       description: "of students achieve their target score improvement",
-      detail: "Based on students who complete their tutoring program"
+      detail: "Based on students who complete their tutoring program",
     },
     {
       value: "14.2",
       description: "average point improvement across all students",
-      detail: "Many achieve 15+ point gains"
-    }
+      detail: "Many achieve 15+ point gains",
+    },
   ];
 
   return (
     <div className="bg-background min-h-screen">
       <Header />
-      
+
       <main className="py-20">
         {/* Hero Section */}
         <section className="container mx-auto px-4 mb-16">
@@ -79,13 +79,19 @@ const MethodologyResults = () => {
               My Methodology & Student Results
             </h1>
             <p className="text-foreground text-xl leading-relaxed mb-8">
-              Every high score is built on proven methodology. Learn how my systematic approach has helped hundreds of students achieve their target scores and get into their dream law schools.
+              Every high score is built on proven methodology. Learn how my
+              systematic approach has helped hundreds of students achieve their
+              target scores and get into their dream law schools.
             </p>
             <div className="grid grid-cols-2 gap-6 max-w-2xl mx-auto">
               {statistics.map((stat, index) => (
                 <div key={index} className="text-center">
-                  <div className="text-4xl font-bold text-accent mb-2">{stat.value}</div>
-                  <div className="text-sm text-foreground/80 leading-tight">{stat.description}</div>
+                  <div className="text-4xl font-bold text-accent mb-2">
+                    {stat.value}
+                  </div>
+                  <div className="text-sm text-foreground/80 leading-tight">
+                    {stat.description}
+                  </div>
                 </div>
               ))}
             </div>
@@ -99,29 +105,39 @@ const MethodologyResults = () => {
               <h2 className="font-heading font-bold text-primary text-3xl md:text-4xl mb-12 text-center">
                 The Three-Step Methodology That Works
               </h2>
-              
+
               <div className="grid lg:grid-cols-3 gap-8 mb-16">
                 {/* Step 1: Define */}
                 <div className="bg-white rounded-xl shadow-lg p-8 text-center">
                   <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
                     <span className="text-white font-bold text-2xl">1</span>
                   </div>
-                  <h3 className="font-heading font-bold text-primary text-2xl mb-4">Define</h3>
+                  <h3 className="font-heading font-bold text-primary text-2xl mb-4">
+                    Define
+                  </h3>
                   <p className="text-foreground leading-relaxed mb-6">
-                    We identify your specific weaknesses and learning style through diagnostic analysis and targeted questioning.
+                    We identify your specific strengths and weaknesses by
+                    analyzing your prior LSAT performances and engaging in a
+                    complete diagnostic review of a new test.
                   </p>
                   <div className="space-y-3 text-left">
                     <div className="flex items-start">
                       <i className="fas fa-check-circle text-accent mt-1 mr-3"></i>
-                      <span className="text-foreground/80">Comprehensive diagnostic review</span>
+                      <span className="text-foreground/80">
+                        Comprehensive diagnostic review
+                      </span>
                     </div>
                     <div className="flex items-start">
                       <i className="fas fa-check-circle text-accent mt-1 mr-3"></i>
-                      <span className="text-foreground/80">Learning style assessment</span>
+                      <span className="text-foreground/80">
+                        Identification of easy improvement areas
+                      </span>
                     </div>
                     <div className="flex items-start">
                       <i className="fas fa-check-circle text-accent mt-1 mr-3"></i>
-                      <span className="text-foreground/80">Goal setting and timeline planning</span>
+                      <span className="text-foreground/80">
+                        Personalized learning plan
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -131,22 +147,31 @@ const MethodologyResults = () => {
                   <div className="w-20 h-20 bg-accent rounded-full flex items-center justify-center mx-auto mb-6">
                     <span className="text-primary font-bold text-2xl">2</span>
                   </div>
-                  <h3 className="font-heading font-bold text-primary text-2xl mb-4">Demonstrate</h3>
+                  <h3 className="font-heading font-bold text-primary text-2xl mb-4">
+                    Demonstrate
+                  </h3>
                   <p className="text-foreground leading-relaxed mb-6">
-                    I show you exactly how to approach each question type with proven strategies tailored to your learning style.
+                    I show you exactly how to approach each question type with
+                    proven strategies adapted to your learning style.
                   </p>
                   <div className="space-y-3 text-left">
                     <div className="flex items-start">
                       <i className="fas fa-check-circle text-accent mt-1 mr-3"></i>
-                      <span className="text-foreground/80">Live problem-solving sessions</span>
+                      <span className="text-foreground/80">
+                        Live problem-solving sessions
+                      </span>
                     </div>
                     <div className="flex items-start">
                       <i className="fas fa-check-circle text-accent mt-1 mr-3"></i>
-                      <span className="text-foreground/80">Step-by-step strategy breakdown</span>
+                      <span className="text-foreground/80">
+                        Step-by-step question explanations
+                      </span>
                     </div>
                     <div className="flex items-start">
                       <i className="fas fa-check-circle text-accent mt-1 mr-3"></i>
-                      <span className="text-foreground/80">Real-time feedback and adjustment</span>
+                      <span className="text-foreground/80">
+                        Real-time feedback and method adjustment
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -156,22 +181,30 @@ const MethodologyResults = () => {
                   <div className="w-20 h-20 bg-primary rounded-full flex items-center justify-center mx-auto mb-6">
                     <span className="text-white font-bold text-2xl">3</span>
                   </div>
-                  <h3 className="font-heading font-bold text-primary text-2xl mb-4">Duplicate</h3>
+                  <h3 className="font-heading font-bold text-primary text-2xl mb-4">
+                    Duplicate
+                  </h3>
                   <p className="text-foreground leading-relaxed mb-6">
-                    You practice the strategies until they become automatic, with my guidance and support.
+                    You apply the strategies and receive feedback until they become second nature, with my guidance and support.
                   </p>
                   <div className="space-y-3 text-left">
                     <div className="flex items-start">
                       <i className="fas fa-check-circle text-accent mt-1 mr-3"></i>
-                      <span className="text-foreground/80">Guided independent practice</span>
+                      <span className="text-foreground/80">
+                        Independent practice + Guided review
+                      </span>
                     </div>
                     <div className="flex items-start">
                       <i className="fas fa-check-circle text-accent mt-1 mr-3"></i>
-                      <span className="text-foreground/80">Progress monitoring and adjustment</span>
+                      <span className="text-foreground/80">
+                        Progress monitoring and plan adjustment
+                      </span>
                     </div>
                     <div className="flex items-start">
                       <i className="fas fa-check-circle text-accent mt-1 mr-3"></i>
-                      <span className="text-foreground/80">Confidence building and mastery</span>
+                      <span className="text-foreground/80">
+                        Speed and accuracy building exercises
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -187,7 +220,7 @@ const MethodologyResults = () => {
               <h2 className="font-heading font-bold text-primary text-3xl md:text-4xl mb-12 text-center">
                 Section-Specific Strategies
               </h2>
-              
+
               <div className="space-y-12">
                 {/* Logical Reasoning */}
                 <div className="bg-white rounded-xl shadow-md p-8 border-l-4 border-primary">
@@ -200,26 +233,61 @@ const MethodologyResults = () => {
                         Logical Reasoning: Foundation of Success
                       </h3>
                       <p className="text-foreground leading-relaxed mb-6">
-                        Master the biggest part of your LSAT score with systematic approach to argument analysis and question-type recognition. Logical Reasoning success requires understanding how arguments work, recognizing patterns, and developing efficient problem-solving strategies.
+                        Master the biggest part of your LSAT score with
+                        systematic approach to argument analysis and
+                        question-type recognition. Logical Reasoning success
+                        requires understanding how arguments work, recognizing
+                        patterns, and developing efficient problem-solving
+                        strategies.
                       </p>
                       <div className="mb-6">
-                        <h4 className="font-semibold text-primary mb-4">Core Strategies</h4>
+                        <h4 className="font-semibold text-primary mb-4">
+                          Core Strategies
+                        </h4>
                         <ul className="space-y-3 text-foreground/80">
                           <li className="flex items-start">
                             <i className="fas fa-chevron-right text-accent mt-1 mr-3 text-xs"></i>
-                            <span><strong>Argument structure identification:</strong> Learn to quickly identify premises, conclusions, and assumptions. Understanding the logical flow helps you predict what the question will ask and where to look for answers.</span>
+                            <span>
+                              <strong>
+                                Argument structure identification:
+                              </strong>{" "}
+                              Learn to quickly identify premises, conclusions,
+                              and assumptions. Understanding the logical flow
+                              helps you predict what the question will ask and
+                              where to look for answers.
+                            </span>
                           </li>
                           <li className="flex items-start">
                             <i className="fas fa-chevron-right text-accent mt-1 mr-3 text-xs"></i>
-                            <span><strong>Question-type specific approaches:</strong> Each question type (strengthen, weaken, assumption, inference, etc.) has specific patterns and optimal solving strategies. Master these patterns to work faster and more accurately.</span>
+                            <span>
+                              <strong>
+                                Question-type specific approaches:
+                              </strong>{" "}
+                              Each question type (strengthen, weaken,
+                              assumption, inference, etc.) has specific patterns
+                              and optimal solving strategies. Master these
+                              patterns to work faster and more accurately.
+                            </span>
                           </li>
                           <li className="flex items-start">
                             <i className="fas fa-chevron-right text-accent mt-1 mr-3 text-xs"></i>
-                            <span><strong>Efficient answer choice elimination:</strong> Develop systematic approaches to eliminate wrong answers first, making the correct choice obvious even when you're unsure of the perfect answer.</span>
+                            <span>
+                              <strong>
+                                Efficient answer choice elimination:
+                              </strong>{" "}
+                              Develop systematic approaches to eliminate wrong
+                              answers first, making the correct choice obvious
+                              even when you're unsure of the perfect answer.
+                            </span>
                           </li>
                           <li className="flex items-start">
                             <i className="fas fa-chevron-right text-accent mt-1 mr-3 text-xs"></i>
-                            <span><strong>Time management techniques:</strong> Balance thorough understanding with pace. Learn when to move quickly and when to invest extra time for maximum point return.</span>
+                            <span>
+                              <strong>Time management techniques:</strong>{" "}
+                              Balance thorough understanding with pace. Learn
+                              when to move quickly and when to invest extra time
+                              for maximum point return.
+                            </span>
                           </li>
                         </ul>
                       </div>
@@ -238,34 +306,63 @@ const MethodologyResults = () => {
                         Reading Comprehension: Strategic Reading
                       </h3>
                       <p className="text-foreground leading-relaxed mb-6">
-                        Transform your reading approach to maximize comprehension while minimizing time investment. Reading Comprehension success comes from strategic reading that balances speed with understanding, allowing you to confidently answer questions about complex academic passages.
+                        Transform your reading approach to maximize
+                        comprehension while minimizing time investment. Reading
+                        Comprehension success comes from strategic reading that
+                        balances speed with understanding, allowing you to
+                        confidently answer questions about complex academic
+                        passages.
                       </p>
                       <div className="mb-6">
-                        <h4 className="font-semibold text-primary mb-4">Core Strategies</h4>
+                        <h4 className="font-semibold text-primary mb-4">
+                          Core Strategies
+                        </h4>
                         <ul className="space-y-3 text-foreground/80">
                           <li className="flex items-start">
                             <i className="fas fa-chevron-right text-accent mt-1 mr-3 text-xs"></i>
-                            <span><strong>Passage mapping techniques:</strong> Create mental roadmaps as you read, tracking main ideas, supporting details, and structural relationships. This helps you quickly locate information when answering questions.</span>
+                            <span>
+                              <strong>Passage mapping techniques:</strong>{" "}
+                              Create mental roadmaps as you read, tracking main
+                              ideas, supporting details, and structural
+                              relationships. This helps you quickly locate
+                              information when answering questions.
+                            </span>
                           </li>
                           <li className="flex items-start">
                             <i className="fas fa-chevron-right text-accent mt-1 mr-3 text-xs"></i>
-                            <span><strong>Author perspective identification:</strong> Understand not just what the author says, but their attitude, tone, and purpose. This insight is crucial for inference and main point questions.</span>
+                            <span>
+                              <strong>
+                                Author perspective identification:
+                              </strong>{" "}
+                              Understand not just what the author says, but
+                              their attitude, tone, and purpose. This insight is
+                              crucial for inference and main point questions.
+                            </span>
                           </li>
                           <li className="flex items-start">
                             <i className="fas fa-chevron-right text-accent mt-1 mr-3 text-xs"></i>
-                            <span><strong>Question anticipation methods:</strong> While reading, predict what questions might be asked. This active reading approach helps you focus on the most important information.</span>
+                            <span>
+                              <strong>Question anticipation methods:</strong>{" "}
+                              While reading, predict what questions might be
+                              asked. This active reading approach helps you
+                              focus on the most important information.
+                            </span>
                           </li>
                           <li className="flex items-start">
                             <i className="fas fa-chevron-right text-accent mt-1 mr-3 text-xs"></i>
-                            <span><strong>Comparative passage strategies:</strong> Master the unique challenges of comparative passages by understanding relationships between texts and efficiently managing increased complexity.</span>
+                            <span>
+                              <strong>Comparative passage strategies:</strong>{" "}
+                              Master the unique challenges of comparative
+                              passages by understanding relationships between
+                              texts and efficiently managing increased
+                              complexity.
+                            </span>
                           </li>
                         </ul>
                       </div>
                     </div>
                   </div>
                 </div>
-
-
               </div>
             </div>
           </div>
@@ -278,17 +375,24 @@ const MethodologyResults = () => {
               <h2 className="font-heading font-bold text-white text-3xl md:text-4xl mb-12 text-center">
                 Real Results from Real Students
               </h2>
-              
+
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {testimonials.slice(0, 6).map((testimonial, index) => (
-                  <div key={index} className="bg-white rounded-xl shadow-lg p-8 transform transition-transform hover:scale-105">
+                  <div
+                    key={index}
+                    className="bg-white rounded-xl shadow-lg p-8 transform transition-transform hover:scale-105"
+                  >
                     <div className="flex items-center mb-6">
                       <div className="bg-accent rounded-full w-20 h-20 flex items-center justify-center text-primary font-bold text-2xl">
                         {testimonial.improvement}
                       </div>
                       <div className="ml-4 flex-1">
-                        <h3 className="font-heading font-bold text-primary text-xl">{testimonial.name}</h3>
-                        <p className="text-foreground/70 font-medium">{testimonial.scoreBefore} → {testimonial.scoreAfter}</p>
+                        <h3 className="font-heading font-bold text-primary text-xl">
+                          {testimonial.name}
+                        </h3>
+                        <p className="text-foreground/70 font-medium">
+                          {testimonial.scoreBefore} → {testimonial.scoreAfter}
+                        </p>
                       </div>
                     </div>
                     <p className="text-foreground leading-relaxed">
@@ -309,18 +413,22 @@ const MethodologyResults = () => {
                 Law Schools Where My Students Were Accepted
               </h2>
               <p className="text-foreground/80 text-lg mb-12">
-                My students have been accepted to top-tier law schools across the country
+                My students have been accepted to top-tier law schools across
+                the country
               </p>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
                 {[
                   "Harvard Law School",
-                  "Yale Law School", 
+                  "Yale Law School",
                   "Stanford Law School",
                   "Columbia Law School",
                   "USC - Gould",
-                  "ASU Law"
+                  "ASU Law",
                 ].map((school, index) => (
-                  <div key={index} className="bg-white rounded-lg shadow-md p-6 text-center">
+                  <div
+                    key={index}
+                    className="bg-white rounded-lg shadow-md p-6 text-center"
+                  >
                     <p className="font-semibold text-primary">{school}</p>
                   </div>
                 ))}
@@ -336,12 +444,15 @@ const MethodologyResults = () => {
               <h2 className="font-heading font-bold text-primary text-3xl md:text-4xl mb-12 text-center">
                 Why This Methodology Works
               </h2>
-              
+
               <div className="grid md:grid-cols-2 gap-8">
                 <div className="bg-white rounded-xl shadow-md p-8">
-                  <h3 className="font-heading font-bold text-primary text-xl mb-4">Personalized Approach</h3>
+                  <h3 className="font-heading font-bold text-primary text-xl mb-4">
+                    Personalized Approach
+                  </h3>
                   <p className="text-foreground leading-relaxed mb-4">
-                    No two students learn the same way. My methodology adapts to your learning style, schedule, and specific weaknesses.
+                    No two students learn the same way. My methodology adapts to
+                    your learning style, schedule, and specific weaknesses.
                   </p>
                   <ul className="space-y-2 text-foreground/80">
                     <li className="flex items-start">
@@ -358,11 +469,14 @@ const MethodologyResults = () => {
                     </li>
                   </ul>
                 </div>
-                
+
                 <div className="bg-white rounded-xl shadow-md p-8">
-                  <h3 className="font-heading font-bold text-primary text-xl mb-4">Proven Track Record</h3>
+                  <h3 className="font-heading font-bold text-primary text-xl mb-4">
+                    Proven Track Record
+                  </h3>
                   <p className="text-foreground leading-relaxed mb-4">
-                    Hundreds of students have achieved their target scores using this exact methodology.
+                    Hundreds of students have achieved their target scores using
+                    this exact methodology.
                   </p>
                   <ul className="space-y-2 text-foreground/80">
                     <li className="flex items-start">
@@ -373,14 +487,16 @@ const MethodologyResults = () => {
                       <i className="fas fa-chart-line text-accent mt-1 mr-2"></i>
                       <span>87% reach target scores</span>
                     </li>
-
                   </ul>
                 </div>
-                
+
                 <div className="bg-white rounded-xl shadow-md p-8">
-                  <h3 className="font-heading font-bold text-primary text-xl mb-4">Continuous Support</h3>
+                  <h3 className="font-heading font-bold text-primary text-xl mb-4">
+                    Continuous Support
+                  </h3>
                   <p className="text-foreground leading-relaxed mb-4">
-                    Learning doesn't stop when our session ends. You'll have ongoing guidance throughout your LSAT journey.
+                    Learning doesn't stop when our session ends. You'll have
+                    ongoing guidance throughout your LSAT journey.
                   </p>
                   <ul className="space-y-2 text-foreground/80">
                     <li className="flex items-start">
@@ -397,14 +513,16 @@ const MethodologyResults = () => {
                     </li>
                   </ul>
                 </div>
-                
+
                 <div className="bg-white rounded-xl shadow-md p-8">
-                  <h3 className="font-heading font-bold text-primary text-xl mb-4">Expert Credentials</h3>
+                  <h3 className="font-heading font-bold text-primary text-xl mb-4">
+                    Expert Credentials
+                  </h3>
                   <p className="text-foreground leading-relaxed mb-4">
-                    Learn from someone who mastered the test and understands the path to top scores.
+                    Learn from someone who mastered the test and understands the
+                    path to top scores.
                   </p>
                   <ul className="space-y-2 text-foreground/80">
-
                     <li className="flex items-start">
                       <i className="fas fa-star text-accent mt-1 mr-2"></i>
                       <span>Princeton Logic graduate</span>
@@ -428,14 +546,15 @@ const MethodologyResults = () => {
                 Ready to Transform Your LSAT Score?
               </h2>
               <p className="text-xl mb-8 text-white/90 leading-relaxed">
-                This proven methodology has helped hundreds of students achieve their target scores. 
-                Schedule your consultation to see how it can work for you.
+                This proven methodology has helped hundreds of students achieve
+                their target scores. Schedule your consultation to see how it
+                can work for you.
               </p>
-              <button 
+              <button
                 onClick={() => {
                   if ((window as any).Calendly) {
                     (window as any).Calendly.initPopupWidget({
-                      url: 'https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=1b385f'
+                      url: "https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=1b385f",
                     });
                   }
                 }}
@@ -451,7 +570,7 @@ const MethodologyResults = () => {
           </div>
         </section>
       </main>
-      
+
       <Footer />
     </div>
   );
