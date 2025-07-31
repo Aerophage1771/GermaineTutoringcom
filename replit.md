@@ -189,6 +189,7 @@ Changelog:
 - July 19, 2025. Removed "170+ score" and "180 perfect score" statistics from methodology page, updated layout from 4-column to 2-column grid
 - July 19, 2025. Updated pricing: 2-Hour session increased from $299 to $399 ($199.50/hour), recalculated savings percentages: 8-Hour (37%), 24-Hour (50%)
 - July 19, 2025. Updated 8-Hour course pricing from $999 to $1,199 ($149.88/hour), recalculated savings to 25%
+- July 19, 2025. Reverted pricing structure back to original rates: 2-hour ($299), 8-hour ($999), 24-hour ($2,399)
 ```
 
 ## User Preferences
