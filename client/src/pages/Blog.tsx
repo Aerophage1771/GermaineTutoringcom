@@ -193,10 +193,11 @@ const Blog = () => {
         </div>
       </section>
 
-      {/* Category Filters */}
-      <section className="border-b border-border bg-white sticky top-0 z-30">
+      <main className="py-10 md:py-14">
         <div className="container mx-auto px-4">
-          <div className="flex items-center gap-1 py-3 overflow-x-auto no-scrollbar">
+
+          {/* Category Filters */}
+          <div className="flex items-center gap-1 pb-6 overflow-x-auto no-scrollbar">
             <Filter className="w-4 h-4 text-foreground/40 mr-2 flex-shrink-0" />
             {CATEGORY_FILTERS.map((cat) => (
               <button
@@ -212,11 +213,7 @@ const Blog = () => {
               </button>
             ))}
           </div>
-        </div>
-      </section>
 
-      <main className="py-10 md:py-14">
-        <div className="container mx-auto px-4">
           <div className="grid lg:grid-cols-[1fr_300px] gap-10">
 
             {/* Main Content Area */}
