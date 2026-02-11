@@ -1,12 +1,10 @@
-import { useState, useMemo } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useState, useMemo, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Calendar, Clock, ArrowRight, BookOpen, Sparkles, Filter, Search, TrendingUp, Mail, GraduationCap, User } from "lucide-react";
+import { Calendar, Clock, ArrowRight, BookOpen, Sparkles, Filter, Search, TrendingUp, Mail, GraduationCap } from "lucide-react";
 import { useSEO } from "@/hooks/use-seo";
-import { apiRequest } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
 
 interface BlogPostMeta {
   slug: string;
@@ -63,21 +61,15 @@ const getPrimaryCategory = (tags: string[]) => {
 const Blog = () => {
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [email, setEmail] = useState("");
-  const { toast } = useToast();
 
-  const subscribeMutation = useMutation({
-    mutationFn: async (emailAddress: string) => {
-      await apiRequest("POST", "/api/subscribe", { email: emailAddress });
-    },
-    onSuccess: () => {
-      toast({ title: "Subscribed!", description: "You'll receive LSAT tips and new articles in your inbox." });
-      setEmail("");
-    },
-    onError: () => {
-      toast({ title: "Something went wrong", description: "Please try again.", variant: "destructive" });
-    },
-  });
+  useEffect(() => {
+    if (!document.querySelector('script[src="https://f.convertkit.com/ckjs/ck.5.js"]')) {
+      const script = document.createElement("script");
+      script.src = "https://f.convertkit.com/ckjs/ck.5.js";
+      script.async = true;
+      document.head.appendChild(script);
+    }
+  }, []);
 
   useSEO({
     title: "LSAT Strategy Blog",
@@ -433,7 +425,7 @@ const Blog = () => {
                 </div>
               )}
 
-              {/* Email Signup */}
+              {/* Email Signup — ConvertKit */}
               <div className="bg-gradient-to-br from-primary/5 to-accent/5 rounded-2xl border border-border/50 p-5">
                 <h4 className="font-heading font-bold text-primary text-sm mb-1.5 flex items-center gap-2">
                   <Mail className="w-4 h-4 text-accent" />
@@ -443,26 +435,30 @@ const Blog = () => {
                   New strategies and articles delivered to your inbox. No spam.
                 </p>
                 <form
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    if (email.trim()) subscribeMutation.mutate(email.trim());
-                  }}
-                  className="space-y-2"
+                  action="https://app.kit.com/forms/9078575/subscriptions"
+                  method="post"
+                  data-sv-form="9078575"
+                  data-uid="8bbd348740"
+                  data-format="inline"
+                  data-version="5"
+                  className="seva-form formkit-form space-y-2"
                 >
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="your@email.com"
-                    required
-                    className="w-full text-sm border border-border rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-colors bg-white placeholder:text-foreground/40"
-                  />
+                  <ul className="formkit-alert formkit-alert-error" data-element="errors" data-group="alert" style={{ display: 'none' }}></ul>
+                  <div data-element="fields" data-stacked="true">
+                    <input
+                      type="email"
+                      name="email_address"
+                      placeholder="your@email.com"
+                      required
+                      className="formkit-input w-full text-sm border border-border rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-colors bg-white placeholder:text-foreground/40"
+                    />
+                  </div>
                   <button
                     type="submit"
-                    disabled={subscribeMutation.isPending}
-                    className="w-full bg-primary text-white text-sm font-semibold py-2.5 rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-60"
+                    data-element="submit"
+                    className="formkit-submit w-full bg-primary text-white text-sm font-semibold py-2.5 rounded-lg hover:bg-primary/90 transition-colors"
                   >
-                    {subscribeMutation.isPending ? "Subscribing..." : "Subscribe"}
+                    Subscribe
                   </button>
                 </form>
               </div>
