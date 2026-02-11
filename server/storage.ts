@@ -10,7 +10,8 @@ import {
   lrQuestions, type LrQuestion,
   rcQuestions, type RcQuestion,
   practiceSets, type PracticeSet, type InsertPracticeSet,
-  questionDetails, type QuestionDetails, type InsertQuestionDetails
+  questionDetails, type QuestionDetails, type InsertQuestionDetails,
+  blogPosts, type BlogPost as BlogPostType, type InsertBlogPost
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql, and, inArray, like, or } from "drizzle-orm";
@@ -99,6 +100,14 @@ export interface IStorage {
     difficulty?: number[];
     prepTests?: number[];
   }, limit?: number): Promise<LsatQuestion[]>;
+
+  // Blog posts
+  getBlogPosts(includedrafts?: boolean): Promise<BlogPostType[]>;
+  getBlogPostBySlug(slug: string): Promise<BlogPostType | undefined>;
+  getBlogPostById(id: number): Promise<BlogPostType | undefined>;
+  createBlogPost(post: InsertBlogPost): Promise<BlogPostType>;
+  updateBlogPost(id: number, updates: Partial<InsertBlogPost>): Promise<BlogPostType>;
+  deleteBlogPost(id: number): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -740,6 +749,42 @@ export class DatabaseStorage implements IStorage {
       console.error("Error logging practice activity:", error);
       throw error;
     }
+  }
+
+  // Blog posts
+  async getBlogPosts(includeDrafts: boolean = false): Promise<BlogPostType[]> {
+    if (includeDrafts) {
+      return db.select().from(blogPosts).orderBy(desc(blogPosts.created_at));
+    }
+    return db.select().from(blogPosts).where(eq(blogPosts.status, "published")).orderBy(desc(blogPosts.published_at));
+  }
+
+  async getBlogPostBySlug(slug: string): Promise<BlogPostType | undefined> {
+    const [post] = await db.select().from(blogPosts).where(eq(blogPosts.slug, slug));
+    return post || undefined;
+  }
+
+  async getBlogPostById(id: number): Promise<BlogPostType | undefined> {
+    const [post] = await db.select().from(blogPosts).where(eq(blogPosts.id, id));
+    return post || undefined;
+  }
+
+  async createBlogPost(post: InsertBlogPost): Promise<BlogPostType> {
+    const [created] = await db.insert(blogPosts).values(post).returning();
+    return created;
+  }
+
+  async updateBlogPost(id: number, updates: Partial<InsertBlogPost>): Promise<BlogPostType> {
+    const [updated] = await db
+      .update(blogPosts)
+      .set({ ...updates, updated_at: new Date() })
+      .where(eq(blogPosts.id, id))
+      .returning();
+    return updated;
+  }
+
+  async deleteBlogPost(id: number): Promise<void> {
+    await db.delete(blogPosts).where(eq(blogPosts.id, id));
   }
 }
 

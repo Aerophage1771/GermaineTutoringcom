@@ -28,7 +28,7 @@ Preferred communication style: Simple, everyday language.
 - **Database Provider**: Neon Database (serverless PostgreSQL)
 - **Session Management**: Express sessions with memorystore
 - **API Design**: RESTful with JSON
-- **Blog**: MDX files parsed with gray-matter
+- **Blog**: Database-backed CMS with TipTap rich text editor, sanitize-html for security
 
 ### Project Structure
 ```
@@ -47,11 +47,11 @@ server/
   routes.ts           # API route definitions (~645 lines)
   storage.ts          # Database storage layer (~746 lines)
   db.ts               # Drizzle database connection
-  blog.ts             # MDX blog post loader
+  blog.ts             # Legacy MDX blog post loader (replaced by database CMS)
   vite.ts             # Vite dev server integration (do not modify)
 shared/
   schema.ts           # Drizzle ORM schema and Zod validation types
-posts/                # MDX blog articles (6 posts)
+posts/                # Legacy MDX blog articles (migrated to database)
 public/               # Static assets (tutor photo)
 scripts/              # Data import utilities
 ```
@@ -78,6 +78,9 @@ scripts/              # Data import utilities
 - `/learning-library` — Study resource library
 - `/blog` — Blog listing
 - `/blog/:slug` — Individual blog post
+- `/admin/blog` — Admin blog management (list, create, edit, delete, publish/unpublish)
+- `/admin/blog/new` — Create new blog post with TipTap rich text editor
+- `/admin/blog/edit/:id` — Edit existing blog post
 
 ### Database Schema (PostgreSQL via Drizzle ORM)
 - **users** — Student accounts with session counts and time tracking
@@ -89,6 +92,7 @@ scripts/              # Data import utilities
 - **time_addons** — Purchased tutoring time add-ons
 - **subscribers** — Email newsletter sign-ups
 - **consultations** — Consultation booking requests
+- **blog_posts** — Blog posts CMS (title, slug, HTML content, excerpt, featured image, meta description, tags, status draft/published, timestamps)
 - **lsat_questions** — Combined LSAT question metadata
 - **lr_questions** — Logical Reasoning questions (optimized, separated table)
 - **rc_questions** — Reading Comprehension questions (optimized, separated table)
@@ -133,8 +137,16 @@ scripts/              # Data import utilities
 - `POST /api/practice/activity` — Log a practice activity
 
 **Blog (public)**
-- `GET /api/blog/posts` — List all blog posts
-- `GET /api/blog/posts/:slug` — Get single blog post by slug
+- `GET /api/blog/posts` — List all published blog posts (from database)
+- `GET /api/blog/posts/:slug` — Get single published blog post by slug
+
+**Blog Admin (authenticated)**
+- `GET /api/admin/blog/posts` — List all blog posts (including drafts)
+- `GET /api/admin/blog/posts/:id` — Get single blog post by ID for editing
+- `POST /api/admin/blog/posts` — Create new blog post (validated, HTML sanitized)
+- `PUT /api/admin/blog/posts/:id` — Update blog post
+- `DELETE /api/admin/blog/posts/:id` — Delete blog post
+- `POST /api/admin/upload` — Upload image for blog (returns URL)
 
 ### Key Features
 - **Public-Facing Website**: Professional landing page with hero section, about (Calendly integration), methodology breakdown (Define/Demonstrate/Duplicate), 4-Hour/12-Hour/36-Hour program pricing, testimonials/results, FAQ accordion, study guide lead magnets, and CTA
@@ -146,7 +158,7 @@ scripts/              # Data import utilities
 - **Problem Log**: Track mistakes with correct reasoning, student flaws, and rules for the future
 - **Progress Tracking**: Practice activity history with performance statistics and charts
 - **Learning Library**: Organized study resources
-- **Blog**: MDX-powered articles on LSAT strategy and preparation
+- **Blog CMS**: Database-backed blog with TipTap rich text editor, image uploads, draft/publish workflow, SEO fields (meta descriptions, slugs), HTML sanitization
 - **Responsive Design**: Mobile, tablet, and desktop layouts with custom Tailwind theme
 
 ## External Dependencies

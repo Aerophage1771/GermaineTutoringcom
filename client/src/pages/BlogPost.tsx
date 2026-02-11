@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
 import { useRoute, Link } from "wouter";
-import ReactMarkdown from "react-markdown";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
@@ -12,6 +11,8 @@ interface BlogPost {
   tags: string[];
   author: string;
   content: string;
+  featured_image?: string | null;
+  meta_description?: string | null;
 }
 
 const BlogPost = () => {
@@ -47,7 +48,6 @@ const BlogPost = () => {
       <Header />
       <main className="py-20">
         <div className="container mx-auto px-4">
-          {/* Back to Blog */}
           <div className="mb-8">
             <Link href="/blog">
               <button className="inline-flex items-center text-accent hover:text-accent/80 font-medium transition-colors">
@@ -59,7 +59,6 @@ const BlogPost = () => {
             </Link>
           </div>
 
-          {/* Loading State */}
           {isLoading && (
             <div className="max-w-4xl mx-auto">
               <div className="animate-pulse">
@@ -74,7 +73,6 @@ const BlogPost = () => {
             </div>
           )}
 
-          {/* Error State */}
           {error && (
             <div className="max-w-4xl mx-auto text-center py-12">
               <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md mx-auto">
@@ -91,11 +89,18 @@ const BlogPost = () => {
             </div>
           )}
 
-          {/* Blog Post Content */}
           {post && (
             <article className="max-w-4xl mx-auto">
-              {/* Header */}
               <header className="mb-12">
+                {post.featured_image && (
+                  <div className="mb-8 rounded-xl overflow-hidden">
+                    <img 
+                      src={post.featured_image} 
+                      alt={post.title}
+                      className="w-full h-64 md:h-96 object-cover"
+                    />
+                  </div>
+                )}
                 <h1 className="font-heading font-bold text-primary text-4xl md:text-5xl mb-6 leading-tight">
                   {post.title}
                 </h1>
@@ -121,14 +126,13 @@ const BlogPost = () => {
                 </div>
               </header>
 
-              {/* Content */}
               <div className="bg-white rounded-xl shadow-md p-8 md:p-12">
-                <div className="prose prose-lg max-w-none prose-headings:font-heading prose-headings:text-primary prose-p:text-foreground prose-p:leading-relaxed prose-strong:text-primary prose-a:text-accent prose-a:no-underline hover:prose-a:underline prose-li:text-foreground prose-blockquote:border-accent prose-blockquote:text-foreground/80">
-                  <ReactMarkdown>{post.content}</ReactMarkdown>
-                </div>
+                <div 
+                  className="prose prose-lg max-w-none prose-headings:font-heading prose-headings:text-primary prose-p:text-foreground prose-p:leading-relaxed prose-strong:text-primary prose-a:text-accent prose-a:no-underline hover:prose-a:underline prose-li:text-foreground prose-blockquote:border-accent prose-blockquote:text-foreground/80"
+                  dangerouslySetInnerHTML={{ __html: post.content }}
+                />
               </div>
 
-              {/* Call to Action */}
               <div className="mt-12 bg-muted/30 rounded-xl p-8 text-center">
                 <h3 className="font-heading font-bold text-primary text-2xl mb-4">
                   Ready to Transform Your LSAT Score?
@@ -138,7 +142,6 @@ const BlogPost = () => {
                 </p>
                 <button 
                   onClick={() => {
-                    // Use the existing Calendly functionality
                     if ((window as any).Calendly) {
                       (window as any).Calendly.initPopupWidget({
                         url: 'https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=1b385f'

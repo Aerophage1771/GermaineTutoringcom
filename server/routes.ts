@@ -7,9 +7,56 @@ import {
   insertSessionSchema,
   insertProblemLogSchema,
   insertPracticeActivitySchema,
-  insertTimeAddOnSchema
+  insertTimeAddOnSchema,
+  insertBlogPostSchema
 } from "@shared/schema";
-import { getAllPosts, getPostBySlug } from "./blog";
+import multer from "multer";
+import path from "path";
+import { promises as fs } from "fs";
+import sanitizeHtml from "sanitize-html";
+import { z } from "zod";
+
+const sanitizeOptions: sanitizeHtml.IOptions = {
+  allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2', 'h3', 'u', 's', 'hr']),
+  allowedAttributes: {
+    ...sanitizeHtml.defaults.allowedAttributes,
+    img: ['src', 'alt', 'title', 'width', 'height'],
+    a: ['href', 'target', 'rel'],
+  },
+  allowedSchemes: ['http', 'https', 'data'],
+};
+
+const blogPostInputSchema = z.object({
+  title: z.string().min(1).max(500),
+  slug: z.string().min(1).max(200).regex(/^[a-z0-9-]+$/),
+  content: z.string().min(1),
+  excerpt: z.string().min(1).max(1000),
+  meta_description: z.string().max(300).optional().nullable(),
+  featured_image: z.string().optional().nullable(),
+  tags: z.array(z.string()).optional().default([]),
+  author: z.string().min(1).max(200).optional().default("Germaine Washington"),
+  status: z.enum(["draft", "published"]).optional().default("draft"),
+});
+
+const uploadDir = path.join(process.cwd(), "public", "uploads");
+fs.mkdir(uploadDir, { recursive: true }).catch(() => {});
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: (_req, _file, cb) => cb(null, uploadDir),
+    filename: (_req, file, cb) => {
+      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+      cb(null, uniqueSuffix + path.extname(file.originalname));
+    },
+  }),
+  limits: { fileSize: 5 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    const allowed = /jpeg|jpg|png|gif|webp/;
+    const ext = allowed.test(path.extname(file.originalname).toLowerCase());
+    const mime = allowed.test(file.mimetype);
+    cb(null, ext && mime);
+  },
+});
 
 // Extend the session interface to include user information
 declare module 'express-session' {
@@ -512,11 +559,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Blog routes
+  // Public blog routes (database-backed)
   app.get("/api/blog/posts", async (req, res) => {
     try {
-      const posts = await getAllPosts();
-      res.json(posts);
+      const posts = await storage.getBlogPosts(false);
+      res.json(posts.map(p => ({
+        ...p,
+        tags: JSON.parse(p.tags || "[]"),
+        date: p.published_at || p.created_at,
+        snippet: p.excerpt,
+      })));
     } catch (error) {
       console.error("Error fetching blog posts:", error);
       res.status(500).json({ message: "Failed to fetch blog posts" });
@@ -525,17 +577,148 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.get("/api/blog/posts/:slug", async (req, res) => {
     try {
-      const { slug } = req.params;
-      const post = await getPostBySlug(slug);
-      
-      if (!post) {
+      const post = await storage.getBlogPostBySlug(req.params.slug);
+      if (!post || post.status !== "published") {
         return res.status(404).json({ message: "Post not found" });
       }
-      
-      res.json(post);
+      res.json({
+        ...post,
+        tags: JSON.parse(post.tags || "[]"),
+        date: post.published_at || post.created_at,
+        snippet: post.excerpt,
+      });
     } catch (error) {
       console.error("Error fetching blog post:", error);
       res.status(500).json({ message: "Failed to fetch blog post" });
+    }
+  });
+
+  // Admin blog routes (authenticated)
+  app.get("/api/admin/blog/posts", async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      const posts = await storage.getBlogPosts(true);
+      res.json(posts.map(p => ({
+        ...p,
+        tags: JSON.parse(p.tags || "[]"),
+      })));
+    } catch (error) {
+      console.error("Error fetching admin blog posts:", error);
+      res.status(500).json({ message: "Failed to fetch blog posts" });
+    }
+  });
+
+  app.get("/api/admin/blog/posts/:id", async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      const post = await storage.getBlogPostById(parseInt(req.params.id));
+      if (!post) {
+        return res.status(404).json({ message: "Post not found" });
+      }
+      res.json({ ...post, tags: JSON.parse(post.tags || "[]") });
+    } catch (error) {
+      console.error("Error fetching blog post:", error);
+      res.status(500).json({ message: "Failed to fetch blog post" });
+    }
+  });
+
+  app.post("/api/admin/blog/posts", async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      const validated = blogPostInputSchema.parse(req.body);
+      const postData = {
+        title: validated.title,
+        slug: validated.slug,
+        content: sanitizeHtml(validated.content, sanitizeOptions),
+        excerpt: validated.excerpt,
+        meta_description: validated.meta_description || null,
+        featured_image: validated.featured_image || null,
+        tags: JSON.stringify(validated.tags),
+        author: validated.author,
+        status: validated.status,
+        published_at: validated.status === "published" ? new Date() : null,
+      };
+      const post = await storage.createBlogPost(postData);
+      res.status(201).json({ ...post, tags: JSON.parse(post.tags || "[]") });
+    } catch (error: any) {
+      if (error?.name === "ZodError") {
+        return res.status(400).json({ message: "Invalid blog post data", errors: error.errors });
+      }
+      console.error("Error creating blog post:", error);
+      res.status(500).json({ message: "Failed to create blog post" });
+    }
+  });
+
+  app.put("/api/admin/blog/posts/:id", async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      const id = parseInt(req.params.id);
+      const existing = await storage.getBlogPostById(id);
+      if (!existing) {
+        return res.status(404).json({ message: "Post not found" });
+      }
+      const validated = blogPostInputSchema.partial().parse(req.body);
+      const updates: any = {};
+      if (validated.title !== undefined) updates.title = validated.title;
+      if (validated.slug !== undefined) updates.slug = validated.slug;
+      if (validated.content !== undefined) updates.content = sanitizeHtml(validated.content, sanitizeOptions);
+      if (validated.excerpt !== undefined) updates.excerpt = validated.excerpt;
+      if (validated.meta_description !== undefined) updates.meta_description = validated.meta_description;
+      if (validated.featured_image !== undefined) updates.featured_image = validated.featured_image;
+      if (validated.tags !== undefined) updates.tags = JSON.stringify(validated.tags);
+      if (validated.author !== undefined) updates.author = validated.author;
+      if (validated.status !== undefined) {
+        updates.status = validated.status;
+        if (validated.status === "published" && existing.status !== "published") {
+          updates.published_at = new Date();
+        }
+      }
+      const post = await storage.updateBlogPost(id, updates);
+      res.json({ ...post, tags: JSON.parse(post.tags || "[]") });
+    } catch (error: any) {
+      if (error?.name === "ZodError") {
+        return res.status(400).json({ message: "Invalid blog post data", errors: error.errors });
+      }
+      console.error("Error updating blog post:", error);
+      res.status(500).json({ message: "Failed to update blog post" });
+    }
+  });
+
+  app.delete("/api/admin/blog/posts/:id", async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      await storage.deleteBlogPost(parseInt(req.params.id));
+      res.json({ message: "Post deleted" });
+    } catch (error) {
+      console.error("Error deleting blog post:", error);
+      res.status(500).json({ message: "Failed to delete blog post" });
+    }
+  });
+
+  // Image upload for blog
+  app.post("/api/admin/upload", upload.single("image"), async (req, res) => {
+    try {
+      if (!req.session.userId) {
+        return res.status(401).json({ message: "Not authenticated" });
+      }
+      if (!req.file) {
+        return res.status(400).json({ message: "No image provided" });
+      }
+      const url = `/uploads/${req.file.filename}`;
+      res.json({ url });
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      res.status(500).json({ message: "Failed to upload image" });
     }
   });
 
