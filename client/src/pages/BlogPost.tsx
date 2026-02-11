@@ -45,8 +45,14 @@ const BlogPost = () => {
     return null;
   }
 
-  // Helper to determine if content is HTML or Markdown
   const isHtml = (str: string) => /<[a-z][\s\S]*>/i.test(str);
+
+  const processInlineMarkdown = (html: string): string => {
+    return html
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>')
+      .replace(/`([^`]+)`/g, '<code>$1</code>');
+  };
 
   return (
     <div className="bg-background min-h-screen">
@@ -135,7 +141,7 @@ const BlogPost = () => {
                 {isHtml(post.content) ? (
                   <div 
                     className="prose prose-lg max-w-none prose-headings:font-heading prose-headings:text-primary prose-p:text-foreground prose-p:leading-relaxed prose-strong:text-primary prose-a:text-accent prose-a:no-underline hover:prose-a:underline prose-li:text-foreground prose-blockquote:border-accent prose-blockquote:text-foreground/80"
-                    dangerouslySetInnerHTML={{ __html: post.content }}
+                    dangerouslySetInnerHTML={{ __html: processInlineMarkdown(post.content) }}
                   />
                 ) : (
                   <div className="prose prose-lg max-w-none prose-headings:font-heading prose-headings:text-primary prose-p:text-foreground prose-p:leading-relaxed prose-strong:text-primary prose-a:text-accent prose-a:no-underline hover:prose-a:underline prose-li:text-foreground prose-blockquote:border-accent prose-blockquote:text-foreground/80">
