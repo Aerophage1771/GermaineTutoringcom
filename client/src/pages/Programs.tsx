@@ -102,7 +102,7 @@ const Programs = () => {
       } else if (programTitle === "12-Hour LSAT Elevation Course") {
         url = 'https://calendly.com/germaine-washington-tutoring/12-hour-lsat-elevation-course';
       } else if (programTitle === "36-Hour LSAT Mastery Program") {
-        url = 'https://calendly.com/germaine-washington-tutoring/36-hour-lsat-mastery-program-gt';
+        url = 'https://calendly.com/germaine-washington-tutoring/36-hour-lsat-mastery-program';
       }
       
       if (url) {
