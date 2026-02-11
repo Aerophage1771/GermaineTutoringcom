@@ -60,7 +60,7 @@ scripts/              # Data import utilities
 - `/` — Home (Hero, About, Methodology, Programs, Results, FAQ, Guides, CTA, Footer)
 - `/methodology` — Methodology & Results (Define, Demonstrate, Duplicate approach)
 - `/results` — Results (redirects to methodology page)
-- `/programs` — Tutoring Programs (three-tiered pricing)
+- `/programs` — Tutoring Programs (4-Hour/$639, 12-Hour/$1,599, 36-Hour/$3,359)
 - `/login` — Student login
 - `/dashboard` — Authenticated student dashboard (sessions, time tracking, add-ons)
 - `/train-me` — Practice hub with training options
@@ -137,7 +137,7 @@ scripts/              # Data import utilities
 - `GET /api/blog/posts/:slug` — Get single blog post by slug
 
 ### Key Features
-- **Public-Facing Website**: Professional landing page with hero section, about (Calendly integration), methodology breakdown (Define/Demonstrate/Duplicate), three-tiered program pricing, testimonials/results, FAQ accordion, study guide lead magnets, and CTA
+- **Public-Facing Website**: Professional landing page with hero section, about (Calendly integration), methodology breakdown (Define/Demonstrate/Duplicate), 4-Hour/12-Hour/36-Hour program pricing, testimonials/results, FAQ accordion, study guide lead magnets, and CTA
 - **Student Authentication**: Email/password login with Express sessions
 - **Student Dashboard**: Session history, time remaining tracker, bonus test review time, time add-on purchases
 - **LSAT Question Database**: 6,000+ questions across Logical Reasoning and Reading Comprehension with metadata (difficulty, type, skills, passage categories)

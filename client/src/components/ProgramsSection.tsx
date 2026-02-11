@@ -51,14 +51,14 @@ const ProgramsSection = () => {
   }, []);
   const programs: Program[] = [
     {
-      title: "3-Hour LSAT Program",
+      title: "4-Hour Acceleration & Alignment Audit",
       description: "Rapidly improve performance and uncover opportunities.",
-      price: "$479",
-      duration: "3 hours",
-      hourly: "$159.67",
+      price: "$639",
+      duration: "4 hours",
+      hourly: "$159.75",
       savings: null,
       features: [
-        { included: true, text: "Comprehensive Tutoring Hours: 3 Hours" },
+        { included: true, text: "Comprehensive Tutoring Hours: 4 Hours" },
         { included: false, text: "Focused Diagnostic & Initial Strategy Session" },
         { included: true, text: "Section-Specific Strategy Discussion" },
         { included: true, text: "Personalized Study Plan Outline" },
@@ -131,12 +131,12 @@ const ProgramsSection = () => {
 
   const handleProgramButtonClick = (programTitle: string) => {
     let url = '';
-    if (programTitle === "3-Hour LSAT Program") {
-      url = 'https://calendly.com/germaine-washington-tutoring/2-hour-lsat-tutoring';
+    if (programTitle === "4-Hour Acceleration & Alignment Audit") {
+      url = 'https://calendly.com/germaine-washington-tutoring/4-hour-acceleration-alignment-audit';
     } else if (programTitle === "12-Hour LSAT Elevation Course") {
-      url = 'https://calendly.com/germaine-washington-tutoring/8-hr-lsat-plan';
+      url = 'https://calendly.com/germaine-washington-tutoring/12-hour-lsat-elevation-course';
     } else if (programTitle === "36-Hour LSAT Mastery Program") {
-      url = 'https://calendly.com/germaine-washington-tutoring/24-hour-lsat-premium-mastery-program';
+      url = 'https://calendly.com/germaine-washington-tutoring/36-hour-lsat-mastery-program-gt';
     }
 
     if (url) {

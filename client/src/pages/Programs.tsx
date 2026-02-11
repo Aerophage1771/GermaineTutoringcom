@@ -27,14 +27,14 @@ const Programs = () => {
 
   const programs: Program[] = [
     {
-      title: "3-Hour LSAT Program",
+      title: "4-Hour Acceleration & Alignment Audit",
       description: "Rapidly improve performance and uncover opportunities.",
-      price: "$479",
-      duration: "3 hours",
-      hourly: "$159.67",
+      price: "$639",
+      duration: "4 hours",
+      hourly: "$159.75",
       savings: null,
       features: [
-        { included: true, text: "Comprehensive Tutoring Hours: 3 Hours" },
+        { included: true, text: "Comprehensive Tutoring Hours: 4 Hours" },
         { included: false, text: "Focused Diagnostic & Initial Strategy Session" },
         { included: true, text: "Section-Specific Strategy Discussion" },
         { included: true, text: "Personalized Study Plan Outline" },
@@ -97,12 +97,12 @@ const Programs = () => {
   const handleProgramClick = (programTitle: string) => {
     if ((window as any).Calendly) {
       let url = '';
-      if (programTitle === "3-Hour LSAT Program") {
-        url = 'https://calendly.com/germaine-washington-tutoring/2-hour-lsat-tutoring';
+      if (programTitle === "4-Hour Acceleration & Alignment Audit") {
+        url = 'https://calendly.com/germaine-washington-tutoring/4-hour-acceleration-alignment-audit';
       } else if (programTitle === "12-Hour LSAT Elevation Course") {
-        url = 'https://calendly.com/germaine-washington-tutoring/8-hr-lsat-plan';
+        url = 'https://calendly.com/germaine-washington-tutoring/12-hour-lsat-elevation-course';
       } else if (programTitle === "36-Hour LSAT Mastery Program") {
-        url = 'https://calendly.com/germaine-washington-tutoring/24-hour-lsat-premium-mastery-program';
+        url = 'https://calendly.com/germaine-washington-tutoring/36-hour-lsat-mastery-program-gt';
       }
       
       if (url) {
@@ -241,7 +241,7 @@ const Programs = () => {
                   <thead>
                     <tr className="bg-primary text-white">
                       <th className="p-4 text-left font-semibold">Feature</th>
-                      <th className="p-4 text-center font-semibold">3-Hour Program</th>
+                      <th className="p-4 text-center font-semibold">4-Hour Audit</th>
                       <th className="p-4 text-center font-semibold">12-Hour Course</th>
                       <th className="p-4 text-center font-semibold bg-accent/20">36-Hour Mastery</th>
                     </tr>
@@ -249,13 +249,13 @@ const Programs = () => {
                   <tbody>
                     <tr className="border-b">
                       <td className="p-4 font-medium">Total Hours</td>
-                      <td className="p-4 text-center">3</td>
+                      <td className="p-4 text-center">4</td>
                       <td className="p-4 text-center">12</td>
                       <td className="p-4 text-center font-semibold">36</td>
                     </tr>
                     <tr className="border-b bg-muted/10">
                       <td className="p-4 font-medium">Price per Hour</td>
-                      <td className="p-4 text-center">$159.67</td>
+                      <td className="p-4 text-center">$159.75</td>
                       <td className="p-4 text-center">$133.25</td>
                       <td className="p-4 text-center font-semibold text-accent">$93.31</td>
                     </tr>
@@ -360,7 +360,7 @@ const Programs = () => {
                   </h3>
                   <p className="text-foreground leading-relaxed">
                     Schedule a free consultation! We'll discuss your current score, goals, and timeline to recommend the best fit. 
-                    Generally, the 3-hour program is great for diagnosis, 12-hour for moderate improvement, and 36-hour for significant gains.
+                    Generally, the 4-hour audit is great for diagnosis, 12-hour for moderate improvement, and 36-hour for significant gains.
                   </p>
                 </div>
                 
@@ -369,7 +369,7 @@ const Programs = () => {
                     Can I upgrade my program later?
                   </h3>
                   <p className="text-foreground leading-relaxed">
-                    Absolutely! Many students start with the 3-hour program and upgrade. We'll credit your initial investment toward a larger program if you upgrade within 30 days.
+                    Absolutely! Many students start with the 4-hour audit and upgrade. We'll credit your initial investment toward a larger program if you upgrade within 30 days.
                   </p>
                 </div>
                 
