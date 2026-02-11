@@ -301,6 +301,32 @@ export const insertLsatQuestionSchema = createInsertSchema(lsatQuestions).pick({
 export type InsertLsatQuestion = z.infer<typeof insertLsatQuestionSchema>;
 export type LsatQuestion = typeof lsatQuestions.$inferSelect;
 
+// Blog posts table for CMS
+export const blogPosts = pgTable("blog_posts", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  slug: text("slug").notNull().unique(),
+  content: text("content").notNull(),
+  excerpt: text("excerpt").notNull(),
+  featured_image: text("featured_image"),
+  meta_description: text("meta_description"),
+  tags: text("tags").notNull().default("[]"),
+  author: text("author").notNull().default("Germaine Washington"),
+  status: text("status").notNull().default("draft"),
+  created_at: timestamp("created_at").defaultNow(),
+  updated_at: timestamp("updated_at").defaultNow(),
+  published_at: timestamp("published_at"),
+});
+
+export const insertBlogPostSchema = createInsertSchema(blogPosts).omit({
+  id: true,
+  created_at: true,
+  updated_at: true,
+});
+
+export type InsertBlogPost = z.infer<typeof insertBlogPostSchema>;
+export type BlogPost = typeof blogPosts.$inferSelect;
+
 // Separate Logical Reasoning Questions Table (optimized)
 export const lrQuestions = pgTable("lr_questions", {
   id: serial("id").primaryKey(),
