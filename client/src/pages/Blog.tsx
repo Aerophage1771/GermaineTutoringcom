@@ -197,7 +197,7 @@ const Blog = () => {
         <div className="container mx-auto px-4">
 
           {/* Category Filters */}
-          <div className="flex items-center justify-center gap-1 pb-6 overflow-x-auto no-scrollbar max-w-2xl mx-auto">
+          <div className="flex items-center justify-center gap-1 pb-6 overflow-x-auto no-scrollbar max-w-4xl mx-auto">
             <Filter className="w-4 h-4 text-foreground/40 mr-2 flex-shrink-0" />
             {CATEGORY_FILTERS.map((cat) => (
               <button
@@ -215,21 +215,9 @@ const Blog = () => {
           </div>
 
           <div className="grid lg:grid-cols-[1fr_300px] gap-10">
-              {isLoading && (
-                <div className="grid gap-6 md:grid-cols-2">
-                  {[1, 2, 3, 4].map(i => (
-                    <div key={i} className="bg-white rounded-2xl border border-border overflow-hidden animate-pulse">
-                      <div className="h-44 bg-muted" />
-                      <div className="p-6">
-                        <div className="h-4 bg-muted rounded w-24 mb-4" />
-                        <div className="h-6 bg-muted rounded w-3/4 mb-3" />
-                        <div className="h-4 bg-muted rounded w-full mb-2" />
-                        <div className="h-4 bg-muted rounded w-2/3" />
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
+            {/* Main Content Area */}
+            <div>
+              {/* Loading State */}
 
               {/* Error State */}
               {error && (
