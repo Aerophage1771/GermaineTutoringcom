@@ -61,6 +61,8 @@ const getPrimaryCategory = (tags: string[]) => {
 const Blog = () => {
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [ckEmail, setCkEmail] = useState("");
+  const [ckStatus, setCkStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
 
   useEffect(() => {
     if (!document.querySelector('script[src="https://f.convertkit.com/ckjs/ck.5.js"]')) {
@@ -434,33 +436,52 @@ const Blog = () => {
                 <p className="text-xs text-foreground/60 mb-3 leading-relaxed">
                   New strategies and articles delivered to your inbox. No spam.
                 </p>
-                <form
-                  action="https://app.kit.com/forms/9078575/subscriptions"
-                  method="post"
-                  data-sv-form="9078575"
-                  data-uid="8bbd348740"
-                  data-format="inline"
-                  data-version="5"
-                  className="seva-form formkit-form space-y-2"
-                >
-                  <ul className="formkit-alert formkit-alert-error" data-element="errors" data-group="alert" style={{ display: 'none' }}></ul>
-                  <div data-element="fields" data-stacked="true">
+                {ckStatus === "success" ? (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
+                    <p className="text-green-800 text-sm font-semibold mb-0.5">You're in!</p>
+                    <p className="text-green-700 text-xs">Check your email to confirm your subscription.</p>
+                  </div>
+                ) : (
+                  <form
+                    onSubmit={async (e) => {
+                      e.preventDefault();
+                      if (!ckEmail.trim()) return;
+                      setCkStatus("submitting");
+                      try {
+                        const formData = new FormData();
+                        formData.append("email_address", ckEmail.trim());
+                        await fetch("https://app.kit.com/forms/9078575/subscriptions", {
+                          method: "POST",
+                          body: formData,
+                          mode: "no-cors",
+                        });
+                        setCkStatus("success");
+                      } catch {
+                        setCkStatus("error");
+                      }
+                    }}
+                    className="space-y-2"
+                  >
                     <input
                       type="email"
-                      name="email_address"
+                      value={ckEmail}
+                      onChange={(e) => setCkEmail(e.target.value)}
                       placeholder="your@email.com"
                       required
-                      className="formkit-input w-full text-sm border border-border rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-colors bg-white placeholder:text-foreground/40"
+                      className="w-full text-sm border border-border rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-colors bg-white placeholder:text-foreground/40"
                     />
-                  </div>
-                  <button
-                    type="submit"
-                    data-element="submit"
-                    className="formkit-submit w-full bg-primary text-white text-sm font-semibold py-2.5 rounded-lg hover:bg-primary/90 transition-colors"
-                  >
-                    Subscribe
-                  </button>
-                </form>
+                    {ckStatus === "error" && (
+                      <p className="text-red-600 text-xs">Something went wrong. Please try again.</p>
+                    )}
+                    <button
+                      type="submit"
+                      disabled={ckStatus === "submitting"}
+                      className="w-full bg-primary text-white text-sm font-semibold py-2.5 rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-60"
+                    >
+                      {ckStatus === "submitting" ? "Subscribing..." : "Subscribe"}
+                    </button>
+                  </form>
+                )}
               </div>
 
               {/* Quick Link to Tutoring */}
