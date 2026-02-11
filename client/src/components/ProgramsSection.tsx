@@ -53,9 +53,9 @@ const ProgramsSection = () => {
     {
       title: "4-Hour Acceleration & Alignment Audit",
       description: "Rapidly improve performance and uncover opportunities.",
-      price: "$639",
+      price: "$699",
       duration: "4 hours",
-      hourly: "$159.75",
+      hourly: "$174.75",
       savings: null,
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 4 Hours" },
@@ -239,16 +239,10 @@ const ProgramsSection = () => {
         </div>
 
         <div className="text-center bg-muted/50 rounded-lg p-6 max-w-3xl mx-auto">
-          <p className="text-foreground mb-4">
+          <p className="text-foreground">
             <i className="fas fa-info-circle mr-2 text-primary"></i>
             <span className="font-semibold">Financing options available during checkout.</span>
           </p>
-          <button
-            onClick={openCalendly}
-            className="inline-block bg-primary text-white hover:bg-primary/90 font-semibold py-3 px-6 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-primary/50"
-          >
-            I Need a Custom Plan
-          </button>
         </div>
       </div>
     </section>

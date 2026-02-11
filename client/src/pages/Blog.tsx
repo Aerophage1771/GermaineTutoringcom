@@ -350,7 +350,7 @@ const Blog = () => {
               {/* Author Branding */}
               <div className="bg-white rounded-2xl border border-border p-6 text-center">
                 <img
-                  src="/germaine_photo.webp"
+                  src="/germaine_photo.jpg"
                   alt="Germaine Washington"
                   className="w-20 h-20 rounded-full mx-auto mb-3 object-cover border-2 border-primary/20"
                 />

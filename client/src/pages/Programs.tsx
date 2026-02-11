@@ -29,9 +29,9 @@ const Programs = () => {
     {
       title: "4-Hour Acceleration & Alignment Audit",
       description: "Rapidly improve performance and uncover opportunities.",
-      price: "$639",
+      price: "$699",
       duration: "4 hours",
-      hourly: "$159.75",
+      hourly: "$174.75",
       savings: null,
       features: [
         { included: true, text: "Comprehensive Tutoring Hours: 4 Hours" },
@@ -255,7 +255,7 @@ const Programs = () => {
                     </tr>
                     <tr className="border-b bg-muted/10">
                       <td className="p-4 font-medium">Price per Hour</td>
-                      <td className="p-4 text-center">$159.75</td>
+                      <td className="p-4 text-center">$174.75</td>
                       <td className="p-4 text-center">$133.25</td>
                       <td className="p-4 text-center font-semibold text-accent">$93.31</td>
                     </tr>
