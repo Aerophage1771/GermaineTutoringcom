@@ -197,7 +197,7 @@ const Blog = () => {
         <div className="container mx-auto px-4">
 
           {/* Category Filters */}
-          <div className="flex items-center gap-1 pb-6 overflow-x-auto no-scrollbar">
+          <div className="flex items-center justify-center gap-1 pb-6 overflow-x-auto no-scrollbar mx-auto">
             <Filter className="w-4 h-4 text-foreground/40 mr-2 flex-shrink-0" />
             {CATEGORY_FILTERS.map((cat) => (
               <button
