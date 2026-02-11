@@ -103,7 +103,7 @@ const Blog = () => {
       {/* Hero Section */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, hsl(210 40% 96.1%) 0%, hsl(0 0% 100%) 100%)' }}>
         <div className="container mx-auto px-4 pt-16 pb-8 md:pt-20 md:pb-10">
-          <div className="grid md:grid-cols-[1.4fr_1fr] gap-6 md:gap-10 items-center">
+          <div className="grid md:grid-cols-[1.2fr_1fr] gap-6 md:gap-10 items-center max-w-4xl mx-auto">
             {/* Left: Title + value prop + CTA */}
             <div>
               <div className="flex items-center gap-2 mb-3">
