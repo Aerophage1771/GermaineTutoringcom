@@ -131,9 +131,9 @@ const Blog = () => {
       {/* Hero Section */}
       <section className="relative overflow-hidden" style={{ background: 'linear-gradient(180deg, hsl(210 40% 96.1%) 0%, hsl(0 0% 100%) 100%)' }}>
         <div className="container mx-auto px-4 pt-16 pb-8 md:pt-20 md:pb-10">
-          <div className="flex flex-col items-center text-center max-w-4xl mx-auto">
+          <div className="grid md:grid-cols-[1.2fr_1fr] gap-6 md:gap-10 items-center max-w-4xl mx-auto">
             {/* Left: Title + value prop + CTA */}
-            <div className="w-full flex flex-col items-center">
+            <div>
               <div className="flex items-center gap-2 mb-3">
                 <BookOpen className="w-5 h-5 text-accent" />
                 <span className="text-sm font-semibold text-accent uppercase tracking-wider">From a Perfect 180 Scorer</span>
@@ -141,10 +141,10 @@ const Blog = () => {
               <h1 className="font-heading font-bold text-primary text-4xl md:text-5xl lg:text-[3.25rem] mb-3 leading-tight" style={{ letterSpacing: '-0.02em' }}>
                 LSAT Strategy Blog
               </h1>
-              <p className="text-foreground/80 text-lg md:text-xl leading-relaxed mb-5 max-w-2xl">
+              <p className="text-foreground/80 text-lg md:text-xl leading-relaxed mb-5 max-w-xl">
                 Practical, systems-based techniques you can apply in your next timed section — from someone who's mastered every question type.
               </p>
-              <div className="flex flex-wrap justify-center gap-3">
+              <div className="flex flex-wrap gap-3">
                 <button
                   onClick={() => {
                     if (window.Calendly) {
@@ -165,12 +165,12 @@ const Blog = () => {
 
             {/* Right: Featured post card */}
             {featuredPost && (
-              <aside className="w-full max-w-xl mt-10">
-                <p className="flex items-center justify-center gap-1.5 text-xs font-bold text-accent uppercase tracking-wider mb-2">
+              <aside>
+                <p className="flex items-center gap-1.5 text-xs font-bold text-accent uppercase tracking-wider mb-2">
                   <Sparkles className="w-3.5 h-3.5" />
                   Featured Article
                 </p>
-                <Link href={`/blog/${featuredPost.slug}`} className="group block bg-white rounded-2xl border border-border p-5 hover:border-primary/40 hover:shadow-lg transition-all duration-200 cursor-pointer no-underline text-left">
+                <Link href={`/blog/${featuredPost.slug}`} className="group block bg-white rounded-2xl border border-border p-5 hover:border-primary/40 hover:shadow-lg transition-all duration-200 cursor-pointer no-underline">
                     <div className={`w-full h-28 rounded-xl bg-gradient-to-br ${THUMBNAIL_COLORS[0].bg} flex items-center justify-center mb-4`}>
                       <BookOpen className={`w-10 h-10 ${THUMBNAIL_COLORS[0].icon}`} />
                     </div>
