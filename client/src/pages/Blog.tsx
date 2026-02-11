@@ -196,29 +196,25 @@ const Blog = () => {
       <main className="py-10 md:py-14">
         <div className="container mx-auto px-4">
 
+          {/* Category Filters */}
+          <div className="flex items-center justify-center gap-1 pb-6 overflow-x-auto no-scrollbar max-w-2xl mx-auto">
+            <Filter className="w-4 h-4 text-foreground/40 mr-2 flex-shrink-0" />
+            {CATEGORY_FILTERS.map((cat) => (
+              <button
+                key={cat.key}
+                onClick={() => setActiveFilter(cat.key)}
+                className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-150 ${
+                  activeFilter === cat.key
+                    ? "bg-primary text-white shadow-sm"
+                    : "text-foreground/70 hover:bg-muted hover:text-foreground"
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+
           <div className="grid lg:grid-cols-[1fr_300px] gap-10">
-
-            {/* Main Content Area */}
-            <div>
-              {/* Category Filters */}
-              <div className="flex items-center gap-1 pb-6 overflow-x-auto no-scrollbar">
-                <Filter className="w-4 h-4 text-foreground/40 mr-2 flex-shrink-0" />
-                {CATEGORY_FILTERS.map((cat) => (
-                  <button
-                    key={cat.key}
-                    onClick={() => setActiveFilter(cat.key)}
-                    className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-150 ${
-                      activeFilter === cat.key
-                        ? "bg-primary text-white shadow-sm"
-                        : "text-foreground/70 hover:bg-muted hover:text-foreground"
-                    }`}
-                  >
-                    {cat.label}
-                  </button>
-                ))}
-              </div>
-
-              {/* Loading State */}
               {isLoading && (
                 <div className="grid gap-6 md:grid-cols-2">
                   {[1, 2, 3, 4].map(i => (
