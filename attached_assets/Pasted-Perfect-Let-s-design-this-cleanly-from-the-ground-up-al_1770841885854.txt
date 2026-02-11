@@ -1,0 +1,310 @@
+Perfect. Let’s design this cleanly from the ground up, almost like we are creating a mini product inside your site.
+
+I will break this into four parts exactly as you asked:
+
+1. Purpose
+2. Integration with the rest of your site
+3. Proposed blog titles
+4. Main hub copy draft
+
+---
+
+# PART 1 – PURPOSE
+
+Before writing anything, we need to define what the roadmap hub is meant to accomplish.
+
+### Core Mission Statement
+
+The LSAT Beginner Roadmap exists to give new students a clear, step-by-step path from total confusion to confident, organized studying.
+
+That mission breaks into five concrete purposes.
+
+---
+
+## A. Orientation
+
+The hub should help a brand-new visitor answer:
+
+* What is the LSAT really testing?
+* How should I think about this exam?
+* Where do I even begin?
+
+Most beginners arrive overwhelmed. The hub reduces that anxiety immediately.
+
+---
+
+## B. Education Without Copyright Risk
+
+Because you cannot reproduce LSAC questions, the hub provides value in safer ways:
+
+* Teaching concepts
+* Explaining processes
+* Modeling reasoning
+* Showing how to study
+
+It lets you be helpful without relying on proprietary material.
+
+---
+
+## C. Organization of Your Content
+
+Right now your blog will naturally grow into dozens of posts.
+
+The hub acts as:
+
+* A table of contents
+* A suggested reading order
+* A logical curriculum
+
+It turns scattered articles into a structured course.
+
+---
+
+## D. Trust Building
+
+Instead of random tips, the hub communicates:
+
+This tutor has a real system.
+
+It shows that your blog is not just advice, but a coherent method.
+
+---
+
+## E. Conversion
+
+Finally, the hub gently leads readers toward tutoring when appropriate:
+
+* After they understand the basics
+* After they see the depth of your approach
+* After they feel guided, not sold to
+
+---
+
+# PART 2 – INTEGRATION WITH THE SITE
+
+The hub should function as a central crossroads between three parts of your ecosystem:
+
+* Blog
+* Tutoring programs
+* Methodology page
+
+Here is how it should connect.
+
+---
+
+## Navigation Placement
+
+Ideally the hub gets a prominent place such as:
+
+**LSAT Blog → Beginner Roadmap**
+
+It should be the first item a new reader sees on the blog page.
+
+---
+
+## Internal Linking Strategy
+
+Each section of the hub links to:
+
+* Specific beginner-focused blog posts
+* Key methodology pages
+* Occasional tutoring calls to action
+
+The flow should look like this:
+
+Homepage → Blog → Roadmap Hub → Individual Articles → Consultation
+
+---
+
+## Relationship to Your About Page
+
+The hub is not about you.
+
+Your About page explains your story.
+The hub explains the student journey.
+
+Different jobs, complementary roles.
+
+---
+
+## Relationship to Tutoring Programs
+
+The hub should never feel like a sales page.
+
+However, at natural transition points, it can say:
+
+If you want help applying this roadmap, here is how to work with me.
+
+That is integration without pressure.
+
+---
+
+# PART 3 – PROPOSED BLOG TITLES
+
+Here is a starter set of beginner-focused posts designed specifically to fit into the roadmap.
+
+I will group them by phase.
+
+---
+
+## Phase 1: Understanding the LSAT
+
+1. **Start Here: What the LSAT Actually Tests**
+2. **How the LSAT Is Scored in Plain English**
+3. **Logical Reasoning vs Reading Comprehension: What Each Section Measures**
+4. **Why the LSAT Is a Skills Test, Not a Knowledge Test**
+
+---
+
+## Phase 2: Learning How to Study
+
+5. **How to Study for the LSAT Without Wasting Time**
+6. **The Right Way to Review LSAT Questions**
+7. **Timed Practice vs Untimed Practice: When to Use Each**
+8. **How to Track and Diagnose Your Mistakes**
+
+---
+
+## Phase 3: Logical Reasoning Foundations
+
+9. **What an LSAT Argument Really Is**
+10. **How to Identify Conclusions Quickly and Accurately**
+11. **The Most Common Logical Reasoning Traps**
+12. **A Simple Process You Can Use on Every LR Question**
+
+---
+
+## Phase 4: Reading Comprehension Foundations
+
+13. **How to Read LSAT Passages for Structure Instead of Details**
+14. **The Four Core Reading Comprehension Question Types**
+15. **How to Review Reading Comprehension Effectively**
+16. **Timing Basics for the Reading Section**
+
+---
+
+## Phase 5: Building a Plan
+
+17. **How to Take Your First LSAT Practice Test**
+18. **What a Realistic LSAT Study Plan Looks Like**
+19. **Common Beginner Mistakes to Avoid**
+20. **How to Know When You Are Ready for Timed Sections**
+
+---
+
+These titles form the backbone of the roadmap. You can add or swap posts over time, but this gives the hub a clear skeleton.
+
+---
+
+# PART 4 – MAIN HUB COPY
+
+Below is a full first draft of what the actual roadmap page could say.
+
+This is written to be practical, welcoming, and direct.
+
+---
+
+## LSAT Beginner Roadmap
+
+### New to the LSAT? Start Here.
+
+Getting started with the LSAT can feel overwhelming. There are countless study plans, strategies, and opinions, and it is hard to know what actually works.
+
+This roadmap gives you a clear, step-by-step path to follow. It organizes the most important ideas on this site into a simple sequence so you can begin studying the right way from day one.
+
+If you are brand new to the LSAT, follow the sections below in order.
+
+---
+
+### Phase 1: Understand the Exam
+
+Before you worry about techniques or practice questions, you need a clear picture of what the LSAT is designed to measure.
+
+Start with these guides:
+
+* **Start Here: What the LSAT Actually Tests**
+* **How the LSAT Is Scored in Plain English**
+* **Logical Reasoning vs Reading Comprehension: What Each Section Measures**
+
+Goal of this phase: understand the structure of the test and what real improvement looks like.
+
+---
+
+### Phase 2: Learn How to Study
+
+Most LSAT struggles come from poor study habits, not lack of ability. Learning how to practice effectively is more important than learning any specific trick.
+
+Read these next:
+
+* **How to Study for the LSAT Without Wasting Time**
+* **The Right Way to Review LSAT Questions**
+* **Timed Practice vs Untimed Practice: When to Use Each**
+* **How to Track and Diagnose Your Mistakes**
+
+Goal of this phase: build a review process that produces steady, measurable progress.
+
+---
+
+### Phase 3: Logical Reasoning Foundations
+
+Logical Reasoning makes up half of your LSAT score. These articles introduce the core skills every student needs.
+
+* **What an LSAT Argument Really Is**
+* **How to Identify Conclusions Quickly and Accurately**
+* **The Most Common Logical Reasoning Traps**
+* **A Simple Process You Can Use on Every LR Question**
+
+Goal of this phase: learn how to think about arguments clearly and consistently.
+
+---
+
+### Phase 4: Reading Comprehension Foundations
+
+Reading Comprehension rewards structure, focus, and disciplined reading habits. These guides show you how to approach passages the right way.
+
+* **How to Read LSAT Passages for Structure Instead of Details**
+* **The Four Core Reading Comprehension Question Types**
+* **How to Review Reading Comprehension Effectively**
+* **Timing Basics for the Reading Section**
+
+Goal of this phase: develop a repeatable approach to passages and questions.
+
+---
+
+### Phase 5: Build Your Study Plan
+
+Once you understand the basics, it is time to put everything together.
+
+* **How to Take Your First LSAT Practice Test**
+* **What a Realistic LSAT Study Plan Looks Like**
+* **Common Beginner Mistakes to Avoid**
+
+Goal of this phase: turn knowledge into a practical weekly routine.
+
+---
+
+## How to Use This Roadmap
+
+Work through the phases in order. Do not rush ahead to advanced strategies before you have mastered the foundations.
+
+If you spend a few weeks following this sequence carefully, you will have a stronger starting point than most students who study on their own.
+
+---
+
+## Want Personal Guidance?
+
+If you would like help applying this roadmap to your specific situation, I offer free consultations to help students build customized study plans.
+
+**Schedule a Free Consultation**
+
+---
+
+# NEXT STEPS
+
+If you want, I can now help you in one of three ways:
+
+1. Adapt this hub copy to match the exact tone of your current site
+2. Help you map your existing blog posts into these categories
+3. Draft the first few beginner articles so the hub has real links
+
+Just tell me which direction you want to move first.
