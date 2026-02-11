@@ -27,14 +27,14 @@ const Programs = () => {
 
   const programs: Program[] = [
     {
-      title: "2-Hour LSAT Acceleration Session",
-      description: "Strategic session focused on rapidly improving performance and uncovering opportunities for growth on the LSAT",
-      price: "$399",
-      duration: "2 hours",
-      hourly: "$199.50",
+      title: "3-Hour LSAT Program",
+      description: "Rapidly improve performance and uncover opportunities.",
+      price: "$479",
+      duration: "3 hours",
+      hourly: "$159.67",
       savings: null,
       features: [
-        { included: true, text: "Comprehensive Tutoring Hours: 2 Hours" },
+        { included: true, text: "Comprehensive Tutoring Hours: 3 Hours" },
         { included: false, text: "Focused Diagnostic & Initial Strategy Session" },
         { included: true, text: "Section-Specific Strategy Discussion" },
         { included: true, text: "Personalized Study Plan Outline" },
@@ -49,14 +49,14 @@ const Programs = () => {
       highlighted: false
     },
     {
-      title: "8-Hour LSAT Elevation Course",
-      description: "For students targeting a 5–10 point gain. Focused section work, strategy drills, and a custom study plan.",
-      price: "$1,199",
-      duration: "8 hours",
-      hourly: "$149.88",
-      savings: "(25% savings)",
+      title: "12-Hour LSAT Elevation Course",
+      description: "For students targeting a 5–10 point gain. Custom study plan.",
+      price: "$1,599",
+      duration: "12 hours",
+      hourly: "$133.25",
+      savings: "(16% savings)",
       features: [
-        { included: true, text: "Comprehensive Tutoring Hours: 8 Hours" },
+        { included: true, text: "Comprehensive Tutoring Hours: 12 Hours" },
         { included: true, text: "Focused Diagnostic & Strategy Call" },
         { included: true, text: "Section-Specific Strategy Discussion" },
         { included: true, text: "Personalized Study Plan Outline" },
@@ -71,14 +71,14 @@ const Programs = () => {
       highlighted: false
     },
     {
-      title: "24-Hour LSAT Mastery Program",
-      description: "For 10+ point improvements or 170+ goals. Intensive coaching, advanced strategy, and full-section mastery.",
-      price: "$2,399",
-      duration: "24 hours",
-      hourly: "$99.96",
-      savings: "(50% savings)",
+      title: "36-Hour LSAT Mastery Program",
+      description: "For 10+ point improvements or 170+ goals. Full mastery.",
+      price: "$3,359",
+      duration: "36 hours",
+      hourly: "$93.31",
+      savings: "(41% savings)",
       features: [
-        { included: true, text: "Comprehensive Tutoring Hours: 24 Hours" },
+        { included: true, text: "Comprehensive Tutoring Hours: 36 Hours" },
         { included: true, text: "Focused Diagnostic & Initial Strategy Session" },
         { included: true, text: "Section-Specific Strategy Discussion" },
         { included: true, text: "Personalized Study Plan Outline" },
@@ -97,11 +97,11 @@ const Programs = () => {
   const handleProgramClick = (programTitle: string) => {
     if ((window as any).Calendly) {
       let url = '';
-      if (programTitle === "2-Hour LSAT Acceleration Session") {
+      if (programTitle === "3-Hour LSAT Program") {
         url = 'https://calendly.com/germaine-washington-tutoring/2-hour-lsat-tutoring';
-      } else if (programTitle === "8-Hour LSAT Elevation Course") {
+      } else if (programTitle === "12-Hour LSAT Elevation Course") {
         url = 'https://calendly.com/germaine-washington-tutoring/8-hr-lsat-plan';
-      } else if (programTitle === "24-Hour LSAT Mastery Program") {
+      } else if (programTitle === "36-Hour LSAT Mastery Program") {
         url = 'https://calendly.com/germaine-washington-tutoring/24-hour-lsat-premium-mastery-program';
       }
       
@@ -241,23 +241,23 @@ const Programs = () => {
                   <thead>
                     <tr className="bg-primary text-white">
                       <th className="p-4 text-left font-semibold">Feature</th>
-                      <th className="p-4 text-center font-semibold">2-Hour Session</th>
-                      <th className="p-4 text-center font-semibold">8-Hour Course</th>
-                      <th className="p-4 text-center font-semibold bg-accent/20">24-Hour Mastery</th>
+                      <th className="p-4 text-center font-semibold">3-Hour Program</th>
+                      <th className="p-4 text-center font-semibold">12-Hour Course</th>
+                      <th className="p-4 text-center font-semibold bg-accent/20">36-Hour Mastery</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr className="border-b">
                       <td className="p-4 font-medium">Total Hours</td>
-                      <td className="p-4 text-center">2</td>
-                      <td className="p-4 text-center">8</td>
-                      <td className="p-4 text-center font-semibold">24</td>
+                      <td className="p-4 text-center">3</td>
+                      <td className="p-4 text-center">12</td>
+                      <td className="p-4 text-center font-semibold">36</td>
                     </tr>
                     <tr className="border-b bg-muted/10">
                       <td className="p-4 font-medium">Price per Hour</td>
-                      <td className="p-4 text-center">$149.50</td>
-                      <td className="p-4 text-center">$124.88</td>
-                      <td className="p-4 text-center font-semibold text-accent">$99.96</td>
+                      <td className="p-4 text-center">$159.67</td>
+                      <td className="p-4 text-center">$133.25</td>
+                      <td className="p-4 text-center font-semibold text-accent">$93.31</td>
                     </tr>
                     <tr className="border-b">
                       <td className="p-4 font-medium">Best For</td>
@@ -360,7 +360,7 @@ const Programs = () => {
                   </h3>
                   <p className="text-foreground leading-relaxed">
                     Schedule a free consultation! We'll discuss your current score, goals, and timeline to recommend the best fit. 
-                    Generally, the 2-hour session is great for diagnosis, 8-hour for moderate improvement, and 24-hour for significant gains.
+                    Generally, the 3-hour program is great for diagnosis, 12-hour for moderate improvement, and 36-hour for significant gains.
                   </p>
                 </div>
                 
@@ -369,7 +369,7 @@ const Programs = () => {
                     Can I upgrade my program later?
                   </h3>
                   <p className="text-foreground leading-relaxed">
-                    Absolutely! Many students start with the 2-hour session and upgrade. We'll credit your initial investment toward a larger program if you upgrade within 30 days.
+                    Absolutely! Many students start with the 3-hour program and upgrade. We'll credit your initial investment toward a larger program if you upgrade within 30 days.
                   </p>
                 </div>
                 

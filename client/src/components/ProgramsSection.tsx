@@ -51,14 +51,14 @@ const ProgramsSection = () => {
   }, []);
   const programs: Program[] = [
     {
-      title: "2-Hour LSAT Acceleration Session",
-      description: "Strategic session focused on rapidly improving performance and uncovering opportunities for growth on the LSAT",
-      price: "$399",
-      duration: "2 hours",
-      hourly: "$199.50",
+      title: "3-Hour LSAT Program",
+      description: "Rapidly improve performance and uncover opportunities.",
+      price: "$479",
+      duration: "3 hours",
+      hourly: "$159.67",
       savings: null,
       features: [
-        { included: true, text: "Comprehensive Tutoring Hours: 2 Hours" },
+        { included: true, text: "Comprehensive Tutoring Hours: 3 Hours" },
         { included: false, text: "Focused Diagnostic & Initial Strategy Session" },
         { included: true, text: "Section-Specific Strategy Discussion" },
         { included: true, text: "Personalized Study Plan Outline" },
@@ -72,14 +72,14 @@ const ProgramsSection = () => {
       highlighted: false
     },
     {
-      title: "8-Hour LSAT Elevation Course",
-      description: "For students targeting a 5–10 point gain. Focused section work, strategy drills, and a custom study plan.",
-      price: "$1,199",
-      duration: "8 hours",
-      hourly: "$149.88",
-      savings: "(25% savings)",
+      title: "12-Hour LSAT Elevation Course",
+      description: "For students targeting a 5–10 point gain. Custom study plan.",
+      price: "$1,599",
+      duration: "12 hours",
+      hourly: "$133.25",
+      savings: "(16% savings)",
       features: [
-        { included: true, text: "Comprehensive Tutoring Hours: 8 Hours" },
+        { included: true, text: "Comprehensive Tutoring Hours: 12 Hours" },
         { included: true, text: "Free: Initial Diagnostic Call" },
         { included: true, text: "Section-Specific Strategy Discussion" },
         { included: true, text: "Personalized Study Plan Outline" },
@@ -93,14 +93,14 @@ const ProgramsSection = () => {
       highlighted: false
     },
     {
-      title: "24-Hour LSAT Mastery Program",
-      description: "For 10+ point improvements or 170+ goals. Intensive coaching, advanced strategy, and full-section mastery.",
-      price: "$2,399",
-      duration: "24 hours",
-      hourly: "$99.96",
-      savings: "(50% savings)",
+      title: "36-Hour LSAT Mastery Program",
+      description: "For 10+ point improvements or 170+ goals. Full mastery.",
+      price: "$3,359",
+      duration: "36 hours",
+      hourly: "$93.31",
+      savings: "(41% savings)",
       features: [
-        { included: true, text: "Comprehensive Tutoring Hours: 24 Hours" },
+        { included: true, text: "Comprehensive Tutoring Hours: 36 Hours" },
         { included: true, text: "Free: Complete 90-Minute Initial Diagnostic Session", bonus: true },
         { included: true, text: "Section-Specific Strategy Discussion" },
         { included: true, text: "Personalized Study Plan Outline" },
@@ -129,62 +129,22 @@ const ProgramsSection = () => {
     }
   };
 
-  // Open Calendly for the 2-hour program
-  const openTwoHourCalendly = (e: React.MouseEvent) => {
-    e.preventDefault();
-    // Check if Calendly is loaded
-    if (window.Calendly) {
-      window.Calendly.initPopupWidget({
-        url: 'https://calendly.com/germaine-washington-tutoring/2-hour-lsat-tutoring'
-      });
-    } else {
-      console.error('Calendly not loaded yet');
-      // Fallback - open directly
-      window.open('https://calendly.com/germaine-washington-tutoring/2-hour-lsat-tutoring', '_blank');
-    }
-  };
-  
-  // Open Calendly for the 8-hour program
-  const open8HourCalendly = (e: React.MouseEvent) => {
-    e.preventDefault();
-    // Check if Calendly is loaded
-    if (window.Calendly) {
-      window.Calendly.initPopupWidget({
-        url: 'https://calendly.com/germaine-washington-tutoring/8-hr-lsat-plan'
-      });
-    } else {
-      console.error('Calendly not loaded yet');
-      // Fallback - open directly
-      window.open('https://calendly.com/germaine-washington-tutoring/8-hr-lsat-plan', '_blank');
-    }
-  };
-  
-  // Open Calendly for the 24-hour program
-  const open24HourCalendly = (e: React.MouseEvent) => {
-    e.preventDefault();
-    // Check if Calendly is loaded
-    if (window.Calendly) {
-      window.Calendly.initPopupWidget({
-        url: 'https://calendly.com/germaine-washington-tutoring/24-hour-lsat-premium-mastery-program'
-      });
-    } else {
-      console.error('Calendly not loaded yet');
-      // Fallback - open directly
-      window.open('https://calendly.com/germaine-washington-tutoring/24-hour-lsat-premium-mastery-program', '_blank');
-    }
-  };
-  
-  // Handler for program buttons
   const handleProgramButtonClick = (programTitle: string) => {
-    console.log(`Button clicked for: ${programTitle}`);
-    
-    // Different actions based on program title
-    if (programTitle === "2-Hour LSAT Acceleration Session") {
-      openTwoHourCalendly(new MouseEvent('click') as any);
-    } else if (programTitle === "8-Hour LSAT Elevation Course") {
-      open8HourCalendly(new MouseEvent('click') as any);
-    } else if (programTitle === "24-Hour LSAT Mastery Program") {
-      open24HourCalendly(new MouseEvent('click') as any);
+    let url = '';
+    if (programTitle === "3-Hour LSAT Program") {
+      url = 'https://calendly.com/germaine-washington-tutoring/2-hour-lsat-tutoring';
+    } else if (programTitle === "12-Hour LSAT Elevation Course") {
+      url = 'https://calendly.com/germaine-washington-tutoring/8-hr-lsat-plan';
+    } else if (programTitle === "36-Hour LSAT Mastery Program") {
+      url = 'https://calendly.com/germaine-washington-tutoring/24-hour-lsat-premium-mastery-program';
+    }
+
+    if (url) {
+      if (window.Calendly) {
+        window.Calendly.initPopupWidget({ url });
+      } else {
+        window.open(url, '_blank');
+      }
     }
   };
 
