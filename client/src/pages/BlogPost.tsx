@@ -2,6 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useRoute, Link } from "wouter";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface BlogPost {
   slug: string;
@@ -42,6 +44,9 @@ const BlogPost = () => {
   if (!match) {
     return null;
   }
+
+  // Helper to determine if content is HTML or Markdown
+  const isHtml = (str: string) => /<[a-z][\s\S]*>/i.test(str);
 
   return (
     <div className="bg-background min-h-screen">
@@ -127,10 +132,18 @@ const BlogPost = () => {
               </header>
 
               <div className="bg-white rounded-xl shadow-md p-8 md:p-12">
-                <div 
-                  className="prose prose-lg max-w-none prose-headings:font-heading prose-headings:text-primary prose-p:text-foreground prose-p:leading-relaxed prose-strong:text-primary prose-a:text-accent prose-a:no-underline hover:prose-a:underline prose-li:text-foreground prose-blockquote:border-accent prose-blockquote:text-foreground/80"
-                  dangerouslySetInnerHTML={{ __html: post.content }}
-                />
+                {isHtml(post.content) ? (
+                  <div 
+                    className="prose prose-lg max-w-none prose-headings:font-heading prose-headings:text-primary prose-p:text-foreground prose-p:leading-relaxed prose-strong:text-primary prose-a:text-accent prose-a:no-underline hover:prose-a:underline prose-li:text-foreground prose-blockquote:border-accent prose-blockquote:text-foreground/80"
+                    dangerouslySetInnerHTML={{ __html: post.content }}
+                  />
+                ) : (
+                  <div className="prose prose-lg max-w-none prose-headings:font-heading prose-headings:text-primary prose-p:text-foreground prose-p:leading-relaxed prose-strong:text-primary prose-a:text-accent prose-a:no-underline hover:prose-a:underline prose-li:text-foreground prose-blockquote:border-accent prose-blockquote:text-foreground/80">
+                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                      {post.content}
+                    </ReactMarkdown>
+                  </div>
+                )}
               </div>
 
               <div className="mt-12 bg-muted/30 rounded-xl p-8 text-center">
