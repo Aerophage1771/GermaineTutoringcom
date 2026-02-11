@@ -568,6 +568,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         tags: JSON.parse(p.tags || "[]"),
         date: p.published_at || p.created_at,
         snippet: p.excerpt,
+        readTime: Math.max(1, Math.ceil((p.content?.replace(/<[^>]*>/g, '').split(/\s+/).length || 0) / 250)),
       })));
     } catch (error) {
       console.error("Error fetching blog posts:", error);
@@ -586,6 +587,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         tags: JSON.parse(post.tags || "[]"),
         date: post.published_at || post.created_at,
         snippet: post.excerpt,
+        readTime: Math.max(1, Math.ceil((post.content?.replace(/<[^>]*>/g, '').split(/\s+/).length || 0) / 250)),
       });
     } catch (error) {
       console.error("Error fetching blog post:", error);

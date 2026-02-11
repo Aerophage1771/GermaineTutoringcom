@@ -123,6 +123,24 @@
   }
 }
 
+/* Blog article content styles */
+.blog-article-content .prose h2 {
+  scroll-margin-top: 80px;
+}
+
+.blog-article-content .prose h3 {
+  scroll-margin-top: 80px;
+}
+
+/* Hide scrollbar for filter bar */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* TipTap Editor Styles */
 .tiptap {
   outline: none;
