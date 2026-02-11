@@ -93,6 +93,7 @@ scripts/              # Data import utilities
 - **subscribers** — Email newsletter sign-ups
 - **consultations** — Consultation booking requests
 - **blog_posts** — Blog posts CMS (title, slug, HTML content, excerpt, featured image, meta description, tags, status draft/published, timestamps)
+- **blog_comments** — Blog post comments (post_slug, author_name, comment text, timestamps)
 - **lsat_questions** — Combined LSAT question metadata
 - **lr_questions** — Logical Reasoning questions (optimized, separated table)
 - **rc_questions** — Reading Comprehension questions (optimized, separated table)
@@ -158,7 +159,7 @@ scripts/              # Data import utilities
 - **Problem Log**: Track mistakes with correct reasoning, student flaws, and rules for the future
 - **Progress Tracking**: Practice activity history with performance statistics and charts
 - **Learning Library**: Organized study resources
-- **Blog CMS**: Database-backed blog with TipTap rich text editor, image uploads, draft/publish workflow, SEO fields (meta descriptions, slugs), HTML sanitization
+- **Blog CMS**: Database-backed blog with TipTap rich text editor, image uploads, draft/publish workflow, SEO fields (meta descriptions, slugs), HTML sanitization, social share buttons (Twitter/X, Facebook, LinkedIn, copy link), comment section, scroll-to-top button
 - **Responsive Design**: Mobile, tablet, and desktop layouts with custom Tailwind theme
 
 ## External Dependencies
