@@ -389,3 +389,19 @@ export type InsertLrQuestion = z.infer<typeof insertLrQuestionSchema>;
 export type LrQuestion = typeof lrQuestions.$inferSelect;
 export type InsertRcQuestion = z.infer<typeof insertRcQuestionSchema>;
 export type RcQuestion = typeof rcQuestions.$inferSelect;
+
+export const blogComments = pgTable("blog_comments", {
+  id: serial("id").primaryKey(),
+  post_slug: text("post_slug").notNull(),
+  author_name: text("author_name").notNull(),
+  comment: text("comment").notNull(),
+  created_at: timestamp("created_at").defaultNow(),
+});
+
+export const insertBlogCommentSchema = createInsertSchema(blogComments).omit({
+  id: true,
+  created_at: true,
+});
+
+export type InsertBlogComment = z.infer<typeof insertBlogCommentSchema>;
+export type BlogComment = typeof blogComments.$inferSelect;

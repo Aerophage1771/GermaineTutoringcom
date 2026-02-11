@@ -8,7 +8,8 @@ import {
   insertProblemLogSchema,
   insertPracticeActivitySchema,
   insertTimeAddOnSchema,
-  insertBlogPostSchema
+  insertBlogPostSchema,
+  insertBlogCommentSchema
 } from "@shared/schema";
 import multer from "multer";
 import path from "path";
@@ -592,6 +593,38 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching blog post:", error);
       res.status(500).json({ message: "Failed to fetch blog post" });
+    }
+  });
+
+  app.get("/api/blog/posts/:slug/comments", async (req, res) => {
+    try {
+      const comments = await storage.getCommentsByPostSlug(req.params.slug);
+      res.json(comments);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+      res.status(500).json({ message: "Failed to fetch comments" });
+    }
+  });
+
+  app.post("/api/blog/posts/:slug/comments", async (req, res) => {
+    try {
+      const commentInputSchema = z.object({
+        author_name: z.string().min(1),
+        comment: z.string().min(1).max(2000),
+      });
+      const validated = commentInputSchema.parse(req.body);
+      const comment = await storage.createComment({
+        post_slug: req.params.slug,
+        author_name: validated.author_name,
+        comment: validated.comment,
+      });
+      res.status(201).json(comment);
+    } catch (error: any) {
+      if (error?.name === "ZodError") {
+        return res.status(400).json({ message: "Invalid comment data", errors: error.errors });
+      }
+      console.error("Error creating comment:", error);
+      res.status(500).json({ message: "Failed to create comment" });
     }
   });
 

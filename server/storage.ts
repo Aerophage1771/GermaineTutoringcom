@@ -11,7 +11,8 @@ import {
   rcQuestions, type RcQuestion,
   practiceSets, type PracticeSet, type InsertPracticeSet,
   questionDetails, type QuestionDetails, type InsertQuestionDetails,
-  blogPosts, type BlogPost as BlogPostType, type InsertBlogPost
+  blogPosts, type BlogPost as BlogPostType, type InsertBlogPost,
+  blogComments, type BlogComment, type InsertBlogComment
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql, and, inArray, like, or } from "drizzle-orm";
@@ -108,6 +109,9 @@ export interface IStorage {
   createBlogPost(post: InsertBlogPost): Promise<BlogPostType>;
   updateBlogPost(id: number, updates: Partial<InsertBlogPost>): Promise<BlogPostType>;
   deleteBlogPost(id: number): Promise<void>;
+
+  getCommentsByPostSlug(slug: string): Promise<BlogComment[]>;
+  createComment(comment: InsertBlogComment): Promise<BlogComment>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -785,6 +789,22 @@ export class DatabaseStorage implements IStorage {
 
   async deleteBlogPost(id: number): Promise<void> {
     await db.delete(blogPosts).where(eq(blogPosts.id, id));
+  }
+
+  async getCommentsByPostSlug(slug: string): Promise<BlogComment[]> {
+    return await db
+      .select()
+      .from(blogComments)
+      .where(eq(blogComments.post_slug, slug))
+      .orderBy(desc(blogComments.created_at));
+  }
+
+  async createComment(comment: InsertBlogComment): Promise<BlogComment> {
+    const [created] = await db
+      .insert(blogComments)
+      .values(comment)
+      .returning();
+    return created;
   }
 }
 
