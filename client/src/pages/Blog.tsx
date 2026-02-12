@@ -1,9 +1,9 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Calendar, Clock, ArrowRight, BookOpen, Sparkles, Filter, Search, TrendingUp, Mail, GraduationCap } from "lucide-react";
+import { Calendar, Clock, ArrowRight, BookOpen, Sparkles, Filter, Search } from "lucide-react";
 import { useSEO } from "@/hooks/use-seo";
 
 interface BlogPostMeta {
@@ -61,17 +61,6 @@ const getPrimaryCategory = (tags: string[]) => {
 const Blog = () => {
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
-  const [ckEmail, setCkEmail] = useState("");
-  const [ckStatus, setCkStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
-
-  useEffect(() => {
-    if (!document.querySelector('script[src="https://f.convertkit.com/ckjs/ck.5.js"]')) {
-      const script = document.createElement("script");
-      script.src = "https://f.convertkit.com/ckjs/ck.5.js";
-      script.async = true;
-      document.head.appendChild(script);
-    }
-  }, []);
 
   useSEO({
     title: "LSAT Strategy Blog",
@@ -106,11 +95,6 @@ const Blog = () => {
     }
     return result;
   }, [posts, activeFilter, searchQuery]);
-
-  const popularPosts = useMemo(() => {
-    if (!posts) return [];
-    return posts.slice(0, 4);
-  }, [posts]);
 
   const showFeatured = activeFilter === "all";
   const featuredPost = showFeatured ? posts?.[0] : null;
@@ -234,7 +218,29 @@ const Blog = () => {
             ))}
           </div>
 
-          <div className="grid lg:grid-cols-[1fr_300px] gap-10">
+          {/* Search Bar */}
+          <div className="max-w-md mx-auto mb-8">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/40" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search articles..."
+                className="w-full text-sm border border-border rounded-full px-4 py-2.5 pl-10 pr-8 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-colors bg-white placeholder:text-foreground/40"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground/40 hover:text-foreground/70 text-xs"
+                >
+                  ✕
+                </button>
+              )}
+            </div>
+          </div>
+
+          <div>
             {/* Main Content Area */}
             <div>
               {/* Loading State */}
@@ -253,7 +259,7 @@ const Blog = () => {
 
               {/* Post Cards Grid */}
               {regularPosts.length > 0 && (
-                <div className="grid gap-6 md:grid-cols-2">
+                <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                   {regularPosts.map((post, index) => (
                     <article
                       key={post.slug}
@@ -364,145 +370,6 @@ const Blog = () => {
                 </div>
               )}
             </div>
-
-            {/* Sidebar */}
-            <aside className="space-y-6 lg:sticky lg:top-16 lg:self-start">
-
-              {/* Author Branding */}
-              <div className="bg-white rounded-2xl border border-border p-6 text-center">
-                <img
-                  src="/germaine_photo.jpg"
-                  alt="Germaine Washington"
-                  className="w-20 h-20 rounded-full mx-auto mb-3 object-cover border-2 border-primary/20"
-                />
-                <h3 className="font-heading font-bold text-primary text-sm mb-1">Germaine Washington</h3>
-                <p className="text-xs text-accent font-semibold mb-2">180 LSAT Scorer</p>
-                <p className="text-xs text-foreground/60 leading-relaxed">
-                  Every post here comes directly from me, built on what I have learned through years of working one-on-one with students and from earning a perfect LSAT score.
-                </p>
-              </div>
-
-              {/* Search */}
-              <div className="bg-white rounded-2xl border border-border p-5">
-                <h4 className="font-heading font-bold text-primary text-sm mb-3 flex items-center gap-2">
-                  <Search className="w-4 h-4 text-accent" />
-                  Search Articles
-                </h4>
-                <div className="relative">
-                  <input
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search by title or topic..."
-                    className="w-full text-sm border border-border rounded-lg px-3 py-2.5 pr-8 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-colors bg-muted/30 placeholder:text-foreground/40"
-                  />
-                  {searchQuery && (
-                    <button
-                      onClick={() => setSearchQuery("")}
-                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-foreground/40 hover:text-foreground/70 text-xs"
-                    >
-                      ✕
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {/* Popular Posts */}
-              {popularPosts.length > 0 && (
-                <div className="bg-white rounded-2xl border border-border p-5">
-                  <h4 className="font-heading font-bold text-primary text-sm mb-4 flex items-center gap-2">
-                    <TrendingUp className="w-4 h-4 text-accent" />
-                    Popular Articles
-                  </h4>
-                  <div className="space-y-3">
-                    {popularPosts.map((post, i) => (
-                      <Link key={post.slug} href={`/blog/${post.slug}`} className="group flex items-start gap-3 no-underline">
-                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/10 text-primary text-xs font-bold flex items-center justify-center mt-0.5">
-                          {i + 1}
-                        </span>
-                        <span className="text-sm text-foreground/80 leading-snug group-hover:text-accent transition-colors line-clamp-2">
-                          {post.title}
-                        </span>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Email Signup — ConvertKit */}
-              <div className="bg-gradient-to-br from-primary/5 to-accent/5 rounded-2xl border border-border/50 p-5">
-                <h4 className="font-heading font-bold text-primary text-sm mb-1.5 flex items-center gap-2">
-                  <Mail className="w-4 h-4 text-accent" />
-                  Get LSAT Tips by Email
-                </h4>
-                <p className="text-xs text-foreground/60 mb-3 leading-relaxed">
-                  New strategies and articles delivered to your inbox. No spam.
-                </p>
-                {ckStatus === "success" ? (
-                  <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-center">
-                    <p className="text-green-800 text-sm font-semibold mb-0.5">You're in!</p>
-                    <p className="text-green-700 text-xs">Check your email to confirm your subscription.</p>
-                  </div>
-                ) : (
-                  <form
-                    onSubmit={async (e) => {
-                      e.preventDefault();
-                      if (!ckEmail.trim()) return;
-                      setCkStatus("submitting");
-                      try {
-                        const formData = new FormData();
-                        formData.append("email_address", ckEmail.trim());
-                        await fetch("https://app.kit.com/forms/9078575/subscriptions", {
-                          method: "POST",
-                          body: formData,
-                          mode: "no-cors",
-                        });
-                        setCkStatus("success");
-                      } catch {
-                        setCkStatus("error");
-                      }
-                    }}
-                    className="space-y-2"
-                  >
-                    <input
-                      type="email"
-                      value={ckEmail}
-                      onChange={(e) => setCkEmail(e.target.value)}
-                      placeholder="your@email.com"
-                      required
-                      className="w-full text-sm border border-border rounded-lg px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-colors bg-white placeholder:text-foreground/40"
-                    />
-                    {ckStatus === "error" && (
-                      <p className="text-red-600 text-xs">Something went wrong. Please try again.</p>
-                    )}
-                    <button
-                      type="submit"
-                      disabled={ckStatus === "submitting"}
-                      className="w-full bg-primary text-white text-sm font-semibold py-2.5 rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-60"
-                    >
-                      {ckStatus === "submitting" ? "Subscribing..." : "Subscribe"}
-                    </button>
-                  </form>
-                )}
-              </div>
-
-              {/* Quick Link to Tutoring */}
-              <Link href="/programs" className="group block bg-white rounded-2xl border border-border p-5 hover:border-accent/40 hover:shadow-md transition-all no-underline">
-                <h4 className="font-heading font-bold text-primary text-sm mb-1.5 flex items-center gap-2">
-                  <GraduationCap className="w-4 h-4 text-accent" />
-                  Ready for 1-on-1 Tutoring?
-                </h4>
-                <p className="text-xs text-foreground/60 leading-relaxed mb-3">
-                  Get a personalized study plan and guided practice from a 180 scorer.
-                </p>
-                <span className="inline-flex items-center gap-1 text-xs font-semibold text-accent group-hover:text-accent/80 transition-colors">
-                  View Programs
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </span>
-              </Link>
-
-            </aside>
-
           </div>
         </div>
       </main>
