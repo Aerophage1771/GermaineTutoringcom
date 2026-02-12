@@ -17,6 +17,7 @@ import { promises as fs } from "fs";
 import sanitizeHtml from "sanitize-html";
 import { z } from "zod";
 import bcrypt from "bcrypt";
+import sharp from "sharp";
 
 const sanitizeOptions: sanitizeHtml.IOptions = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2', 'h3', 'u', 's', 'hr']),
@@ -751,17 +752,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Image upload for blog
+  // Image upload for blog (with compression)
   app.post("/api/admin/upload", requireAdmin, upload.single("image"), async (req, res) => {
     try {
       if (!req.file) {
         return res.status(400).json({ message: "No image provided" });
       }
-      const url = `/uploads/${req.file.filename}`;
+
+      const originalPath = req.file.path;
+      const webpFilename = req.file.filename.replace(/\.[^.]+$/, ".webp");
+      const webpPath = path.join(uploadDir, webpFilename);
+
+      await sharp(originalPath)
+        .resize(1200, 800, { fit: "inside", withoutEnlargement: true })
+        .webp({ quality: 80 })
+        .toFile(webpPath);
+
+      await fs.unlink(originalPath).catch(() => {});
+
+      const url = `/uploads/${webpFilename}`;
       res.json({ url });
     } catch (error) {
       console.error("Error uploading image:", error);
-      res.status(500).json({ message: "Failed to upload image" });
+      if (req.file) {
+        const url = `/uploads/${req.file.filename}`;
+        res.json({ url });
+      } else {
+        res.status(500).json({ message: "Failed to upload image" });
+      }
     }
   });
 
