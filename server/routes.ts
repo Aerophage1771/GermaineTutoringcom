@@ -30,7 +30,7 @@ const sanitizeOptions: sanitizeHtml.IOptions = {
 
 const blogPostInputSchema = z.object({
   title: z.string().min(1).max(500),
-  slug: z.string().min(1).max(200).regex(/^[a-z0-9-]+$/),
+  slug: z.string().min(1).max(200).transform(s => s.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-').replace(/^-|-$/g, '')).pipe(z.string().min(1).regex(/^[a-z0-9-]+$/)),
   content: z.string().min(1),
   excerpt: z.string().min(1).max(1000),
   meta_description: z.string().max(300).optional().nullable(),
