@@ -10,7 +10,10 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.use("/uploads", express.static(path.join(process.cwd(), "public", "uploads")));
+app.use("/uploads", express.static(path.join(process.cwd(), "public", "uploads"), {
+  maxAge: "30d",
+  immutable: true,
+}));
 
 // Set up session middleware
 const MemoryStoreSession = MemoryStore(session);
