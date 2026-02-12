@@ -171,17 +171,20 @@ const Blog = () => {
                   Featured Article
                 </p>
                 <Link href={`/blog/${featuredPost.slug}`} className="group block bg-white rounded-2xl border border-border overflow-hidden hover:border-primary/40 hover:shadow-lg transition-all duration-200 cursor-pointer no-underline">
-                    {featuredPost.featured_image ? (
-                      <img
-                        src={featuredPost.featured_image}
-                        alt={featuredPost.title}
-                        className="w-full h-48 object-cover"
-                      />
-                    ) : (
-                      <div className={`w-full h-48 bg-gradient-to-br ${THUMBNAIL_COLORS[0].bg} flex items-center justify-center`}>
-                        <BookOpen className={`w-12 h-12 ${THUMBNAIL_COLORS[0].icon}`} />
-                      </div>
-                    )}
+                    <div className="relative w-full h-48 overflow-hidden">
+                      {featuredPost.featured_image ? (
+                        <img
+                          src={featuredPost.featured_image}
+                          alt={featuredPost.title}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className={`w-full h-full bg-gradient-to-br ${THUMBNAIL_COLORS[0].bg} flex items-center justify-center`}>
+                          <BookOpen className={`w-12 h-12 ${THUMBNAIL_COLORS[0].icon}`} />
+                        </div>
+                      )}
+                      <div className="absolute inset-0 bg-primary/20 mix-blend-multiply" />
+                    </div>
                     <div className="p-5">
                       <span className="inline-block text-xs font-semibold px-2.5 py-1 rounded-full bg-accent/10 text-accent mb-3">
                         {getTagLabel(getPrimaryCategory(featuredPost.tags))}
@@ -270,6 +273,7 @@ const Blog = () => {
                           ) : (
                             <BookOpen className={`w-14 h-14 ${THUMBNAIL_COLORS[(index + 1) % THUMBNAIL_COLORS.length].icon} opacity-60`} />
                           )}
+                          <div className="absolute inset-0 bg-primary/20 mix-blend-multiply" />
                         </div>
                       </Link>
 
