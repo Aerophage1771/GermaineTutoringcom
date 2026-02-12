@@ -9,6 +9,7 @@ export const users = pgTable("users", {
   username: text("username").notNull().unique(),
   email: text("email").notNull().unique(),
   password: text("password").notNull(),
+  role: text("role").notNull().default("student"),
   sessions_held: integer("sessions_held").default(0).notNull(),
   time_remaining: decimal("time_remaining", { precision: 4, scale: 1 }).default("0.0").notNull(),
   bonus_test_review_time: decimal("bonus_test_review_time", { precision: 4, scale: 1 }).default("0.0").notNull(),
@@ -19,6 +20,7 @@ export const insertUserSchema = createInsertSchema(users).pick({
   username: true,
   email: true,
   password: true,
+  role: true,
 });
 
 export type InsertUser = z.infer<typeof insertUserSchema>;

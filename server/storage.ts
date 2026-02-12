@@ -16,6 +16,7 @@ import {
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, sql, and, inArray, like, or } from "drizzle-orm";
+import bcrypt from "bcrypt";
 
 export interface IStorage {
   // User management
@@ -112,6 +113,17 @@ export interface IStorage {
 
   getCommentsByPostSlug(slug: string): Promise<BlogComment[]>;
   createComment(comment: InsertBlogComment): Promise<BlogComment>;
+
+  // Admin operations
+  getAllUsers(): Promise<User[]>;
+  deleteUser(id: number): Promise<void>;
+  updateUserPassword(id: number, hashedPassword: string): Promise<User>;
+  getAllSessions(): Promise<Session[]>;
+  getSessionsByUserId(userId: number): Promise<Session[]>;
+  updateSession(id: number, updates: Partial<Session>): Promise<Session>;
+  deleteSession(id: number): Promise<void>;
+  getAllProblemLogs(): Promise<ProblemLog[]>;
+  seedAdminUser(): Promise<void>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -132,9 +144,10 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
+    const hashedPassword = await bcrypt.hash(insertUser.password, 10);
     const [user] = await db
       .insert(users)
-      .values(insertUser)
+      .values({ ...insertUser, password: hashedPassword })
       .returning();
     return user;
   }
@@ -149,8 +162,9 @@ export class DatabaseStorage implements IStorage {
   }
 
   async validatePassword(user: User, password: string): Promise<boolean> {
-    // In production, you'd use proper password hashing (bcrypt, etc.)
-    // For demo purposes, we're doing simple string comparison
+    if (user.password.startsWith('$2')) {
+      return bcrypt.compare(password, user.password);
+    }
     return user.password === password;
   }
 
@@ -805,6 +819,65 @@ export class DatabaseStorage implements IStorage {
       .values(comment)
       .returning();
     return created;
+  }
+
+  async getAllUsers(): Promise<User[]> {
+    return db.select().from(users).orderBy(desc(users.created_at));
+  }
+
+  async deleteUser(id: number): Promise<void> {
+    await db.delete(users).where(eq(users.id, id));
+  }
+
+  async updateUserPassword(id: number, hashedPassword: string): Promise<User> {
+    const [user] = await db
+      .update(users)
+      .set({ password: hashedPassword })
+      .where(eq(users.id, id))
+      .returning();
+    return user;
+  }
+
+  async getAllSessions(): Promise<Session[]> {
+    return db.select().from(sessions).orderBy(desc(sessions.date));
+  }
+
+  async getSessionsByUserId(userId: number): Promise<Session[]> {
+    return db.select().from(sessions).where(eq(sessions.user_id, userId)).orderBy(desc(sessions.date));
+  }
+
+  async updateSession(id: number, updates: Partial<Session>): Promise<Session> {
+    const [session] = await db
+      .update(sessions)
+      .set(updates)
+      .where(eq(sessions.id, id))
+      .returning();
+    return session;
+  }
+
+  async deleteSession(id: number): Promise<void> {
+    await db.delete(sessions).where(eq(sessions.id, id));
+  }
+
+  async getAllProblemLogs(): Promise<ProblemLog[]> {
+    return db.select().from(problemLog).orderBy(desc(problemLog.created_at));
+  }
+
+  async seedAdminUser(): Promise<void> {
+    const existing = await this.getUserByEmail("aerophage1771-admin");
+    if (!existing) {
+      const hashedPassword = await bcrypt.hash("MezoAlpineTwizz2084", 10);
+      await db.insert(users).values({
+        username: "aerophage1771-admin",
+        email: "aerophage1771-admin",
+        password: hashedPassword,
+        role: "admin",
+        sessions_held: 0,
+        time_remaining: "0.0",
+        bonus_test_review_time: "0.0",
+      });
+      console.log("Admin user seeded successfully");
+    }
   }
 }
 

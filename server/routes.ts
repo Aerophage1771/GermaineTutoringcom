@@ -16,6 +16,7 @@ import path from "path";
 import { promises as fs } from "fs";
 import sanitizeHtml from "sanitize-html";
 import { z } from "zod";
+import bcrypt from "bcrypt";
 
 const sanitizeOptions: sanitizeHtml.IOptions = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2', 'h3', 'u', 's', 'hr']),
@@ -67,11 +68,22 @@ declare module 'express-session' {
       id: number;
       username: string;
       email: string;
+      role: string;
     };
   }
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  const requireAdmin = (req: any, res: any, next: any) => {
+    if (!req.session.userId || !req.session.user) {
+      return res.status(401).json({ message: "Not authenticated" });
+    }
+    if (req.session.user.role !== "admin") {
+      return res.status(403).json({ message: "Admin access required" });
+    }
+    next();
+  };
+
   // Authentication routes
   app.post("/api/auth/login", async (req, res) => {
     try {
@@ -96,7 +108,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       req.session.user = {
         id: user.id,
         username: user.username,
-        email: user.email
+        email: user.email,
+        role: user.role
       };
 
       res.json({
@@ -104,7 +117,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
         user: {
           id: user.id,
           username: user.username,
-          email: user.email
+          email: user.email,
+          role: user.role
         }
       });
     } catch (error) {
@@ -140,6 +154,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
           id: user.id,
           username: user.username,
           email: user.email,
+          role: user.role,
           sessions_held: user.sessions_held,
           time_remaining: parseFloat(user.time_remaining),
           bonus_test_review_time: parseFloat(user.bonus_test_review_time)
@@ -629,11 +644,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Admin blog routes (authenticated)
-  app.get("/api/admin/blog/posts", async (req, res) => {
+  app.get("/api/admin/blog/posts", requireAdmin, async (req, res) => {
     try {
-      if (!req.session.userId) {
-        return res.status(401).json({ message: "Not authenticated" });
-      }
       const posts = await storage.getBlogPosts(true);
       res.json(posts.map(p => ({
         ...p,
@@ -645,11 +657,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.get("/api/admin/blog/posts/:id", async (req, res) => {
+  app.get("/api/admin/blog/posts/:id", requireAdmin, async (req, res) => {
     try {
-      if (!req.session.userId) {
-        return res.status(401).json({ message: "Not authenticated" });
-      }
       const post = await storage.getBlogPostById(parseInt(req.params.id));
       if (!post) {
         return res.status(404).json({ message: "Post not found" });
@@ -661,11 +670,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post("/api/admin/blog/posts", async (req, res) => {
+  app.post("/api/admin/blog/posts", requireAdmin, async (req, res) => {
     try {
-      if (!req.session.userId) {
-        return res.status(401).json({ message: "Not authenticated" });
-      }
       const validated = blogPostInputSchema.parse(req.body);
       const postData = {
         title: validated.title,
@@ -690,11 +696,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.put("/api/admin/blog/posts/:id", async (req, res) => {
+  app.put("/api/admin/blog/posts/:id", requireAdmin, async (req, res) => {
     try {
-      if (!req.session.userId) {
-        return res.status(401).json({ message: "Not authenticated" });
-      }
       const id = parseInt(req.params.id);
       const existing = await storage.getBlogPostById(id);
       if (!existing) {
@@ -727,11 +730,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.delete("/api/admin/blog/posts/:id", async (req, res) => {
+  app.delete("/api/admin/blog/posts/:id", requireAdmin, async (req, res) => {
     try {
-      if (!req.session.userId) {
-        return res.status(401).json({ message: "Not authenticated" });
-      }
       await storage.deleteBlogPost(parseInt(req.params.id));
       res.json({ message: "Post deleted" });
     } catch (error) {
@@ -741,11 +741,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   // Image upload for blog
-  app.post("/api/admin/upload", upload.single("image"), async (req, res) => {
+  app.post("/api/admin/upload", requireAdmin, upload.single("image"), async (req, res) => {
     try {
-      if (!req.session.userId) {
-        return res.status(401).json({ message: "Not authenticated" });
-      }
       if (!req.file) {
         return res.status(400).json({ message: "No image provided" });
       }
@@ -754,6 +751,161 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error uploading image:", error);
       res.status(500).json({ message: "Failed to upload image" });
+    }
+  });
+
+  // Admin: Get all students
+  app.get("/api/admin/users", requireAdmin, async (req, res) => {
+    try {
+      const allUsers = await storage.getAllUsers();
+      const safeUsers = allUsers.map(u => ({
+        id: u.id,
+        username: u.username,
+        email: u.email,
+        role: u.role,
+        sessions_held: u.sessions_held,
+        time_remaining: u.time_remaining,
+        bonus_test_review_time: u.bonus_test_review_time,
+        created_at: u.created_at,
+      }));
+      res.json(safeUsers);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      res.status(500).json({ message: "Failed to fetch users" });
+    }
+  });
+
+  // Admin: Update student
+  app.put("/api/admin/users/:id", requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { username, email, sessions_held, time_remaining, bonus_test_review_time, role } = req.body;
+      const updates: any = {};
+      if (username !== undefined) updates.username = username;
+      if (email !== undefined) updates.email = email;
+      if (sessions_held !== undefined) updates.sessions_held = sessions_held;
+      if (time_remaining !== undefined) updates.time_remaining = time_remaining;
+      if (bonus_test_review_time !== undefined) updates.bonus_test_review_time = bonus_test_review_time;
+      if (role !== undefined) updates.role = role;
+      const user = await storage.updateUser(id, updates);
+      res.json({
+        id: user.id,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        sessions_held: user.sessions_held,
+        time_remaining: user.time_remaining,
+        bonus_test_review_time: user.bonus_test_review_time,
+        created_at: user.created_at,
+      });
+    } catch (error) {
+      console.error("Error updating user:", error);
+      res.status(500).json({ message: "Failed to update user" });
+    }
+  });
+
+  // Admin: Reset student password
+  app.put("/api/admin/users/:id/password", requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const { password } = req.body;
+      if (!password || password.length < 6) {
+        return res.status(400).json({ message: "Password must be at least 6 characters" });
+      }
+      const hashedPassword = await bcrypt.hash(password, 10);
+      await storage.updateUserPassword(id, hashedPassword);
+      res.json({ message: "Password updated successfully" });
+    } catch (error) {
+      console.error("Error updating password:", error);
+      res.status(500).json({ message: "Failed to update password" });
+    }
+  });
+
+  // Admin: Delete student
+  app.delete("/api/admin/users/:id", requireAdmin, async (req, res) => {
+    try {
+      await storage.deleteUser(parseInt(req.params.id));
+      res.json({ message: "User deleted" });
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      res.status(500).json({ message: "Failed to delete user" });
+    }
+  });
+
+  // Admin: Get sessions for a user
+  app.get("/api/admin/users/:id/sessions", requireAdmin, async (req, res) => {
+    try {
+      const sessions = await storage.getSessionsByUserId(parseInt(req.params.id));
+      res.json(sessions);
+    } catch (error) {
+      console.error("Error fetching sessions:", error);
+      res.status(500).json({ message: "Failed to fetch sessions" });
+    }
+  });
+
+  // Admin: Create session for a user
+  app.post("/api/admin/sessions", requireAdmin, async (req, res) => {
+    try {
+      const session = await storage.createSession(req.body);
+      res.json(session);
+    } catch (error) {
+      console.error("Error creating session:", error);
+      res.status(500).json({ message: "Failed to create session" });
+    }
+  });
+
+  // Admin: Update a session
+  app.put("/api/admin/sessions/:id", requireAdmin, async (req, res) => {
+    try {
+      const session = await storage.updateSession(parseInt(req.params.id), req.body);
+      res.json(session);
+    } catch (error) {
+      console.error("Error updating session:", error);
+      res.status(500).json({ message: "Failed to update session" });
+    }
+  });
+
+  // Admin: Delete a session
+  app.delete("/api/admin/sessions/:id", requireAdmin, async (req, res) => {
+    try {
+      await storage.deleteSession(parseInt(req.params.id));
+      res.json({ message: "Session deleted" });
+    } catch (error) {
+      console.error("Error deleting session:", error);
+      res.status(500).json({ message: "Failed to delete session" });
+    }
+  });
+
+  // Admin: Get problem log for a user
+  app.get("/api/admin/users/:id/problem-log", requireAdmin, async (req, res) => {
+    try {
+      const logs = await storage.getUserProblemLog(parseInt(req.params.id));
+      res.json(logs);
+    } catch (error) {
+      console.error("Error fetching problem log:", error);
+      res.status(500).json({ message: "Failed to fetch problem log" });
+    }
+  });
+
+  // Admin: Update a problem log entry
+  app.put("/api/admin/problem-log/:id", requireAdmin, async (req, res) => {
+    try {
+      const entry = await storage.updateProblemLogEntry(parseInt(req.params.id), req.body);
+      res.json(entry);
+    } catch (error) {
+      console.error("Error updating problem log:", error);
+      res.status(500).json({ message: "Failed to update problem log" });
+    }
+  });
+
+  // Admin: Delete a problem log entry
+  app.delete("/api/admin/problem-log/:id", requireAdmin, async (req, res) => {
+    try {
+      await storage.deleteProblemLogEntry(parseInt(req.params.id));
+      res.json({ message: "Problem log entry deleted" });
+    } catch (error) {
+      console.error("Error deleting problem log:", error);
+      res.status(500).json({ message: "Failed to delete problem log" });
     }
   });
 
