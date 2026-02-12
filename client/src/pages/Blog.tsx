@@ -357,7 +357,7 @@ const Blog = () => {
                 <h3 className="font-heading font-bold text-primary text-sm mb-1">Germaine Washington</h3>
                 <p className="text-xs text-accent font-semibold mb-2">180 LSAT Scorer</p>
                 <p className="text-xs text-foreground/60 leading-relaxed">
-                  Every article on this blog is written by Germaine — drawing from years of tutoring experience and a perfect score.
+                  Every post here comes directly from me, built on what I have learned through years of working one-on-one with students and from earning a perfect LSAT score.
                 </p>
               </div>
 
