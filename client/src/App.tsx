@@ -27,6 +27,7 @@ import CustomSets from "@/pages/CustomSets";
 import SimulateTestInterface from "@/pages/SimulateTestInterface";
 import Progress from "@/pages/Progress";
 import AdminBlog from "@/pages/AdminBlog";
+import AdminDashboard from "@/pages/AdminDashboard";
 
 function Router() {
   return (
@@ -50,6 +51,7 @@ function Router() {
       <Route path="/custom-sets" component={CustomSets} />
       <Route path="/simulate-test/:testNumber" component={SimulateTestInterface} />
       <Route path="/progress" component={Progress} />
+      <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route path="/admin/blog" component={AdminBlog} />
       <Route path="/admin/blog/new" component={AdminBlog} />
       <Route path="/admin/blog/edit/:id" component={AdminBlog} />

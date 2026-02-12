@@ -14,14 +14,13 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [, setLocation] = useLocation();
   const { toast } = useToast();
-  const { login, isLoading, isAuthenticated } = useAuth();
+  const { login, isLoading, isAuthenticated, user } = useAuth();
 
-  // Redirect if already authenticated
   useEffect(() => {
-    if (isAuthenticated) {
-      setLocation("/dashboard");
+    if (isAuthenticated && user) {
+      setLocation(user.role === "admin" ? "/admin/dashboard" : "/dashboard");
     }
-  }, [isAuthenticated, setLocation]);
+  }, [isAuthenticated, user, setLocation]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,13 +34,11 @@ const Login = () => {
     }
 
     try {
-      await login(email, password);
+      const result = await login(email, password);
       toast({
         title: "Login Successful",
         description: "Welcome to your dashboard!",
       });
-      // Redirect to dashboard after successful login
-      setLocation("/dashboard");
     } catch (error: any) {
       toast({
         title: "Login Failed",
@@ -69,10 +66,10 @@ const Login = () => {
               <CardContent>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <Label htmlFor="email" className="text-foreground font-medium">Email Address</Label>
+                    <Label htmlFor="email" className="text-foreground font-medium">Email or Username</Label>
                     <Input
                       id="email"
-                      type="email"
+                      type="text"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       className="mt-1"

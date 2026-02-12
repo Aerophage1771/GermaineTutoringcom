@@ -6,6 +6,7 @@ interface User {
   id: number;
   username: string;
   email: string;
+  role: string;
   sessions_held: number;
   time_remaining: number;
   bonus_test_review_time: number;
