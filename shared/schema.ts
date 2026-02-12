@@ -318,6 +318,7 @@ export const blogPosts = pgTable("blog_posts", {
   created_at: timestamp("created_at").defaultNow(),
   updated_at: timestamp("updated_at").defaultNow(),
   published_at: timestamp("published_at"),
+  scheduled_at: timestamp("scheduled_at"),
 });
 
 export const insertBlogPostSchema = createInsertSchema(blogPosts).omit({

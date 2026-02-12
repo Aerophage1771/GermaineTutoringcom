@@ -278,7 +278,7 @@ function PostEditor({
   const isEditing = postId !== null;
 
   const { data: existingPost, isLoading: loadingPost } = useQuery<BlogPost>({
-    queryKey: ["/api/admin/blog/posts", postId],
+    queryKey: [`/api/admin/blog/posts/${postId}`],
     enabled: isEditing,
   });
 
