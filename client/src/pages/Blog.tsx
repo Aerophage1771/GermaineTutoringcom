@@ -171,9 +171,17 @@ const Blog = () => {
                   Featured Article
                 </p>
                 <Link href={`/blog/${featuredPost.slug}`} className="group block bg-white rounded-2xl border border-border p-5 hover:border-primary/40 hover:shadow-lg transition-all duration-200 cursor-pointer no-underline">
-                    <div className={`w-full h-28 rounded-xl bg-gradient-to-br ${THUMBNAIL_COLORS[0].bg} flex items-center justify-center mb-4`}>
-                      <BookOpen className={`w-10 h-10 ${THUMBNAIL_COLORS[0].icon}`} />
-                    </div>
+                    {featuredPost.featured_image ? (
+                      <img
+                        src={featuredPost.featured_image}
+                        alt={featuredPost.title}
+                        className="w-full h-28 rounded-xl object-cover mb-4"
+                      />
+                    ) : (
+                      <div className={`w-full h-28 rounded-xl bg-gradient-to-br ${THUMBNAIL_COLORS[0].bg} flex items-center justify-center mb-4`}>
+                        <BookOpen className={`w-10 h-10 ${THUMBNAIL_COLORS[0].icon}`} />
+                      </div>
+                    )}
                     <span className="inline-block text-xs font-semibold px-2.5 py-1 rounded-full bg-accent/10 text-accent mb-3">
                       {getTagLabel(getPrimaryCategory(featuredPost.tags))}
                     </span>
