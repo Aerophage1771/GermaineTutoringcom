@@ -237,13 +237,6 @@ const ProgramsSection = () => {
             </div>
           ))}
         </div>
-
-        <div className="text-center bg-muted/50 rounded-lg p-6 max-w-3xl mx-auto">
-          <p className="text-foreground">
-            <i className="fas fa-info-circle mr-2 text-primary"></i>
-            <span className="font-semibold">Financing options available during checkout.</span>
-          </p>
-        </div>
       </div>
     </section>
   );
