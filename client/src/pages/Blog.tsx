@@ -166,34 +166,41 @@ const Blog = () => {
             {/* Right: Featured post card */}
             {featuredPost && (
               <aside>
-                <p className="flex items-center gap-1.5 text-xs font-bold text-accent uppercase tracking-wider mb-2">
+                <p className="flex items-center gap-1.5 text-xs font-bold text-accent uppercase tracking-wider mb-3">
                   <Sparkles className="w-3.5 h-3.5" />
                   Featured Article
                 </p>
-                <Link href={`/blog/${featuredPost.slug}`} className="group block bg-white rounded-2xl border border-border p-5 hover:border-primary/40 hover:shadow-lg transition-all duration-200 cursor-pointer no-underline">
+                <Link href={`/blog/${featuredPost.slug}`} className="group block bg-white rounded-2xl border border-border overflow-hidden hover:border-primary/40 hover:shadow-lg transition-all duration-200 cursor-pointer no-underline">
                     {featuredPost.featured_image ? (
                       <img
                         src={featuredPost.featured_image}
                         alt={featuredPost.title}
-                        className="w-full h-28 rounded-xl object-cover mb-4"
+                        className="w-full h-48 object-cover"
                       />
                     ) : (
-                      <div className={`w-full h-28 rounded-xl bg-gradient-to-br ${THUMBNAIL_COLORS[0].bg} flex items-center justify-center mb-4`}>
-                        <BookOpen className={`w-10 h-10 ${THUMBNAIL_COLORS[0].icon}`} />
+                      <div className={`w-full h-48 bg-gradient-to-br ${THUMBNAIL_COLORS[0].bg} flex items-center justify-center`}>
+                        <BookOpen className={`w-12 h-12 ${THUMBNAIL_COLORS[0].icon}`} />
                       </div>
                     )}
-                    <span className="inline-block text-xs font-semibold px-2.5 py-1 rounded-full bg-accent/10 text-accent mb-3">
-                      {getTagLabel(getPrimaryCategory(featuredPost.tags))}
-                    </span>
-                    <h2 className="font-heading font-bold text-primary text-xl mb-2 group-hover:text-accent transition-colors leading-snug">
-                      {featuredPost.title}
-                    </h2>
-                    <p className="text-sm text-foreground/60 flex items-center gap-3">
-                      <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" />{formatDate(featuredPost.date)}</span>
-                      {featuredPost.readTime && (
-                        <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{featuredPost.readTime} min read</span>
+                    <div className="p-5">
+                      <span className="inline-block text-xs font-semibold px-2.5 py-1 rounded-full bg-accent/10 text-accent mb-3">
+                        {getTagLabel(getPrimaryCategory(featuredPost.tags))}
+                      </span>
+                      <h2 className="font-heading font-bold text-primary text-xl mb-2 group-hover:text-accent transition-colors leading-snug">
+                        {featuredPost.title}
+                      </h2>
+                      {featuredPost.snippet && (
+                        <p className="text-sm text-foreground/60 mb-3 line-clamp-2 leading-relaxed">
+                          {featuredPost.snippet}
+                        </p>
                       )}
-                    </p>
+                      <p className="text-xs text-foreground/50 flex items-center gap-3">
+                        <span className="flex items-center gap-1"><Calendar className="w-3.5 h-3.5" />{formatDate(featuredPost.date)}</span>
+                        {featuredPost.readTime && (
+                          <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5" />{featuredPost.readTime} min read</span>
+                        )}
+                      </p>
+                    </div>
                 </Link>
               </aside>
             )}
