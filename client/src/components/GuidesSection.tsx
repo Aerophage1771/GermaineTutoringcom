@@ -110,7 +110,9 @@ const GuidesSection = () => {
               <img 
                 src={guide.image} 
                 alt={guide.title} 
-                className="w-full h-48 object-cover" 
+                className="w-full h-48 object-cover"
+                loading="lazy"
+                decoding="async"
               />
               
               <div className="p-6">

@@ -177,6 +177,8 @@ const Blog = () => {
                           src={featuredPost.featured_image}
                           alt={featuredPost.title}
                           className="w-full h-full object-cover"
+                          loading="lazy"
+                          decoding="async"
                         />
                       ) : (
                         <div className={`w-full h-full bg-gradient-to-br ${THUMBNAIL_COLORS[0].bg} flex items-center justify-center`}>

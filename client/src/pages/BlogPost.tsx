@@ -374,6 +374,8 @@ const BlogPost = () => {
                     alt={post.title}
                     className="w-full rounded-2xl object-cover shadow-md"
                     style={{ maxHeight: '420px' }}
+                    loading="lazy"
+                    decoding="async"
                   />
                 </div>
               </div>
