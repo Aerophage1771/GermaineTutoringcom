@@ -53,6 +53,7 @@ interface BlogPost {
   created_at: string;
   updated_at: string;
   published_at: string | null;
+  scheduled_at: string | null;
 }
 
 function generateSlug(title: string): string {
@@ -271,6 +272,8 @@ function PostEditor({
   const [tagsInput, setTagsInput] = useState("");
   const [featuredImage, setFeaturedImage] = useState("");
   const [author, setAuthor] = useState("Germaine Washington");
+  const [scheduledDate, setScheduledDate] = useState("");
+  const [scheduledTime, setScheduledTime] = useState("");
   const [uploadingFeatured, setUploadingFeatured] = useState(false);
   const [saving, setSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -311,6 +314,11 @@ function PostEditor({
       );
       setFeaturedImage(existingPost.featured_image || "");
       setAuthor(existingPost.author);
+      if (existingPost.scheduled_at) {
+        const dt = new Date(existingPost.scheduled_at);
+        setScheduledDate(dt.toISOString().split("T")[0]);
+        setScheduledTime(dt.toTimeString().slice(0, 5));
+      }
       editor.commands.setContent(existingPost.content);
     }
   }, [existingPost, editor]);
@@ -361,11 +369,28 @@ function PostEditor({
       return;
     }
 
+    if (status === "scheduled") {
+      if (!scheduledDate || !scheduledTime) {
+        toast({ title: "Please set a date and time for scheduling", variant: "destructive" });
+        return;
+      }
+      const scheduledDateTime = new Date(`${scheduledDate}T${scheduledTime}`);
+      if (scheduledDateTime <= new Date()) {
+        toast({ title: "Scheduled time must be in the future", variant: "destructive" });
+        return;
+      }
+    }
+
     const content = editor?.getHTML() || "";
     const tags = tagsInput
       .split(",")
       .map((t) => t.trim())
       .filter(Boolean);
+
+    let scheduled_at: string | null = null;
+    if (status === "scheduled" && scheduledDate && scheduledTime) {
+      scheduled_at = new Date(`${scheduledDate}T${scheduledTime}`).toISOString();
+    }
 
     const postData = {
       title,
@@ -377,7 +402,8 @@ function PostEditor({
       author,
       status,
       featured_image: featuredImage || null,
-      published_at: status === "published" ? new Date().toISOString() : null,
+      published_at: status === "published" ? new Date().toISOString() : (existingPost?.published_at || null),
+      scheduled_at,
     };
 
     setSaving(true);
@@ -391,7 +417,7 @@ function PostEditor({
       toast({
         title: isEditing ? "Post updated" : "Post created",
         description:
-          status === "published" ? "Post is now live" : "Saved as draft",
+          status === "published" ? "Post is now live" : status === "scheduled" ? "Post scheduled for publication" : "Saved as draft",
       });
       onBack();
     } catch (err: any) {
@@ -423,7 +449,7 @@ function PostEditor({
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Posts
         </button>
-        <div className="flex gap-3">
+        <div className="flex items-center gap-3 flex-wrap">
           <button
             onClick={() => savePost("draft")}
             disabled={saving}
@@ -433,12 +459,22 @@ function PostEditor({
             Save as Draft
           </button>
           <button
+            onClick={() => savePost("scheduled")}
+            disabled={saving || !scheduledDate || !scheduledTime}
+            className="inline-flex items-center gap-2 px-5 py-2.5 border-2 border-blue-500 text-blue-600 rounded-lg font-semibold hover:bg-blue-50 transition-colors disabled:opacity-50"
+            title={!scheduledDate || !scheduledTime ? "Set a date and time below to schedule" : ""}
+          >
+            {saving && <Loader2 className="w-4 h-4 animate-spin" />}
+            <Calendar className="w-4 h-4" />
+            Schedule
+          </button>
+          <button
             onClick={() => savePost("published")}
             disabled={saving}
             className="inline-flex items-center gap-2 px-5 py-2.5 bg-accent text-primary rounded-lg font-semibold hover:bg-accent/90 transition-colors disabled:opacity-50"
           >
             {saving && <Loader2 className="w-4 h-4 animate-spin" />}
-            Publish
+            Publish Now
           </button>
         </div>
       </div>
@@ -511,6 +547,42 @@ function PostEditor({
               placeholder="LSAT, Strategy, Tips"
               className="w-full px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-colors"
             />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-semibold text-foreground mb-2">
+              <Calendar className="w-4 h-4 inline mr-1.5 -mt-0.5" />
+              Schedule Publication
+            </label>
+            <div className="flex items-center gap-4">
+              <input
+                type="date"
+                value={scheduledDate}
+                onChange={(e) => setScheduledDate(e.target.value)}
+                min={new Date().toISOString().split("T")[0]}
+                className="px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-colors"
+              />
+              <input
+                type="time"
+                value={scheduledTime}
+                onChange={(e) => setScheduledTime(e.target.value)}
+                className="px-4 py-3 border border-border rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-colors"
+              />
+              {scheduledDate && scheduledTime && (
+                <span className="text-sm text-blue-600 font-medium">
+                  Will publish: {new Date(`${scheduledDate}T${scheduledTime}`).toLocaleString()}
+                </span>
+              )}
+              {(scheduledDate || scheduledTime) && (
+                <button
+                  type="button"
+                  onClick={() => { setScheduledDate(""); setScheduledTime(""); }}
+                  className="text-red-500 hover:text-red-700 text-sm font-medium"
+                >
+                  Clear
+                </button>
+              )}
+            </div>
           </div>
 
           <div className="md:col-span-2">
@@ -727,10 +799,12 @@ function PostListing() {
                       className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold whitespace-nowrap ${
                         post.status === "published"
                           ? "bg-green-100 text-green-800"
+                          : post.status === "scheduled"
+                          ? "bg-blue-100 text-blue-800"
                           : "bg-yellow-100 text-yellow-800"
                       }`}
                     >
-                      {post.status === "published" ? "Published" : "Draft"}
+                      {post.status === "published" ? "Published" : post.status === "scheduled" ? "Scheduled" : "Draft"}
                     </span>
                   </div>
                   {post.excerpt && (
@@ -743,6 +817,12 @@ function PostListing() {
                       <Calendar className="w-3 h-3" />
                       {formatDate(post.created_at)}
                     </span>
+                    {post.status === "scheduled" && post.scheduled_at && (
+                      <span className="inline-flex items-center gap-1 text-blue-600 font-medium">
+                        <Calendar className="w-3 h-3" />
+                        Publishes: {new Date(post.scheduled_at).toLocaleString()}
+                      </span>
+                    )}
                     <span>By {post.author}</span>
                     {post.tags &&
                       Array.isArray(post.tags) &&
@@ -765,7 +845,7 @@ function PostListing() {
                     disabled={toggleStatusMutation.isPending}
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg border border-border hover:bg-muted transition-colors"
                     title={
-                      post.status === "published" ? "Unpublish" : "Publish"
+                      post.status === "published" ? "Unpublish" : "Publish Now"
                     }
                   >
                     {post.status === "published" ? (
@@ -776,7 +856,7 @@ function PostListing() {
                     ) : (
                       <>
                         <Eye className="w-3.5 h-3.5" />
-                        <span className="hidden sm:inline">Publish</span>
+                        <span className="hidden sm:inline">Publish Now</span>
                       </>
                     )}
                   </button>

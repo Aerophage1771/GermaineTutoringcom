@@ -37,7 +37,8 @@ const blogPostInputSchema = z.object({
   featured_image: z.string().optional().nullable(),
   tags: z.array(z.string()).optional().default([]),
   author: z.string().min(1).max(200).optional().default("Germaine Washington"),
-  status: z.enum(["draft", "published"]).optional().default("draft"),
+  status: z.enum(["draft", "published", "scheduled"]).optional().default("draft"),
+  scheduled_at: z.string().optional().nullable(),
 });
 
 const uploadDir = path.join(process.cwd(), "public", "uploads");
@@ -676,7 +677,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/admin/blog/posts", requireAdmin, async (req, res) => {
     try {
       const validated = blogPostInputSchema.parse(req.body);
-      const postData = {
+      const postData: any = {
         title: validated.title,
         slug: validated.slug,
         content: sanitizeHtml(validated.content, sanitizeOptions),
@@ -687,6 +688,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         author: validated.author,
         status: validated.status,
         published_at: validated.status === "published" ? new Date() : null,
+        scheduled_at: validated.status === "scheduled" && req.body.scheduled_at ? new Date(req.body.scheduled_at) : null,
       };
       const post = await storage.createBlogPost(postData);
       res.status(201).json({ ...post, tags: JSON.parse(post.tags || "[]") });
@@ -720,6 +722,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
         updates.status = validated.status;
         if (validated.status === "published" && existing.status !== "published") {
           updates.published_at = new Date();
+        }
+        if (validated.status === "scheduled" && req.body.scheduled_at) {
+          updates.scheduled_at = new Date(req.body.scheduled_at);
+        }
+        if (validated.status !== "scheduled") {
+          updates.scheduled_at = null;
         }
       }
       const post = await storage.updateBlogPost(id, updates);
@@ -1011,6 +1019,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(500).json({ message: "Failed to log practice activity" });
     }
   });
+
+  setInterval(async () => {
+    try {
+      const duePosts = await storage.getScheduledPostsDue();
+      for (const post of duePosts) {
+        await storage.publishScheduledPost(post.id);
+        console.log(`Auto-published scheduled post: "${post.title}" (id: ${post.id})`);
+      }
+    } catch (error) {
+      console.error("Error checking scheduled posts:", error);
+    }
+  }, 60000);
 
   const httpServer = createServer(app);
   return httpServer;
