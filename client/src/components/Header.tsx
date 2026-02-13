@@ -15,6 +15,7 @@ declare global {
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isAuthenticated, logout, user } = useAuth();
+  const isRoutineMaintenanceActive = Date.now() < new Date("2026-02-13T09:00:00-08:00").getTime();
   
   // Add Calendly script to the document when component mounts
   useEffect(() => {
@@ -80,6 +81,11 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-md">
+      {isRoutineMaintenanceActive && (
+        <div className="bg-amber-100 border-b border-amber-200 text-amber-900 text-center text-sm font-medium py-2 px-4">
+          Blog and sign-up are temporarily closed for routine maintenance until 9:00 AM PT.
+        </div>
+      )}
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <Link href="/" className="flex items-center">
           <h1 className="text-primary font-heading font-bold text-xl md:text-2xl">GermaineTutoring.com</h1>
@@ -129,13 +135,22 @@ const Header = () => {
                   Tutoring Programs
                 </button>
               </Link>
-              <Link href="/blog">
-                <button 
-                  onClick={scrollToTop}
-                  className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
-                  LSAT Blog
+              {isRoutineMaintenanceActive ? (
+                <button
+                  disabled
+                  className="text-muted-foreground font-medium text-sm lg:text-base cursor-not-allowed"
+                >
+                  LSAT Blog (Closed)
                 </button>
-              </Link>
+              ) : (
+                <Link href="/blog">
+                  <button 
+                    onClick={scrollToTop}
+                    className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
+                    LSAT Blog
+                  </button>
+                </Link>
+              )}
               <Link href="/login">
                 <button 
                   onClick={scrollToTop}
@@ -145,10 +160,11 @@ const Header = () => {
                 </button>
               </Link>
               <button 
-                onClick={openCalendly} 
-                className="bg-accent hover:bg-accent/90 text-primary font-bold px-5 py-2 rounded-lg transition-colors text-sm lg:text-base"
+                onClick={openCalendly}
+                disabled={isRoutineMaintenanceActive}
+                className="bg-accent hover:bg-accent/90 text-primary font-bold px-5 py-2 rounded-lg transition-colors text-sm lg:text-base disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground"
               >
-                Schedule Consultation
+                {isRoutineMaintenanceActive ? "Sign-Up Closed" : "Schedule Consultation"}
               </button>
             </>
           )}
@@ -203,17 +219,26 @@ const Header = () => {
                   Tutoring Programs
                 </button>
               </Link>
-              <Link href="/blog">
-                <button 
-                  onClick={() => {
-                    scrollToTop();
-                    setMobileMenuOpen(false);
-                  }}
-                  className="text-foreground hover:text-primary font-medium transition-colors text-left"
+              {isRoutineMaintenanceActive ? (
+                <button
+                  disabled
+                  className="text-muted-foreground font-medium text-left cursor-not-allowed"
                 >
-                  LSAT Blog
+                  LSAT Blog (Closed)
                 </button>
-              </Link>
+              ) : (
+                <Link href="/blog">
+                  <button 
+                    onClick={() => {
+                      scrollToTop();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="text-foreground hover:text-primary font-medium transition-colors text-left"
+                  >
+                    LSAT Blog
+                  </button>
+                </Link>
+              )}
               <Link href="/login">
                 <button 
                   onClick={() => {
@@ -226,10 +251,11 @@ const Header = () => {
                 </button>
               </Link>
               <button 
-                onClick={openCalendly} 
-                className="bg-accent hover:bg-accent/90 text-primary font-bold px-4 py-2 rounded-lg text-center transition-colors"
+                onClick={openCalendly}
+                disabled={isRoutineMaintenanceActive}
+                className="bg-accent hover:bg-accent/90 text-primary font-bold px-4 py-2 rounded-lg text-center transition-colors disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground"
               >
-                Schedule Consultation
+                {isRoutineMaintenanceActive ? "Sign-Up Closed" : "Schedule Consultation"}
               </button>
             </>
           )}

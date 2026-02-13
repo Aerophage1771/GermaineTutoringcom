@@ -73,11 +73,19 @@ const Blog = () => {
     queryFn: async () => {
       const response = await fetch('/api/blog/posts');
       if (!response.ok) {
-        throw new Error('Failed to fetch blog posts');
+        const errorData = await response.json().catch(() => null);
+        throw new Error(errorData?.message || 'Failed to fetch blog posts');
       }
-      return response.json();
+      return response.json().catch(() => {
+        throw new Error("We're having trouble loading the blog posts. Please try again later.");
+      });
     }
   });
+
+  const errorMessage =
+    error instanceof Error && error.message.includes("Temporarily unavailable")
+      ? error.message
+      : "We're having trouble loading the blog posts. Please try again later.";
 
   const filteredPosts = useMemo(() => {
     if (!posts) return [];
@@ -251,7 +259,7 @@ const Blog = () => {
                   <div className="bg-red-50 border border-red-200 rounded-xl p-8 max-w-md mx-auto">
                     <h3 className="text-red-800 font-heading font-semibold text-lg mb-2">Unable to Load Posts</h3>
                     <p className="text-red-600 text-sm leading-relaxed">
-                      We're having trouble loading the blog posts. Please try again later.
+                      {errorMessage}
                     </p>
                   </div>
                 </div>

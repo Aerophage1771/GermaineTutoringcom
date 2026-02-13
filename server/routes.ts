@@ -62,6 +62,10 @@ const upload = multer({
   },
 });
 
+const routineMaintenanceEndsAt = new Date("2026-02-13T09:00:00-08:00");
+const isRoutineMaintenanceActive = () => Date.now() < routineMaintenanceEndsAt.getTime();
+const routineMaintenanceMessage = "Temporarily unavailable for routine maintenance until 9:00 AM PT.";
+
 // Extend the session interface to include user information
 declare module 'express-session' {
   interface SessionData {
@@ -491,6 +495,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Email subscription route
   app.post("/api/subscribe", async (req, res) => {
+    if (isRoutineMaintenanceActive()) {
+      return res.status(503).json({ message: routineMaintenanceMessage });
+    }
+
     try {
       const validatedData = insertSubscriberSchema.parse(req.body);
       const subscriber = await storage.createSubscriber(validatedData);
@@ -582,6 +590,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Public blog routes (database-backed)
   app.get("/api/blog/posts", async (req, res) => {
+    if (isRoutineMaintenanceActive()) {
+      return res.status(503).json({ message: routineMaintenanceMessage });
+    }
+
     try {
       const posts = await storage.getBlogPosts(false);
       res.json(posts.map(p => ({
@@ -598,6 +610,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get("/api/blog/posts/:slug", async (req, res) => {
+    if (isRoutineMaintenanceActive()) {
+      return res.status(503).json({ message: routineMaintenanceMessage });
+    }
+
     try {
       const post = await storage.getBlogPostBySlug(req.params.slug);
       if (!post || post.status !== "published") {
@@ -617,6 +633,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.get("/api/blog/posts/:slug/comments", async (req, res) => {
+    if (isRoutineMaintenanceActive()) {
+      return res.status(503).json({ message: routineMaintenanceMessage });
+    }
+
     try {
       const comments = await storage.getCommentsByPostSlug(req.params.slug);
       res.json(comments);
@@ -627,6 +647,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
   });
 
   app.post("/api/blog/posts/:slug/comments", async (req, res) => {
+    if (isRoutineMaintenanceActive()) {
+      return res.status(503).json({ message: routineMaintenanceMessage });
+    }
+
     try {
       const commentInputSchema = z.object({
         author_name: z.string().min(1),
