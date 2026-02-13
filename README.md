@@ -435,6 +435,16 @@ The application will be available at `http://localhost:5000`. Both the API and c
 
 ---
 
+## Netlify Deployment
+
+This repository includes a `netlify.toml` configuration so Netlify can build and publish the client app:
+
+- **Build command:** `npm run build`
+- **Publish directory:** `dist/public`
+- **SPA routing fallback:** `/*` redirects to `/index.html`
+
+---
+
 ## Environment Variables
 
 | Variable | Required | Description |
