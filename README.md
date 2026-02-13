@@ -442,7 +442,8 @@ This repository includes a `netlify.toml` configuration so Netlify can build and
 - **Build command:** `npm run build`
 - **Publish directory:** `dist/public`
 - **SPA routing fallback:** `/*` redirects to `/index.html`
-- `@netlify/neon` is installed, so Netlify can automatically provision a Neon database and populate required env vars (including `DATABASE_URL`) during `netlify dev`, `netlify build`, or hosted Netlify builds.
+- `@netlify/neon` is installed so Netlify can automatically provision a Neon database.
+- During `netlify dev`, `netlify build`, or hosted Netlify builds, Netlify will populate required env vars (including `DATABASE_URL`).
 
 ---
 
