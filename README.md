@@ -395,7 +395,7 @@ The application uses **PostgreSQL** (via Neon serverless) with **Drizzle ORM**. 
 
 ### Prerequisites
 
-- **Node.js** ≥ 18
+- **Node.js** ≥ 20.12.2
 - **npm** or **yarn**
 - **PostgreSQL** database (Neon recommended)
 
@@ -442,6 +442,7 @@ This repository includes a `netlify.toml` configuration so Netlify can build and
 - **Build command:** `npm run build`
 - **Publish directory:** `dist/public`
 - **SPA routing fallback:** `/*` redirects to `/index.html`
+- `@netlify/neon` is installed, so Netlify can automatically provision a Neon database and populate required env vars (including `DATABASE_URL`) during `netlify dev`, `netlify build`, or hosted Netlify builds.
 
 ---
 
