@@ -409,8 +409,8 @@ cd GermaineTutoringcom
 # Install dependencies
 npm install
 
-# Set up environment variables (see below)
-cp .env.example .env
+# Create a .env file and add required variables (see below)
+touch .env
 
 # Push database schema
 npm run db:push
@@ -420,6 +420,7 @@ npm run dev
 ```
 
 The application will be available at `http://localhost:5000`. Both the API and client are served from the same port.
+Set `DATABASE_URL` and `SESSION_SECRET` in your `.env` file before running `db:push` or starting the app.
 
 ---
 
