@@ -454,7 +454,7 @@ This repository includes a `netlify.toml` configuration so Netlify can build and
 | `SESSION_SECRET` | ✅ | Secret key for express-session cookie signing |
 | `NODE_ENV` | — | `development` or `production` (defaults to `development`) |
 
-\* Set either `DATABASE_URL` or `SUPABASE_DB_URL`.
+\* At least one of `DATABASE_URL` or `SUPABASE_DB_URL` must be set.
 
 ---
 
