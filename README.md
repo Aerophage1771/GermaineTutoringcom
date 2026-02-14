@@ -383,7 +383,7 @@ The application uses **PostgreSQL** (via Neon serverless) with **Drizzle ORM**. 
 
 | Service | Purpose |
 |---|---|
-| **Neon Database** | Serverless PostgreSQL hosting |
+| **Neon / Supabase Postgres** | Serverless PostgreSQL hosting |
 | **Calendly** | Embedded scheduling widget for consultations & session booking |
 | **Google Fonts** | Typography — Merriweather (headings) & Open Sans (body) |
 | **Font Awesome 6** | Additional iconography |
@@ -397,7 +397,7 @@ The application uses **PostgreSQL** (via Neon serverless) with **Drizzle ORM**. 
 
 - **Node.js** ≥ 18
 - **npm** or **yarn**
-- **PostgreSQL** database (Neon recommended)
+- **PostgreSQL** database (Neon or Supabase recommended)
 
 ### Installation
 
@@ -449,9 +449,12 @@ This repository includes a `netlify.toml` configuration so Netlify can build and
 
 | Variable | Required | Description |
 |---|---|---|
-| `DATABASE_URL` | ✅ | PostgreSQL connection string (Neon format recommended) |
+| `DATABASE_URL` | ✅* | PostgreSQL connection string (Neon format recommended) |
+| `SUPABASE_DB_URL` | ✅* | Supabase PostgreSQL connection string (used when `DATABASE_URL` is not set) |
 | `SESSION_SECRET` | ✅ | Secret key for express-session cookie signing |
 | `NODE_ENV` | — | `development` or `production` (defaults to `development`) |
+
+\* Set either `DATABASE_URL` or `SUPABASE_DB_URL`.
 
 ---
 
