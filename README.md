@@ -459,6 +459,7 @@ This repository includes a `netlify.toml` configuration so Netlify can build and
 For Supabase, use the **direct Postgres connection string** (from Project Settings → Database → Connection string), e.g.
 `postgresql://postgres:<PASSWORD>@db.<PROJECT-REF>.supabase.co:5432/postgres?sslmode=require`
 — not the Supabase dashboard/project URL.
+Example: `https://omxnalsnfcjwrkkrplyo.supabase.co` is a project URL, not a valid value for `DATABASE_URL`/`SUPABASE_DB_URL`.
 
 ---
 
