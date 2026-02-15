@@ -42,6 +42,20 @@ const blogPostInputSchema = z.object({
   scheduled_at: z.string().optional().nullable(),
 });
 
+const parseBlogTags = (rawTags: string | null | undefined): string[] => {
+  if (!rawTags) return [];
+  try {
+    const parsed = JSON.parse(rawTags);
+    if (Array.isArray(parsed)) {
+      return parsed.map((tag) => String(tag));
+    }
+  } catch {}
+  return rawTags
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter(Boolean);
+};
+
 const uploadDir = path.join(process.cwd(), "public", "uploads");
 fs.mkdir(uploadDir, { recursive: true }).catch(() => {});
 
@@ -586,7 +600,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const posts = await storage.getBlogPosts(false);
       res.json(posts.map(p => ({
         ...p,
-        tags: JSON.parse(p.tags || "[]"),
+        tags: parseBlogTags(p.tags),
         date: p.published_at || p.created_at,
         snippet: p.excerpt,
         readTime: Math.max(1, Math.ceil((p.content?.replace(/<[^>]*>/g, '').split(/\s+/).length || 0) / 250)),
@@ -605,7 +619,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       }
       res.json({
         ...post,
-        tags: JSON.parse(post.tags || "[]"),
+        tags: parseBlogTags(post.tags),
         date: post.published_at || post.created_at,
         snippet: post.excerpt,
         readTime: Math.max(1, Math.ceil((post.content?.replace(/<[^>]*>/g, '').split(/\s+/).length || 0) / 250)),
@@ -654,7 +668,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const posts = await storage.getBlogPosts(true);
       res.json(posts.map(p => ({
         ...p,
-        tags: JSON.parse(p.tags || "[]"),
+        tags: parseBlogTags(p.tags),
       })));
     } catch (error) {
       console.error("Error fetching admin blog posts:", error);
@@ -668,7 +682,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       if (!post) {
         return res.status(404).json({ message: "Post not found" });
       }
-      res.json({ ...post, tags: JSON.parse(post.tags || "[]") });
+      res.json({ ...post, tags: parseBlogTags(post.tags) });
     } catch (error) {
       console.error("Error fetching blog post:", error);
       res.status(500).json({ message: "Failed to fetch blog post" });
@@ -692,7 +706,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         scheduled_at: validated.status === "scheduled" && req.body.scheduled_at ? new Date(req.body.scheduled_at) : null,
       };
       const post = await storage.createBlogPost(postData);
-      res.status(201).json({ ...post, tags: JSON.parse(post.tags || "[]") });
+      res.status(201).json({ ...post, tags: parseBlogTags(post.tags) });
     } catch (error: any) {
       if (error?.name === "ZodError") {
         return res.status(400).json({ message: "Invalid blog post data", errors: error.errors });
@@ -732,7 +746,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       }
       const post = await storage.updateBlogPost(id, updates);
-      res.json({ ...post, tags: JSON.parse(post.tags || "[]") });
+      res.json({ ...post, tags: parseBlogTags(post.tags) });
     } catch (error: any) {
       if (error?.name === "ZodError") {
         return res.status(400).json({ message: "Invalid blog post data", errors: error.errors });
