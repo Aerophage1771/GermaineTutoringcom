@@ -432,6 +432,7 @@ The application will be available at `http://localhost:5000`. Both the API and c
 | `start` | `npm start` | Run production build |
 | `check` | `npm run check` | TypeScript type checking |
 | `db:push` | `npm run db:push` | Push Drizzle schema to database |
+| `blog:migrate` | `npm run blog:migrate` | Import legacy `posts/*.mdx` blog files into the database |
 
 ---
 
@@ -449,9 +450,20 @@ This repository includes a `netlify.toml` configuration so Netlify can build and
 
 | Variable | Required | Description |
 |---|---|---|
-| `DATABASE_URL` | ✅ | PostgreSQL connection string (Neon format recommended) |
+| `DATABASE_URL` | ✅* | PostgreSQL connection string |
+| `SUPABASE_DB_URL` | ✅* | Direct Supabase Postgres connection string (use instead of `DATABASE_URL` if preferred) |
 | `SESSION_SECRET` | ✅ | Secret key for express-session cookie signing |
 | `NODE_ENV` | — | `development` or `production` (defaults to `development`) |
+
+\*Provide at least one of `DATABASE_URL` or `SUPABASE_DB_URL`.
+
+### Supabase Blog Integration Checklist
+
+To complete blog DB integration against Supabase:
+
+1. Set `SUPABASE_DB_URL` to a **direct Postgres URI** (not `https://...supabase.co`).
+2. Run `npm run db:push` to create/update tables (`blog_posts`, `blog_comments`, etc.).
+3. If you still have legacy MDX posts, run `npm run blog:migrate` once.
 
 ---
 
