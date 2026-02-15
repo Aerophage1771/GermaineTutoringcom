@@ -18,6 +18,7 @@ import sanitizeHtml from "sanitize-html";
 import { z } from "zod";
 import bcrypt from "bcrypt";
 import sharp from "sharp";
+import { getAllPosts as getFileBlogPosts, getPostBySlug as getFileBlogPostBySlug } from "./blog";
 
 const sanitizeOptions: sanitizeHtml.IOptions = {
   allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'h1', 'h2', 'h3', 'u', 's', 'hr']),
@@ -584,12 +585,20 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/blog/posts", async (req, res) => {
     try {
       const posts = await storage.getBlogPosts(false);
-      res.json(posts.map(p => ({
-        ...p,
-        tags: JSON.parse(p.tags || "[]"),
-        date: p.published_at || p.created_at,
-        snippet: p.excerpt,
-        readTime: Math.max(1, Math.ceil((p.content?.replace(/<[^>]*>/g, '').split(/\s+/).length || 0) / 250)),
+      if (posts.length > 0) {
+        return res.json(posts.map(p => ({
+          ...p,
+          tags: JSON.parse(p.tags || "[]"),
+          date: p.published_at || p.created_at,
+          snippet: p.excerpt,
+          readTime: Math.max(1, Math.ceil((p.content?.replace(/<[^>]*>/g, '').split(/\s+/).length || 0) / 250)),
+        })));
+      }
+
+      const filePosts = await getFileBlogPosts();
+      res.json(filePosts.map((post) => ({
+        ...post,
+        featured_image: null,
       })));
     } catch (error) {
       console.error("Error fetching blog posts:", error);
@@ -600,8 +609,19 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/blog/posts/:slug", async (req, res) => {
     try {
       const post = await storage.getBlogPostBySlug(req.params.slug);
-      if (!post || post.status !== "published") {
+      if (post && post.status !== "published") {
         return res.status(404).json({ message: "Post not found" });
+      }
+      if (!post) {
+        const filePost = await getFileBlogPostBySlug(req.params.slug);
+        if (!filePost) {
+          return res.status(404).json({ message: "Post not found" });
+        }
+        return res.json({
+          ...filePost,
+          featured_image: null,
+          readTime: Math.max(1, Math.ceil((filePost.content?.split(/\s+/).length || 0) / 250)),
+        });
       }
       res.json({
         ...post,
