@@ -47,9 +47,15 @@ const parseBlogTags = (rawTags: string | null | undefined): string[] => {
   try {
     const parsed = JSON.parse(rawTags);
     if (Array.isArray(parsed)) {
-      return parsed.map((tag) => String(tag));
+      return parsed
+        .filter((tag): tag is string | number | boolean => ["string", "number", "boolean"].includes(typeof tag))
+        .map((tag) => String(tag).trim())
+        .filter(Boolean);
     }
-  } catch {}
+    return [];
+  } catch {
+    // Invalid JSON tags can appear in legacy rows; fall back to CSV parsing.
+  }
   return rawTags
     .split(",")
     .map((tag) => tag.trim())
