@@ -13,6 +13,7 @@ import MethodologyResults from "@/pages/MethodologyResults";
 import Programs from "@/pages/Programs";
 import Login from "@/pages/Login";
 import Dashboard from "@/pages/Dashboard";
+import Sessions from "@/pages/Sessions";
 import LearningLibrary from "@/pages/LearningLibrary";
 import AdminBlog from "@/pages/AdminBlog";
 import AdminDashboard from "@/pages/AdminDashboard";
@@ -28,6 +29,7 @@ function Router() {
       <Route path="/programs" component={Programs} />
       <Route path="/login" component={Login} />
       <Route path="/dashboard" component={Dashboard} />
+      <Route path="/sessions" component={Sessions} />
       <Route path="/learning-library" component={LearningLibrary} />
       <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route path="/admin/blog" component={AdminBlog} />
