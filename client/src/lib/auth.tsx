@@ -1,111 +1,113 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { apiRequest } from './queryClient';
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { User as SupabaseUser } from "@supabase/supabase-js";
+import { supabase } from "./supabase";
 
 interface User {
-  id: number;
-
+  id: string;
   username: string;
   email: string;
   role: string;
-
   sessions_held: number;
   time_remaining: number;
   bonus_test_review_time: number;
-@@ -23,75 +25,75 @@ interface AuthContextType {
+}
+
+interface AuthContextType {
+  user: User | null;
+  isLoading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  isAuthenticated: boolean;
+}
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+function mapSupabaseUser(user: SupabaseUser | null): User | null {
+  if (!user) return null;
+
+  return {
+    id: user.id,
+    username: user.email?.split("@")[0] || "student",
+    email: user.email || "",
+    role: "student",
+    sessions_held: 12,
+    time_remaining: 4.5,
+    bonus_test_review_time: 1.0,
+  };
+}
+
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const queryClient = useQueryClient();
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Query to check authentication status
-  const { data: authData, isLoading } = useQuery({
-    queryKey: ['/api/auth/me'],
-    queryFn: async () => {
-      try {
-        const response = await fetch('/api/auth/me', {
-          credentials: 'include',
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setIsAuthenticated(true);
-          return data;
-        } else {
-          setIsAuthenticated(false);
-          return null;
-        }
-      } catch {
-        setIsAuthenticated(false);
-        return null;
+  useEffect(() => {
+    let mounted = true;
+
+    const loadSession = async () => {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      if (mounted) {
+        setUser(mapSupabaseUser(session?.user ?? null));
+        setIsLoading(false);
       }
-    },
-    retry: false,
-    refetchOnWindowFocus: false,
-  });
+    };
 
-  const loginMutation = useMutation({
-    mutationFn: async ({ email, password }: { email: string; password: string }) => {
-      const response = await apiRequest("POST", "/api/auth/login", { email, password });
-      const data = await response.json();
-      return data;
-    },
-    onSuccess: (data) => {
-      setIsAuthenticated(true);
-      queryClient.setQueryData(['/api/auth/me'], data);
-      queryClient.invalidateQueries({ queryKey: ['/api/auth/me'] });
-    }
-  });
+    loadSession();
 
-  const logoutMutation = useMutation({
-    mutationFn: async () => {
-      const response = await apiRequest("POST", "/api/auth/logout", {});
-      return response.json();
-    },
-    onSuccess: () => {
-      setIsAuthenticated(false);
-      queryClient.setQueryData(['/api/auth/me'], null);
-      queryClient.clear();
-    }
-  });
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(mapSupabaseUser(session?.user ?? null));
+      setIsLoading(false);
+    });
 
-
-
+    return () => {
+      mounted = false;
+      subscription.unsubscribe();
+    };
+  }, []);
 
   const login = async (email: string, password: string) => {
-    await loginMutation.mutateAsync({ email, password });
+    setIsLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    setIsLoading(false);
 
-
-
-
-
-
-
-
-
-
+    if (error) {
+      throw new Error(error.message || "Login failed");
+    }
   };
 
   const logout = async () => {
-    await logoutMutation.mutateAsync();
+    setIsLoading(true);
+    const { error } = await supabase.auth.signOut();
+    setIsLoading(false);
 
+    if (error) {
+      throw new Error(error.message || "Logout failed");
+    }
   };
 
   return (
-    <AuthContext.Provider value={{
-      user: authData?.user || null,
-      isLoading: isLoading || loginMutation.isPending || logoutMutation.isPending,
-      login,
-      logout,
-      isAuthenticated
-    }}>
-
-
+    <AuthContext.Provider
+      value={{
+        user,
+        isLoading,
+        login,
+        logout,
+        isAuthenticated: !!user,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
-@@ -103,4 +105,4 @@ export function useAuth() {
-    throw new Error('useAuth must be used within an AuthProvider');
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }
