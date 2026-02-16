@@ -1,17 +1,12 @@
-import { Pool, neonConfig } from '@neondatabase/serverless';
-import { drizzle } from 'drizzle-orm/neon-serverless';
-import ws from "ws";
+import { Pool } from "pg";
+import { drizzle } from "drizzle-orm/node-postgres";
 import * as schema from "@shared/schema";
 
-neonConfig.webSocketConstructor = ws;
-
-const databaseUrl = process.env.DATABASE_URL || process.env.SUPABASE_DB_URL;
+const databaseUrl = process.env.DATABASE_URL;
 
 if (!databaseUrl) {
-  throw new Error(
-    "DATABASE_URL or SUPABASE_DB_URL must be set. Use a direct Postgres connection string.",
-  );
+  throw new Error("DATABASE_URL must be set.");
 }
 
 export const pool = new Pool({ connectionString: databaseUrl });
-export const db = drizzle({ client: pool, schema });
+export const db = drizzle(pool, { schema });

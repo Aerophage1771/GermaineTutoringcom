@@ -13,11 +13,11 @@ import bcrypt from "bcrypt";
 
 export interface IStorage {
   // User management (via profiles table)
-  getUser(id: number): Promise<User | undefined>;
+  getUser(id: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
-  updateUser(id: number, updates: Partial<User>): Promise<User>;
+  updateUser(id: string, updates: Partial<User>): Promise<User>;
   validatePassword(user: User, password: string): Promise<boolean>;
   
   // Subscription and consultation
@@ -25,11 +25,11 @@ export interface IStorage {
   createConsultation(consultation: InsertConsultation): Promise<Consultation>;
   
   // Session management
-  getUserSessions(userId: number): Promise<Session[]>;
+  getUserSessions(userId: string): Promise<Session[]>;
   createSession(session: InsertSession): Promise<Session>;
   
   // Time add-ons
-  getUserTimeAddOns(userId: number): Promise<TimeAddOn[]>;
+  getUserTimeAddOns(userId: string): Promise<TimeAddOn[]>;
   createTimeAddOn(addon: InsertTimeAddOn): Promise<TimeAddOn>;
 
   // Blog posts
@@ -47,10 +47,10 @@ export interface IStorage {
 
   // Admin operations
   getAllUsers(): Promise<User[]>;
-  deleteUser(id: number): Promise<void>;
-  updateUserPassword(id: number, hashedPassword: string): Promise<User>;
+  deleteUser(id: string): Promise<void>;
+  updateUserPassword(id: string, hashedPassword: string): Promise<User>;
   getAllSessions(): Promise<Session[]>;
-  getSessionsByUserId(userId: number): Promise<Session[]>;
+  getSessionsByUserId(userId: string): Promise<Session[]>;
   updateSession(id: number, updates: Partial<Session>): Promise<Session>;
   deleteSession(id: number): Promise<void>;
   seedAdminUser(): Promise<void>;
@@ -58,7 +58,7 @@ export interface IStorage {
 
 export class DatabaseStorage implements IStorage {
   // User management (via profiles table)
-  async getUser(id: number): Promise<User | undefined> {
+  async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(profiles).where(eq(profiles.id, id));
     return user || undefined;
   }
@@ -82,7 +82,7 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async updateUser(id: number, updates: Partial<User>): Promise<User> {
+  async updateUser(id: string, updates: Partial<User>): Promise<User> {
     const [user] = await db
       .update(profiles)
       .set(updates)
@@ -116,7 +116,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Session management
-  async getUserSessions(userId: number): Promise<Session[]> {
+  async getUserSessions(userId: string): Promise<Session[]> {
     return await db
       .select()
       .from(sessions)
@@ -140,7 +140,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Time add-ons
-  async getUserTimeAddOns(userId: number): Promise<TimeAddOn[]> {
+  async getUserTimeAddOns(userId: string): Promise<TimeAddOn[]> {
     return await db
       .select()
       .from(timeAddOns)
@@ -235,11 +235,11 @@ export class DatabaseStorage implements IStorage {
     return db.select().from(profiles).orderBy(desc(profiles.created_at));
   }
 
-  async deleteUser(id: number): Promise<void> {
+  async deleteUser(id: string): Promise<void> {
     await db.delete(profiles).where(eq(profiles.id, id));
   }
 
-  async updateUserPassword(id: number, hashedPassword: string): Promise<User> {
+  async updateUserPassword(id: string, hashedPassword: string): Promise<User> {
     const [user] = await db
       .update(profiles)
       .set({ password: hashedPassword })
@@ -252,7 +252,7 @@ export class DatabaseStorage implements IStorage {
     return db.select().from(sessions).orderBy(desc(sessions.date));
   }
 
-  async getSessionsByUserId(userId: number): Promise<Session[]> {
+  async getSessionsByUserId(userId: string): Promise<Session[]> {
     return db.select().from(sessions).where(eq(sessions.user_id, userId)).orderBy(desc(sessions.date));
   }
 

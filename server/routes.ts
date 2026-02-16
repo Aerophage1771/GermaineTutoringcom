@@ -63,9 +63,9 @@ const upload = multer({
 // Extend the session interface to include user information
 declare module 'express-session' {
   interface SessionData {
-    userId?: number;
+    userId?: string;
     user?: {
-      id: number;
+      id: string;
       username: string;
       email: string;
       role: string;
@@ -497,7 +497,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin: Update student
   app.put("/api/admin/users/:id", requireAdmin, async (req, res) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = req.params.id;
       const { username, email, sessions_held, time_remaining, bonus_test_review_time, role } = req.body;
       const updates: any = {};
       if (username !== undefined) updates.username = username;
@@ -526,7 +526,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin: Reset student password
   app.put("/api/admin/users/:id/password", requireAdmin, async (req, res) => {
     try {
-      const id = parseInt(req.params.id);
+      const id = req.params.id;
       const { password } = req.body;
       if (!password || password.length < 6) {
         return res.status(400).json({ message: "Password must be at least 6 characters" });
@@ -543,7 +543,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin: Delete student
   app.delete("/api/admin/users/:id", requireAdmin, async (req, res) => {
     try {
-      await storage.deleteUser(parseInt(req.params.id));
+      await storage.deleteUser(req.params.id);
       res.json({ message: "User deleted" });
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -554,7 +554,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin: Get sessions for a user
   app.get("/api/admin/users/:id/sessions", requireAdmin, async (req, res) => {
     try {
-      const sessions = await storage.getSessionsByUserId(parseInt(req.params.id));
+      const sessions = await storage.getSessionsByUserId(req.params.id);
       res.json(sessions);
     } catch (error) {
       console.error("Error fetching sessions:", error);

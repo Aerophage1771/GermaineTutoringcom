@@ -1,12 +1,15 @@
 import { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/auth";
 import { useAuthRedirect } from "@/hooks/use-auth-redirect";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Clock, BookOpen, Calendar, Archive, MessageCircle, FileText } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/lib/supabase";
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
@@ -19,29 +22,18 @@ declare global {
   }
 }
 
-// Types
-interface Session {
-  id: number;
-  user_id: number;
-  date: string;
-  duration: number;
-  topic: string;
-  notes?: string;
-}
-
 export default function Dashboard() {
   const { user, isLoading } = useAuthRedirect();
   const { logout } = useAuth();
-  const [location, setLocation] = useLocation();
+  const [, setLocation] = useLocation();
+  const { toast } = useToast();
 
   // Dialog states
   const [isBookSessionOpen, setIsBookSessionOpen] = useState(false);
-
-  // Data queries
-  const { data: sessions = [] } = useQuery<Session[]>({
-    queryKey: ["/api/dashboard/sessions"],
-    enabled: !!user
-  });
+  const [isContactTutorOpen, setIsContactTutorOpen] = useState(false);
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+  const [isSendingMessage, setIsSendingMessage] = useState(false);
 
   // Show loading spinner while checking authentication
   if (isLoading || !user) {
@@ -55,7 +47,6 @@ export default function Dashboard() {
   // Calculations
   const timeRemaining = user ? user.time_remaining / 60 : 0; // Convert minutes to hours
   const bonusTestTime = user ? user.bonus_test_review_time / 60 : 0;
-  const sessionHistory = sessions.slice(0, 5);
   
   const getTimeRemainingColor = (time: number) => {
     if (time > 5) return "text-green-600";
@@ -66,15 +57,49 @@ export default function Dashboard() {
   const timeRemainingColor = getTimeRemainingColor(timeRemaining);
   const canSchedule = timeRemaining > 0;
 
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString();
-  };
-
   // Calendly functions
   const openCalendlyWidget = (url: string) => {
     if (window.Calendly) {
       window.Calendly.initPopupWidget({ url });
     }
+  };
+
+  const handleContactTutor = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!subject.trim() || !message.trim()) {
+      toast({
+        title: "Missing Information",
+        description: "Please provide both a subject and message.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsSendingMessage(true);
+    const { error } = await supabase.from("messages").insert({
+      user_id: user.id,
+      subject: subject.trim(),
+      content: message.trim(),
+    });
+    setIsSendingMessage(false);
+
+    if (error) {
+      toast({
+        title: "Message Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: "Message Sent",
+      description: "Your tutor has received your message.",
+    });
+    setSubject("");
+    setMessage("");
+    setIsContactTutorOpen(false);
   };
 
   return (
@@ -100,68 +125,36 @@ export default function Dashboard() {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
           {/* Left Column - Compact */}
           <div className="lg:col-span-1 space-y-4">
-            {/* Tabbed Account Info */}
+            {/* Account Info */}
             <Card className="shadow-lg bg-white border-0">
-              <Tabs defaultValue="summary" className="w-full">
-                <TabsList className="grid w-full grid-cols-2">
-                  <TabsTrigger value="summary">Account</TabsTrigger>
-                  <TabsTrigger value="sessions">Sessions</TabsTrigger>
-                </TabsList>
-                
-                <TabsContent value="summary" className="p-4">
-                  <div className="space-y-3">
-                    <h3 className="font-medium flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-blue-500" />
-                      Summary
-                    </h3>
-                    <div className="grid grid-cols-1 gap-3">
-                      <div className="text-center p-3 bg-gray-50 rounded-lg">
-                        <div className="text-xl font-bold text-blue-600">{user.sessions_held}</div>
-                        <div className="text-xs text-gray-600">Sessions</div>
+              <CardContent className="p-4">
+                <div className="space-y-3">
+                  <h3 className="font-medium flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-blue-500" />
+                    Summary
+                  </h3>
+                  <div className="grid grid-cols-1 gap-3">
+                    <div className="text-center p-3 bg-gray-50 rounded-lg">
+                      <div className="text-xl font-bold text-blue-600">{user.sessions_held}</div>
+                      <div className="text-xs text-gray-600">Completed Sessions</div>
+                    </div>
+                    <div className="text-center p-3 bg-gray-50 rounded-lg">
+                      <div className={`text-xl font-bold ${timeRemainingColor}`}>
+                        {timeRemaining.toFixed(1)}h
                       </div>
-                      <div className="text-center p-3 bg-gray-50 rounded-lg">
-                        <div className={`text-xl font-bold ${timeRemainingColor}`}>
-                          {timeRemaining.toFixed(1)}h
-                        </div>
-                        <div className="text-xs text-gray-600">Time Left</div>
-                      </div>
+                      <div className="text-xs text-gray-600">Time Left</div>
+                    </div>
+                    {user.bonus_test_review_time > 0 ? (
                       <div className="text-center p-3 bg-gray-50 rounded-lg">
                         <div className="text-xl font-bold text-emerald-600">
                           {bonusTestTime.toFixed(1)}h
                         </div>
                         <div className="text-xs text-gray-600">Bonus</div>
                       </div>
-                    </div>
+                    ) : null}
                   </div>
-                </TabsContent>
-                
-                <TabsContent value="sessions" className="p-4 max-h-64 overflow-y-auto">
-                  <div className="space-y-3">
-                    <h3 className="font-medium flex items-center gap-2">
-                      <Calendar className="h-4 w-4 text-blue-500" />
-                      Recent Sessions
-                    </h3>
-                    {sessionHistory.length > 0 ? (
-                      <div className="space-y-2">
-                        {sessionHistory.slice(0, 3).map((session) => (
-                          <div key={session.id} className="border-l-3 border-blue-400 pl-3 py-2 bg-gray-50 rounded-r-lg">
-                            <div className="text-sm font-medium">
-                              {session.topic || "Session"}
-                            </div>
-                            <div className="text-xs text-gray-600">
-                              {formatDate(session.date)} • {session.duration}h
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="text-sm text-gray-500 text-center py-3">
-                        No sessions yet
-                      </p>
-                    )}
-                  </div>
-                </TabsContent>
-              </Tabs>
+                </div>
+              </CardContent>
             </Card>
           </div>
 
@@ -279,18 +272,56 @@ export default function Dashboard() {
                 </Button>
 
                 {/* Contact Tutor */}
-                <Button 
-                  size="lg" 
-                  variant="outline"
-                  className="h-20 text-lg font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105 rounded-xl"
-                  onClick={() => window.open('mailto:germaine@germainetutoring.com', '_blank')}
-                >
-                  <MessageCircle className="h-6 w-6 mr-3" />
-                  <div className="text-left">
-                    <div>Contact Tutor</div>
-                    <div className="text-sm font-normal opacity-70">Get help and support</div>
-                  </div>
-                </Button>
+                <Dialog open={isContactTutorOpen} onOpenChange={setIsContactTutorOpen}>
+                  <DialogTrigger asChild>
+                    <Button 
+                      size="lg" 
+                      variant="outline"
+                      className="h-20 text-lg font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105 rounded-xl"
+                    >
+                      <MessageCircle className="h-6 w-6 mr-3" />
+                      <div className="text-left">
+                        <div>Contact Tutor</div>
+                        <div className="text-sm font-normal opacity-70">Get help and support</div>
+                      </div>
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>Contact Tutor</DialogTitle>
+                      <DialogDescription>
+                        Send a message directly to your tutor.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <form onSubmit={handleContactTutor} className="space-y-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="contact-subject">Subject</Label>
+                        <Input
+                          id="contact-subject"
+                          value={subject}
+                          onChange={(event) => setSubject(event.target.value)}
+                          placeholder="What do you need help with?"
+                          maxLength={200}
+                          required
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <Label htmlFor="contact-message">Message</Label>
+                        <Textarea
+                          id="contact-message"
+                          value={message}
+                          onChange={(event) => setMessage(event.target.value)}
+                          placeholder="Write your message..."
+                          rows={5}
+                          required
+                        />
+                      </div>
+                      <Button type="submit" className="w-full" disabled={isSendingMessage}>
+                        {isSendingMessage ? "Sending..." : "Send Message"}
+                      </Button>
+                    </form>
+                  </DialogContent>
+                </Dialog>
               </div>
             </div>
           </div>

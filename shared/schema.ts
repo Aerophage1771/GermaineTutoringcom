@@ -1,11 +1,11 @@
-import { pgTable, text, serial, integer, boolean, timestamp, decimal, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, decimal, varchar, uuid, bigint } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
 
 // Profiles table for student/admin authentication with time tracking
 export const profiles = pgTable("profiles", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   username: text("username").notNull().unique(),
   email: text("email").notNull().unique(),
   password: text("password").notNull(),
@@ -29,7 +29,7 @@ export type User = typeof profiles.$inferSelect;
 // Sessions table for tracking tutoring sessions
 export const sessions = pgTable("sessions", {
   id: serial("id").primaryKey(),
-  user_id: integer("user_id").references(() => profiles.id).notNull(),
+  user_id: uuid("user_id").references(() => profiles.id).notNull(),
   date: timestamp("date").notNull(),
   summary: text("summary").notNull(),
   duration: decimal("duration", { precision: 3, scale: 1 }).notNull(), // in hours
@@ -51,7 +51,7 @@ export type Session = typeof sessions.$inferSelect;
 // Time add-ons purchased by students
 export const timeAddOns = pgTable("time_addons", {
   id: serial("id").primaryKey(),
-  user_id: integer("user_id").references(() => profiles.id).notNull(),
+  user_id: uuid("user_id").references(() => profiles.id).notNull(),
   hours_added: decimal("hours_added", { precision: 4, scale: 1 }).notNull(),
   addon_type: varchar("addon_type", { length: 50 }).notNull(), // 'regular', 'bonus_test_review'
   price_paid: decimal("price_paid", { precision: 8, scale: 2 }),
@@ -67,6 +67,24 @@ export const insertTimeAddOnSchema = createInsertSchema(timeAddOns).pick({
 
 export type InsertTimeAddOn = z.infer<typeof insertTimeAddOnSchema>;
 export type TimeAddOn = typeof timeAddOns.$inferSelect;
+
+export const messages = pgTable("messages", {
+  id: bigint("id", { mode: "number" }).primaryKey(),
+  user_id: uuid("user_id").references(() => profiles.id).notNull(),
+  subject: text("subject").notNull(),
+  content: text("content").notNull(),
+  is_read: boolean("is_read").default(false).notNull(),
+  created_at: timestamp("created_at").defaultNow(),
+});
+
+export const insertMessageSchema = createInsertSchema(messages).pick({
+  user_id: true,
+  subject: true,
+  content: true,
+});
+
+export type InsertMessage = z.infer<typeof insertMessageSchema>;
+export type Message = typeof messages.$inferSelect;
 
 // Relations
 export const profilesRelations = relations(profiles, ({ many }) => ({
