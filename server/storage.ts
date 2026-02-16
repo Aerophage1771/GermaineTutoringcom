@@ -25,7 +25,7 @@ export interface IStorage {
   createConsultation(consultation: InsertConsultation): Promise<Consultation>;
   
   // Session management
-  getUserSessions(userId: number): Promise<Session[]>;
+  getUserSessions(userId: string): Promise<Session[]>;
   createSession(session: InsertSession): Promise<Session>;
   
   // Time add-ons
@@ -50,7 +50,7 @@ export interface IStorage {
   deleteUser(id: number): Promise<void>;
   updateUserPassword(id: number, hashedPassword: string): Promise<User>;
   getAllSessions(): Promise<Session[]>;
-  getSessionsByUserId(userId: number): Promise<Session[]>;
+  getSessionsByUserId(userId: string): Promise<Session[]>;
   updateSession(id: number, updates: Partial<Session>): Promise<Session>;
   deleteSession(id: number): Promise<void>;
   seedAdminUser(): Promise<void>;
@@ -116,11 +116,11 @@ export class DatabaseStorage implements IStorage {
   }
 
   // Session management
-  async getUserSessions(userId: number): Promise<Session[]> {
+  async getUserSessions(userId: string): Promise<Session[]> {
     return await db
       .select()
       .from(sessions)
-      .where(eq(sessions.user_id, userId.toString()))
+      .where(eq(sessions.user_id, userId))
       .orderBy(desc(sessions.date));
   }
 
@@ -131,10 +131,15 @@ export class DatabaseStorage implements IStorage {
       .returning();
     
     // Update user's session count using SQL increment
-    await db
-      .update(profiles)
-      .set({ sessions_held: sql`${profiles.sessions_held} + 1` })
-      .where(eq(profiles.id, Number(insertSession.user_id)));
+    const numericUserId = Number(insertSession.user_id);
+    if (!Number.isNaN(numericUserId)) {
+      await db
+        .update(profiles)
+        .set({ sessions_held: sql`${profiles.sessions_held} + 1` })
+        .where(eq(profiles.id, numericUserId));
+    } else {
+      console.warn(`Skipping profile sessions_held update for non-numeric user_id: ${insertSession.user_id}`);
+    }
     
     return session;
   }
@@ -252,8 +257,8 @@ export class DatabaseStorage implements IStorage {
     return db.select().from(sessions).orderBy(desc(sessions.date));
   }
 
-  async getSessionsByUserId(userId: number): Promise<Session[]> {
-    return db.select().from(sessions).where(eq(sessions.user_id, userId.toString())).orderBy(desc(sessions.date));
+  async getSessionsByUserId(userId: string): Promise<Session[]> {
+    return db.select().from(sessions).where(eq(sessions.user_id, userId)).orderBy(desc(sessions.date));
   }
 
   async updateSession(id: number, updates: Partial<Session>): Promise<Session> {

@@ -554,7 +554,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin: Get sessions for a user
   app.get("/api/admin/users/:id/sessions", requireAdmin, async (req, res) => {
     try {
-      const sessions = await storage.getSessionsByUserId(parseInt(req.params.id));
+      const sessions = await storage.getSessionsByUserId(req.params.id);
       res.json(sessions);
     } catch (error) {
       console.error("Error fetching sessions:", error);
