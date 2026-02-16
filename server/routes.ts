@@ -177,13 +177,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(401).json({ message: "Not authenticated" });
     }
     
-    try {
-      const sessions = await storage.getUserSessions(req.session.userId);
-      res.json(sessions);
-    } catch (error) {
-      console.error("Error fetching sessions:", error);
-      res.status(500).json({ message: "Failed to fetch sessions" });
-    }
+    return res.json([]);
   });
 
   app.post("/api/dashboard/sessions", async (req, res) => {
@@ -210,13 +204,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(401).json({ message: "Not authenticated" });
     }
     
-    try {
-      const problemLog = await storage.getUserProblemLog(req.session.userId);
-      res.json(problemLog);
-    } catch (error) {
-      console.error("Error fetching problem log:", error);
-      res.status(500).json({ message: "Failed to fetch problem log" });
-    }
+    return res.json([]);
   });
 
   app.post("/api/dashboard/problem-log", async (req, res) => {
@@ -274,14 +262,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(401).json({ message: "Not authenticated" });
     }
     
-    try {
-      const activities = await storage.getUserPracticeActivities(req.session.userId);
-      res.json(activities);
-    } catch (error) {
-      console.error("Error fetching practice activities:", error);
-      res.status(500).json({ message: "Failed to fetch practice activities" });
-    }
+    return res.json([]);
   });
+
+  // Temporarily disable LSAT/practice feature routes during backend simplification
+  app.all("/api/lsat/*", (_req, res) => res.json([]));
+  app.all("/api/practice/*", (_req, res) => res.json([]));
 
   // LSAT Questions routes
   app.get("/api/lsat/random", async (req, res) => {
@@ -449,13 +435,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       return res.status(401).json({ message: "Not authenticated" });
     }
     
-    try {
-      const addons = await storage.getUserTimeAddOns(req.session.userId);
-      res.json(addons);
-    } catch (error) {
-      console.error("Error fetching time add-ons:", error);
-      res.status(500).json({ message: "Failed to fetch time add-ons" });
-    }
+    return res.json([]);
   });
 
   app.post("/api/dashboard/time-addons", async (req, res) => {
