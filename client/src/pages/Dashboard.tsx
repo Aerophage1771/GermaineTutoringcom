@@ -30,6 +30,8 @@ interface Session {
 
 const CALENDLY_2_HOUR_URL = "https://calendly.com/germaine-washington-tutoring/2-hours-lsat-tutoring";
 const TUTOR_EMAIL = "germaine@germainetutoring.com";
+const TUTOR_EMAIL_SUBJECT = "Student Message";
+const TUTOR_EMAIL_BODY = "I tried to contact my tutor from the dashboard but it did not send.";
 
 export default function Dashboard() {
   const { user, isLoading } = useAuthRedirect();
@@ -87,6 +89,8 @@ export default function Dashboard() {
       return;
     }
 
+    const backupTutorEmailHref = `mailto:${TUTOR_EMAIL}?subject=${encodeURIComponent(TUTOR_EMAIL_SUBJECT)}&body=${encodeURIComponent(TUTOR_EMAIL_BODY)}`;
+
     const { error } = await supabase.from("messages").insert({
       user_id: user.id,
       subject: "Dashboard Contact Request",
@@ -98,7 +102,7 @@ export default function Dashboard() {
       const { error: loggingError } = await supabase.from("messages").insert({
         user_id: user.id,
         subject: "Dashboard Contact Request Error",
-        content: `Dashboard contact request failed to send. Error: ${error.message}`,
+        content: "Dashboard contact request failed to send. Student was directed to email tutor as backup.",
       });
       if (loggingError) {
         console.error("Failed to log dashboard contact error message", loggingError);
@@ -107,9 +111,9 @@ export default function Dashboard() {
         title: "Message not delivered",
         description: (
           <>
-            We couldn&apos;t deliver your tutor message. Please{" "}
+            We couldn't deliver your tutor message. Please{" "}
             <a
-              href={`mailto:${TUTOR_EMAIL}?subject=Student%20Message&body=I%20tried%20to%20contact%20my%20tutor%20from%20the%20dashboard%20but%20it%20did%20not%20send.`}
+              href={backupTutorEmailHref}
               target="_blank"
               rel="noreferrer"
               className="underline"
