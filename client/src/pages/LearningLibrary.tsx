@@ -400,7 +400,16 @@ export default function LearningLibrary() {
         </p>
       </div>
 
+      <Card className="mb-6 border-gray-300 bg-gray-100">
+        <CardContent className="py-4">
+          <p className="text-sm font-medium text-gray-700">
+            I&apos;m still getting the Content Library ready. Content access is scheduled to arrive Feb 16th at 6:00 PM Pacific time.
+          </p>
+        </CardContent>
+      </Card>
+
       {/* Main Content */}
+      <div className="opacity-50 grayscale pointer-events-none select-none">
       {!selectedSection ? (
         // Section Selection View
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -511,6 +520,7 @@ export default function LearningLibrary() {
           </div>
         </div>
       )}
+      </div>
 
       {/* Content Modal */}
       <Dialog open={isModalOpen} onOpenChange={closeModal}>
