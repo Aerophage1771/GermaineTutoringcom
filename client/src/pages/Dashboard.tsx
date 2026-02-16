@@ -1,14 +1,13 @@
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/auth";
 import { useAuthRedirect } from "@/hooks/use-auth-redirect";
 import { useLocation } from "wouter";
+import { supabase } from "@/lib/supabase";
+import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Clock, BookOpen, Calendar, Archive, MessageCircle, FileText } from "lucide-react";
-
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 
 // Calendly widget interface
 declare global {
@@ -29,13 +28,13 @@ interface Session {
   notes?: string;
 }
 
+const CALENDLY_2_HOUR_URL = "https://calendly.com/germaine-washington-tutoring/2-hours-lsat-tutoring";
+
 export default function Dashboard() {
   const { user, isLoading } = useAuthRedirect();
   const { logout } = useAuth();
+  const { toast } = useToast();
   const [location, setLocation] = useLocation();
-
-  // Dialog states
-  const [isBookSessionOpen, setIsBookSessionOpen] = useState(false);
 
   // Data queries
   const { data: sessions = [] } = useQuery<Session[]>({
@@ -75,6 +74,38 @@ export default function Dashboard() {
     if (window.Calendly) {
       window.Calendly.initPopupWidget({ url });
     }
+  };
+
+  const handleContactTutor = async () => {
+    if (!user?.id) {
+      toast({
+        title: "Message failed",
+        description: "You must be logged in to contact your tutor.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const { error } = await supabase.from("messages").insert({
+      user_id: user.id,
+      subject: "Dashboard Contact Request",
+      description: "Student requested tutor contact from the dashboard.",
+    });
+
+    if (error) {
+      console.error("Failed to insert dashboard contact message", error);
+      toast({
+        title: "Message failed",
+        description: "Could not notify your tutor. Please try again.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    toast({
+      title: "Message sent",
+      description: "Your tutor has been notified and will follow up soon.",
+    });
   };
 
   return (
@@ -175,72 +206,18 @@ export default function Dashboard() {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Book Session */}
-                <Dialog open={isBookSessionOpen} onOpenChange={setIsBookSessionOpen}>
-                  <DialogTrigger asChild>
-                    <Button 
-                      size="lg" 
-                      className="h-20 text-lg font-semibold bg-blue-600 hover:bg-blue-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
-                      disabled={!canSchedule}
-                    >
-                      <Calendar className="h-6 w-6 mr-3" />
-                      <div className="text-left">
-                        <div>Book Session</div>
-                        <div className="text-sm font-normal opacity-80">Schedule a new tutoring session</div>
-                      </div>
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-md">
-                    <DialogHeader>
-                      <DialogTitle>Choose Session Length</DialogTitle>
-                      <DialogDescription>
-                        Select the duration for your tutoring session
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="grid gap-4">
-                      <Button 
-                        className="h-16 text-lg font-semibold bg-blue-600 hover:bg-blue-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
-                        onClick={() => {
-                          openCalendlyWidget('https://calendly.com/germaine-washington-tutoring/1-hour-lsat-tutoring?hide_gdpr_banner=1');
-                          setIsBookSessionOpen(false);
-                        }}
-                      >
-                        <Clock className="h-5 w-5 mr-3" />
-                        <div className="text-left">
-                          <div>60 Minutes</div>
-                          <div className="text-sm font-normal opacity-80">Standard session</div>
-                        </div>
-                      </Button>
-                      
-                      <Button 
-                        className="h-16 text-lg font-semibold bg-emerald-600 hover:bg-emerald-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
-                        onClick={() => {
-                          openCalendlyWidget('https://calendly.com/germaine-washington-tutoring/90-min-lsat-tutoring');
-                          setIsBookSessionOpen(false);
-                        }}
-                      >
-                        <Clock className="h-5 w-5 mr-3" />
-                        <div className="text-left">
-                          <div>90 Minutes</div>
-                          <div className="text-sm font-normal opacity-80">Extended session</div>
-                        </div>
-                      </Button>
-                      
-                      <Button 
-                        className="h-16 text-lg font-semibold bg-purple-600 hover:bg-purple-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
-                        onClick={() => {
-                          openCalendlyWidget('https://calendly.com/germaine-washington-tutoring/2-hours-lsat-tutoring');
-                          setIsBookSessionOpen(false);
-                        }}
-                      >
-                        <Clock className="h-5 w-5 mr-3" />
-                        <div className="text-left">
-                          <div>120 Minutes</div>
-                          <div className="text-sm font-normal opacity-80">Deep dive session</div>
-                        </div>
-                      </Button>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                <Button 
+                  size="lg" 
+                  className="h-20 text-lg font-semibold bg-blue-600 hover:bg-blue-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
+                  disabled={!canSchedule}
+                  onClick={() => openCalendlyWidget(CALENDLY_2_HOUR_URL)}
+                >
+                  <Calendar className="h-6 w-6 mr-3" />
+                  <div className="text-left">
+                    <div>Book Session</div>
+                    <div className="text-sm font-normal opacity-80">Schedule a new tutoring session</div>
+                  </div>
+                </Button>
 
                 {/* Session Summaries */}
                 <Button 
@@ -283,7 +260,9 @@ export default function Dashboard() {
                   size="lg" 
                   variant="outline"
                   className="h-20 text-lg font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105 rounded-xl"
-                  onClick={() => window.open('mailto:germaine@germainetutoring.com', '_blank')}
+                  onClick={() => {
+                    void handleContactTutor();
+                  }}
                 >
                   <MessageCircle className="h-6 w-6 mr-3" />
                   <div className="text-left">
