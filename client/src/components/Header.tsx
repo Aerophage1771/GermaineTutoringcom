@@ -136,14 +136,12 @@ const Header = () => {
                   LSAT Blog
                 </button>
               </Link>
-              <Link href="/login">
-                <button 
-                  onClick={scrollToTop}
-                  className="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-5 rounded-lg transition-colors text-sm lg:text-base border-2 border-primary"
-                >
-                  Student Log-In
-                </button>
-              </Link>
+              <a
+                href="https://student.germainetutoring.com"
+                className="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-5 rounded-lg transition-colors text-sm lg:text-base border-2 border-primary"
+              >
+                Student Log-In
+              </a>
               <button 
                 onClick={openCalendly} 
                 className="bg-accent hover:bg-accent/90 text-primary font-bold px-5 py-2 rounded-lg transition-colors text-sm lg:text-base"
@@ -214,17 +212,13 @@ const Header = () => {
                   LSAT Blog
                 </button>
               </Link>
-              <Link href="/login">
-                <button 
-                  onClick={() => {
-                    scrollToTop();
-                    setMobileMenuOpen(false);
-                  }}
-                  className="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-4 rounded-lg transition-colors text-left"
-                >
-                  Student Log-In
-                </button>
-              </Link>
+              <a
+                href="https://student.germainetutoring.com"
+                onClick={() => setMobileMenuOpen(false)}
+                className="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-4 rounded-lg transition-colors text-left"
+              >
+                Student Log-In
+              </a>
               <button 
                 onClick={openCalendly} 
                 className="bg-accent hover:bg-accent/90 text-primary font-bold px-4 py-2 rounded-lg text-center transition-colors"
