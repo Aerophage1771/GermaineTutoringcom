@@ -409,8 +409,8 @@ cd GermaineTutoringcom
 # Install dependencies
 npm install
 
-# Set up environment variables (see below)
-cp .env.example .env
+# Create a `.env` file and set environment variables (see below)
+touch .env
 
 # Push database schema
 npm run db:push
