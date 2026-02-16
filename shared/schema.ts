@@ -48,6 +48,22 @@ export const insertSessionSchema = createInsertSchema(sessions).pick({
 export type InsertSession = z.infer<typeof insertSessionSchema>;
 export type Session = typeof sessions.$inferSelect;
 
+export const messages = pgTable("messages", {
+  id: serial("id").primaryKey(),
+  user_id: integer("user_id").references(() => profiles.id).notNull(),
+  subject: text("subject").notNull(),
+  content: text("content").notNull(),
+  is_read: boolean("is_read").default(false),
+  created_at: timestamp("created_at").defaultNow(),
+});
+
+export const insertMessageSchema = createInsertSchema(messages).pick({
+  user_id: true,
+  subject: true,
+  content: true,
+  is_read: true,
+});
+
 // Time add-ons purchased by students
 export const timeAddOns = pgTable("time_addons", {
   id: serial("id").primaryKey(),
