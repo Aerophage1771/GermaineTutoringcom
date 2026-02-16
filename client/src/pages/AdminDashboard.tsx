@@ -35,18 +35,7 @@ interface Session {
   video_link: string;
 }
 
-interface ProblemLogEntry {
-  id: number;
-  user_id: number;
-  prep_test: string;
-  section: string;
-  question: string;
-  correct_reasoning: string;
-  student_flaw: string;
-  rule_for_future: string;
-}
-
-type TabType = "students" | "sessions" | "problem-log";
+type TabType = "students" | "sessions";
 
 function StudentsTab() {
   const { toast } = useToast();
@@ -559,220 +548,6 @@ function SessionsTab() {
   );
 }
 
-function ProblemLogTab() {
-  const { toast } = useToast();
-  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [editForm, setEditForm] = useState<Partial<ProblemLogEntry>>({});
-  const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
-
-  const { data: users } = useQuery<AdminUser[]>({
-    queryKey: ["/api/admin/users"],
-  });
-
-  const { data: entries, isLoading: entriesLoading } = useQuery<ProblemLogEntry[]>({
-    queryKey: ["/api/admin/users", selectedUserId, "problem-log"],
-    queryFn: async () => {
-      const res = await fetch(`/api/admin/users/${selectedUserId}/problem-log`, { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to fetch problem log");
-      return res.json();
-    },
-    enabled: selectedUserId !== null,
-  });
-
-  const updateMutation = useMutation({
-    mutationFn: async ({ id, data }: { id: number; data: Partial<ProblemLogEntry> }) => {
-      await apiRequest("PUT", `/api/admin/problem-log/${id}`, data);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/users", selectedUserId, "problem-log"] });
-      toast({ title: "Problem log updated successfully" });
-      setEditingId(null);
-    },
-    onError: (err: Error) => {
-      toast({ title: "Failed to update entry", description: err.message, variant: "destructive" });
-    },
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: async (id: number) => {
-      await apiRequest("DELETE", `/api/admin/problem-log/${id}`);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/admin/users", selectedUserId, "problem-log"] });
-      toast({ title: "Problem log entry deleted" });
-      setDeleteConfirmId(null);
-    },
-    onError: (err: Error) => {
-      toast({ title: "Failed to delete entry", description: err.message, variant: "destructive" });
-    },
-  });
-
-  const startEdit = (entry: ProblemLogEntry) => {
-    setEditingId(entry.id);
-    setEditForm({
-      prep_test: entry.prep_test,
-      section: entry.section,
-      question: entry.question,
-      correct_reasoning: entry.correct_reasoning,
-      student_flaw: entry.student_flaw,
-      rule_for_future: entry.rule_for_future,
-    });
-  };
-
-  return (
-    <div>
-      <h2 className="font-heading font-bold text-primary text-2xl mb-6">Problem Log</h2>
-
-      <div className="mb-6">
-        <Label className="mb-2 block">Select Student</Label>
-        <div className="relative w-full max-w-xs">
-          <select
-            value={selectedUserId ?? ""}
-            onChange={(e) => setSelectedUserId(e.target.value ? parseInt(e.target.value) : null)}
-            className="w-full px-4 py-2 border border-border rounded-lg bg-white text-sm appearance-none pr-8 focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none"
-          >
-            <option value="">Choose a student...</option>
-            {users?.map((u) => (
-              <option key={u.id} value={u.id}>{u.username} ({u.email})</option>
-            ))}
-          </select>
-          <ChevronDown className="w-4 h-4 absolute right-3 top-1/2 -translate-y-1/2 text-foreground/50 pointer-events-none" />
-        </div>
-      </div>
-
-      {deleteConfirmId !== null && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <Card className="w-full max-w-md">
-            <CardHeader>
-              <CardTitle className="font-heading text-primary">Confirm Delete</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-foreground/70">Are you sure you want to delete this problem log entry?</p>
-              <div className="flex gap-2 justify-end">
-                <Button variant="outline" onClick={() => setDeleteConfirmId(null)}>Cancel</Button>
-                <Button variant="destructive" onClick={() => deleteMutation.mutate(deleteConfirmId)} disabled={deleteMutation.isPending}>
-                  {deleteMutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-                  Delete
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
-
-      {editingId !== null && (
-        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
-          <Card className="w-full max-w-2xl max-h-[90vh] overflow-y-auto">
-            <CardHeader>
-              <CardTitle className="font-heading text-primary">Edit Problem Log Entry</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <Label>Prep Test</Label>
-                  <Input value={editForm.prep_test || ""} onChange={(e) => setEditForm({ ...editForm, prep_test: e.target.value })} className="mt-1" />
-                </div>
-                <div>
-                  <Label>Section</Label>
-                  <Input value={editForm.section || ""} onChange={(e) => setEditForm({ ...editForm, section: e.target.value })} className="mt-1" />
-                </div>
-                <div>
-                  <Label>Question</Label>
-                  <Input value={editForm.question || ""} onChange={(e) => setEditForm({ ...editForm, question: e.target.value })} className="mt-1" />
-                </div>
-              </div>
-              <div>
-                <Label>Correct Reasoning</Label>
-                <Input value={editForm.correct_reasoning || ""} onChange={(e) => setEditForm({ ...editForm, correct_reasoning: e.target.value })} className="mt-1" />
-              </div>
-              <div>
-                <Label>Student Flaw</Label>
-                <Input value={editForm.student_flaw || ""} onChange={(e) => setEditForm({ ...editForm, student_flaw: e.target.value })} className="mt-1" />
-              </div>
-              <div>
-                <Label>Rule for Future</Label>
-                <Input value={editForm.rule_for_future || ""} onChange={(e) => setEditForm({ ...editForm, rule_for_future: e.target.value })} className="mt-1" />
-              </div>
-              <div className="flex gap-2 justify-end">
-                <Button variant="outline" onClick={() => setEditingId(null)}>Cancel</Button>
-                <Button
-                  onClick={() => updateMutation.mutate({ id: editingId, data: editForm })}
-                  disabled={updateMutation.isPending}
-                  className="bg-primary text-white"
-                >
-                  {updateMutation.isPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-                  Save Changes
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
-      )}
-
-      {selectedUserId === null && (
-        <div className="text-center py-12 text-foreground/50">
-          <BookOpen className="w-12 h-12 mx-auto mb-3 opacity-30" />
-          <p>Select a student to view their problem log</p>
-        </div>
-      )}
-
-      {selectedUserId !== null && entriesLoading && (
-        <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 animate-spin text-primary" />
-        </div>
-      )}
-
-      {selectedUserId !== null && entries && (
-        <div className="overflow-x-auto">
-          <table className="w-full border border-border rounded-lg">
-            <thead>
-              <tr className="bg-muted/30">
-                <th className="text-left px-4 py-3 text-sm font-semibold text-foreground border-b border-border">Prep Test</th>
-                <th className="text-left px-4 py-3 text-sm font-semibold text-foreground border-b border-border">Section</th>
-                <th className="text-left px-4 py-3 text-sm font-semibold text-foreground border-b border-border">Question</th>
-                <th className="text-left px-4 py-3 text-sm font-semibold text-foreground border-b border-border">Correct Reasoning</th>
-                <th className="text-left px-4 py-3 text-sm font-semibold text-foreground border-b border-border">Student Flaw</th>
-                <th className="text-left px-4 py-3 text-sm font-semibold text-foreground border-b border-border">Rule for Future</th>
-                <th className="text-left px-4 py-3 text-sm font-semibold text-foreground border-b border-border">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {entries.map((entry) => (
-                <tr key={entry.id} className="border-b border-border hover:bg-muted/10">
-                  <td className="px-4 py-3 text-sm">{entry.prep_test}</td>
-                  <td className="px-4 py-3 text-sm">{entry.section}</td>
-                  <td className="px-4 py-3 text-sm">{entry.question}</td>
-                  <td className="px-4 py-3 text-sm max-w-[200px] truncate" title={entry.correct_reasoning}>{entry.correct_reasoning}</td>
-                  <td className="px-4 py-3 text-sm max-w-[200px] truncate" title={entry.student_flaw}>{entry.student_flaw}</td>
-                  <td className="px-4 py-3 text-sm max-w-[200px] truncate" title={entry.rule_for_future}>{entry.rule_for_future}</td>
-                  <td className="px-4 py-3">
-                    <div className="flex gap-1">
-                      <Button size="sm" variant="ghost" onClick={() => startEdit(entry)} title="Edit">
-                        <Pencil className="w-4 h-4" />
-                      </Button>
-                      <Button size="sm" variant="ghost" onClick={() => setDeleteConfirmId(entry.id)} title="Delete" className="text-red-500 hover:text-red-700">
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-
-          {entries.length === 0 && (
-            <div className="text-center py-12 text-foreground/50">
-              <BookOpen className="w-12 h-12 mx-auto mb-3 opacity-30" />
-              <p>No problem log entries found for this student</p>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
 function AdminDashboard() {
   const { user, isLoading: authLoading, isAuthenticated } = useAuth();
   const [, setLocation] = useLocation();
@@ -799,7 +574,6 @@ function AdminDashboard() {
   const tabs: { key: TabType | "blog"; label: string; icon: typeof Users }[] = [
     { key: "students", label: "Students", icon: Users },
     { key: "sessions", label: "Sessions", icon: FileText },
-    { key: "problem-log", label: "Problem Log", icon: BookOpen },
     { key: "blog", label: "Blog", icon: Settings },
   ];
 
@@ -845,7 +619,6 @@ function AdminDashboard() {
             <CardContent className="p-6">
               {activeTab === "students" && <StudentsTab />}
               {activeTab === "sessions" && <SessionsTab />}
-              {activeTab === "problem-log" && <ProblemLogTab />}
             </CardContent>
           </Card>
         </div>

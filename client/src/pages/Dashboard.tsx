@@ -1,22 +1,23 @@
-import { useState, useEffect } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/auth";
 import { useAuthRedirect } from "@/hooks/use-auth-redirect";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { useToast } from "@/hooks/use-toast";
-import { Clock, Plus, Play, BookOpen, Target, Calendar, Archive, BarChart3, Trash2, Brain, FileText, MessageCircle } from "lucide-react";
+import { Clock, BookOpen, Calendar, Archive, MessageCircle, FileText } from "lucide-react";
 
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { apiRequest } from "@/lib/queryClient";
+
+// Calendly widget interface
+declare global {
+  interface Window {
+    Calendly?: {
+      initPopupWidget: (options: { url: string }) => void;
+    };
+  }
+}
 
 // Types
 interface Session {
@@ -28,89 +29,21 @@ interface Session {
   notes?: string;
 }
 
-interface ProblemLog {
-  id: number;
-  user_id: number;
-  prep_test: number;
-  section_number: number;
-  question_number: number;
-  question_type: string;
-  difficulty: number;
-  correct: boolean;
-  time_spent: number;
-  notes?: string;
-  created_at: string;
-}
-
 export default function Dashboard() {
   const { user, isLoading } = useAuthRedirect();
   const { logout } = useAuth();
   const [location, setLocation] = useLocation();
-  const { toast } = useToast();
-  const queryClient = useQueryClient();
 
-  // Dialog states - moved before early return to fix hooks order
+  // Dialog states
   const [isBookSessionOpen, setIsBookSessionOpen] = useState(false);
-  const [isAddProblemOpen, setIsAddProblemOpen] = useState(false);
 
-  // Problem log form state
-  const [problemForm, setProblemForm] = useState({
-    prep_test: "",
-    section_number: "",
-    question_number: "",
-    question_type: "",
-    difficulty: "",
-    correct: "false",
-    time_spent: "",
-    notes: ""
-  });
-
-  // Data queries - must be called before any early returns
+  // Data queries
   const { data: sessions = [] } = useQuery<Session[]>({
     queryKey: ["/api/dashboard/sessions"],
     enabled: !!user
   });
 
-  const { data: problemLog = [] } = useQuery<ProblemLog[]>({
-    queryKey: ["/api/dashboard/problem-log"],
-    enabled: !!user
-  });
-
-  // Mutations - must be called before any early returns
-  const addProblemMutation = useMutation({
-    mutationFn: (data: any) => apiRequest("/api/dashboard/problem-log", "POST", data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/dashboard/problem-log"] });
-      setIsAddProblemOpen(false);
-      setProblemForm({
-        prep_test: "",
-        section_number: "",
-        question_number: "",
-        question_type: "",
-        difficulty: "",
-        correct: "false",
-        time_spent: "",
-        notes: ""
-      });
-      toast({ title: "Problem added successfully" });
-    },
-    onError: (error: any) => {
-      toast({ title: "Error adding problem", description: error.message, variant: "destructive" });
-    }
-  });
-
-  const deleteProblemMutation = useMutation({
-    mutationFn: (id: number) => apiRequest(`/api/dashboard/problem-log/${id}`, "DELETE"),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/dashboard/problem-log"] });
-      toast({ title: "Problem deleted successfully" });
-    },
-    onError: (error: any) => {
-      toast({ title: "Error deleting problem", description: error.message, variant: "destructive" });
-    }
-  });
-
-  // Show loading spinner while checking authentication - moved after all hooks
+  // Show loading spinner while checking authentication
   if (isLoading || !user) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -143,15 +76,6 @@ export default function Dashboard() {
       window.Calendly.initPopupWidget({ url });
     }
   };
-
-  // Declare Calendly interface
-  declare global {
-    interface Window {
-      Calendly?: {
-        initPopupWidget: (options: { url: string }) => void;
-      };
-    }
-  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -334,28 +258,13 @@ export default function Dashboard() {
               </div>
             </div>
 
-
-
-            {/* Practice & Review Section - Simplified */}
+            {/* Resources & Tools Section */}
             <div>
               <h2 className="text-lg font-medium text-gray-800 mb-4 flex items-center gap-2">
-                <Brain className="h-5 w-5 text-emerald-500" />
-                Practice & Review
+                <Archive className="h-5 w-5 text-orange-500" />
+                Resources & Tools
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {/* Practice - Combined */}
-                <Button 
-                  size="lg" 
-                  className="h-20 text-lg font-semibold bg-green-600 hover:bg-green-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
-                  onClick={() => setLocation("/train-me")}
-                >
-                  <Play className="h-6 w-6 mr-3" />
-                  <div className="text-left">
-                    <div>Practice</div>
-                    <div className="text-sm font-normal opacity-80">Smart drills and question practice</div>
-                  </div>
-                </Button>
-
                 {/* Learning Library */}
                 <Button 
                   size="lg"
@@ -368,17 +277,6 @@ export default function Dashboard() {
                     <div className="text-sm font-normal opacity-80">Study materials and concepts</div>
                   </div>
                 </Button>
-              </div>
-            </div>
-
-            {/* Resources & Tools Section */}
-            <div>
-              <h2 className="text-lg font-medium text-gray-800 mb-4 flex items-center gap-2">
-                <Archive className="h-5 w-5 text-orange-500" />
-                Resources & Tools
-              </h2>
-              <div className="grid grid-cols-1 gap-4">
-
 
                 {/* Contact Tutor */}
                 <Button 
@@ -397,63 +295,6 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
-
-        {/* Problem Log Table */}
-        {problemLog.length > 0 && (
-          <div className="mt-12">
-            <h2 className="text-xl font-semibold mb-4">Recent Problem Log</h2>
-            <Card>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Test</TableHead>
-                    <TableHead>Section</TableHead>
-                    <TableHead>Question</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Difficulty</TableHead>
-                    <TableHead>Result</TableHead>
-                    <TableHead>Time</TableHead>
-                    <TableHead>Notes</TableHead>
-                    <TableHead></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {problemLog.slice(0, 10).map((problem) => (
-                    <TableRow key={problem.id}>
-                      <TableCell>PT {problem.prep_test}</TableCell>
-                      <TableCell>S{problem.section_number}</TableCell>
-                      <TableCell>Q{problem.question_number}</TableCell>
-                      <TableCell>
-                        <Badge variant="outline">{problem.question_type}</Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={problem.difficulty >= 4 ? "destructive" : problem.difficulty >= 3 ? "default" : "secondary"}>
-                          {problem.difficulty}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>
-                        <Badge variant={problem.correct ? "default" : "destructive"}>
-                          {problem.correct ? "✓" : "✗"}
-                        </Badge>
-                      </TableCell>
-                      <TableCell>{problem.time_spent}s</TableCell>
-                      <TableCell className="max-w-xs truncate">{problem.notes}</TableCell>
-                      <TableCell>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => deleteProblemMutation.mutate(problem.id)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Card>
-          </div>
-        )}
       </div>
     </div>
   );
