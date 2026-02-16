@@ -29,6 +29,9 @@ interface Session {
 }
 
 const CALENDLY_2_HOUR_URL = "https://calendly.com/germaine-washington-tutoring/2-hours-lsat-tutoring";
+const TUTOR_EMAIL = "germaine@germainetutoring.com";
+const TUTOR_EMAIL_SUBJECT = "Student Message";
+const TUTOR_EMAIL_BODY = "I tried to contact my tutor from the dashboard but it did not send.";
 
 export default function Dashboard() {
   const { user, isLoading } = useAuthRedirect();
@@ -86,17 +89,40 @@ export default function Dashboard() {
       return;
     }
 
+    const backupTutorEmailHref = `mailto:${TUTOR_EMAIL}?subject=${encodeURIComponent(TUTOR_EMAIL_SUBJECT)}&body=${encodeURIComponent(TUTOR_EMAIL_BODY)}`;
+
     const { error } = await supabase.from("messages").insert({
       user_id: user.id,
       subject: "Dashboard Contact Request",
-      description: "Student requested tutor contact from the dashboard.",
+      content: "Student requested tutor contact from the dashboard.",
     });
 
     if (error) {
       console.error("Failed to insert dashboard contact message", error);
+      const { error: loggingError } = await supabase.from("messages").insert({
+        user_id: user.id,
+        subject: "Dashboard Contact Request Error",
+        content: "Dashboard contact request failed to send. Student was directed to email tutor as backup.",
+      });
+      if (loggingError) {
+        console.error("Failed to log dashboard contact error message", loggingError);
+      }
       toast({
-        title: "Message failed",
-        description: "Could not notify your tutor. Please try again.",
+        title: "Message not delivered",
+        description: (
+          <>
+            We couldn't deliver your tutor message. Please{" "}
+            <a
+              href={backupTutorEmailHref}
+              target="_blank"
+              rel="noreferrer"
+              className="underline"
+            >
+              email your tutor
+            </a>{" "}
+            as a backup.
+          </>
+        ),
         variant: "destructive",
       });
       return;
