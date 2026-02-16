@@ -16,7 +16,7 @@ export default function NotFound() {
     void supabase.from("messages").insert({
       user_id: user.id,
       subject: "Error Error",
-      description: `Student encountered 404 error with user id: ${user.id}`,
+      content: `Student encountered 404 error with user id: ${user.id}`,
     });
   }, [isAuthenticated, user]);
 

@@ -29,6 +29,7 @@ interface Session {
 }
 
 const CALENDLY_2_HOUR_URL = "https://calendly.com/germaine-washington-tutoring/2-hours-lsat-tutoring";
+const TUTOR_EMAIL = "germaine@germainetutoring.com";
 
 export default function Dashboard() {
   const { user, isLoading } = useAuthRedirect();
@@ -89,14 +90,35 @@ export default function Dashboard() {
     const { error } = await supabase.from("messages").insert({
       user_id: user.id,
       subject: "Dashboard Contact Request",
-      description: "Student requested tutor contact from the dashboard.",
+      content: "Student requested tutor contact from the dashboard.",
     });
 
     if (error) {
       console.error("Failed to insert dashboard contact message", error);
+      const { error: loggingError } = await supabase.from("messages").insert({
+        user_id: user.id,
+        subject: "Dashboard Contact Request Error",
+        content: `Dashboard contact request failed to send. Error: ${error.message}`,
+      });
+      if (loggingError) {
+        console.error("Failed to log dashboard contact error message", loggingError);
+      }
       toast({
-        title: "Message failed",
-        description: "Could not notify your tutor. Please try again.",
+        title: "Message not delivered",
+        description: (
+          <>
+            We couldn&apos;t deliver your tutor message. Please{" "}
+            <a
+              href={`mailto:${TUTOR_EMAIL}?subject=Student%20Message&body=I%20tried%20to%20contact%20my%20tutor%20from%20the%20dashboard%20but%20it%20did%20not%20send.`}
+              target="_blank"
+              rel="noreferrer"
+              className="underline"
+            >
+              email your tutor
+            </a>{" "}
+            as a backup.
+          </>
+        ),
         variant: "destructive",
       });
       return;
