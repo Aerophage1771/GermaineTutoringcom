@@ -1,21 +1,10 @@
 import { useState, useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
 import { Link } from "wouter";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Calendar, Clock, ArrowRight, BookOpen, Sparkles, Filter, Search } from "lucide-react";
 import { useSEO } from "@/hooks/use-seo";
-
-interface BlogPostMeta {
-  slug: string;
-  title: string;
-  date: string;
-  snippet: string;
-  tags: string[];
-  author: string;
-  featured_image?: string | null;
-  readTime?: number;
-}
+import { blogPosts } from "@/data/posts";
 
 const TAG_LABELS: Record<string, string> = {
   "logical-reasoning": "Logical Reasoning",
@@ -68,16 +57,9 @@ const Blog = () => {
     ogType: "website",
   });
 
-  const { data: posts, isLoading, error } = useQuery<BlogPostMeta[]>({
-    queryKey: ['/api/blog/posts'],
-    queryFn: async () => {
-      const response = await fetch('/api/blog/posts');
-      if (!response.ok) {
-        throw new Error('Failed to fetch blog posts');
-      }
-      return response.json();
-    }
-  });
+  const posts = blogPosts;
+  const isLoading = false;
+  const error = null;
 
   const filteredPosts = useMemo(() => {
     if (!posts) return [];

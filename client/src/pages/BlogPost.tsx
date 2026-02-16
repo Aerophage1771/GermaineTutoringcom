@@ -10,19 +10,7 @@ import { useSEO } from "@/hooks/use-seo";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import type { BlogComment } from "@shared/schema";
-
-interface BlogPost {
-  slug: string;
-  title: string;
-  date: string;
-  snippet: string;
-  tags: string[];
-  author: string;
-  content: string;
-  featured_image?: string | null;
-  meta_description?: string | null;
-  readTime?: number;
-}
+import { blogPosts } from "@/data/posts";
 
 const TAG_LABELS: Record<string, string> = {
   "logical-reasoning": "Logical Reasoning",
@@ -138,17 +126,8 @@ const BlogPost = () => {
   const [commentText, setCommentText] = useState('');
   const { toast } = useToast();
 
-  const { data: post, isLoading, error } = useQuery<BlogPost>({
-    queryKey: ['/api/blog/posts', slug],
-    queryFn: async () => {
-      const response = await fetch(`/api/blog/posts/${slug}`);
-      if (!response.ok) {
-        throw new Error('Failed to fetch blog post');
-      }
-      return response.json();
-    },
-    enabled: !!slug
-  });
+  const post = blogPosts.find((p) => p.slug === slug);
+  const isLoading = false;
 
   const { data: comments = [], isLoading: commentsLoading } = useQuery<BlogComment[]>({
     queryKey: ['/api/blog/posts', slug, 'comments'],
@@ -248,9 +227,9 @@ const BlogPost = () => {
 
   useSEO({
     title: post?.title,
-    description: post?.meta_description ?? post?.snippet,
+    description: post?.snippet,
     ogTitle: post?.title,
-    ogDescription: post?.meta_description ?? post?.snippet,
+    ogDescription: post?.snippet,
     ogImage: post?.featured_image || undefined,
     ogType: "article",
     articlePublishedTime: post?.date,
@@ -302,7 +281,7 @@ const BlogPost = () => {
         )}
 
         {/* Error */}
-        {error && (
+        {!post && (
           <div className="container mx-auto px-4 py-16 text-center">
             <div className="bg-red-50 border border-red-200 rounded-xl p-8 max-w-md mx-auto">
               <h3 className="text-red-800 font-heading font-semibold text-lg mb-2">Post Not Found</h3>
