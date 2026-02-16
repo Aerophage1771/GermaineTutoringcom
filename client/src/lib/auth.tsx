@@ -49,6 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     retry: false,
     refetchOnWindowFocus: false,
+    enabled: false,
   });
 
   const loginMutation = useMutation({

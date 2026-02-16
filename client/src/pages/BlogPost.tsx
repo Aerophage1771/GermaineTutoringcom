@@ -1,15 +1,11 @@
 import { useState, useEffect, useMemo } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
 import { useRoute, Link } from "wouter";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Calendar, Clock, ArrowLeft, ArrowRight, ChevronRight, ChevronUp, User, List, Link2, MessageCircle, Send } from "lucide-react";
+import { Calendar, Clock, ArrowLeft, ArrowRight, ChevronRight, ChevronUp, User, List, Link2 } from "lucide-react";
 import { useSEO } from "@/hooks/use-seo";
-import { apiRequest, queryClient } from "@/lib/queryClient";
-import { useToast } from "@/hooks/use-toast";
-import type { BlogComment } from "@shared/schema";
 import { blogPosts } from "@/data/posts";
 
 const TAG_LABELS: Record<string, string> = {
@@ -100,60 +96,14 @@ const ShareButtons = ({ title, compact }: { title: string; compact?: boolean }) 
   );
 };
 
-const timeAgo = (dateStr: string | Date | null | undefined): string => {
-  if (!dateStr) return '';
-  const date = new Date(dateStr);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffSec = Math.floor(diffMs / 1000);
-  const diffMin = Math.floor(diffSec / 60);
-  const diffHr = Math.floor(diffMin / 60);
-  const diffDay = Math.floor(diffHr / 24);
-
-  if (diffDay > 30) return `${Math.floor(diffDay / 30)} months ago`;
-  if (diffDay > 0) return `${diffDay} day${diffDay === 1 ? '' : 's'} ago`;
-  if (diffHr > 0) return `${diffHr} hour${diffHr === 1 ? '' : 's'} ago`;
-  if (diffMin > 0) return `${diffMin} minute${diffMin === 1 ? '' : 's'} ago`;
-  return 'just now';
-};
-
 const BlogPost = () => {
   const [match, params] = useRoute("/blog/:slug");
   const slug = params?.slug;
   const [tocOpen, setTocOpen] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
-  const [commentName, setCommentName] = useState('');
-  const [commentText, setCommentText] = useState('');
-  const { toast } = useToast();
 
   const post = blogPosts.find((p) => p.slug === slug);
   const isLoading = false;
-
-  const { data: comments = [], isLoading: commentsLoading } = useQuery<BlogComment[]>({
-    queryKey: ['/api/blog/posts', slug, 'comments'],
-    queryFn: async () => {
-      const response = await fetch(`/api/blog/posts/${slug}/comments`);
-      if (!response.ok) throw new Error('Failed to fetch comments');
-      return response.json();
-    },
-    enabled: !!slug && !!post,
-  });
-
-  const commentMutation = useMutation({
-    mutationFn: async (data: { author_name: string; comment: string }) => {
-      const res = await apiRequest('POST', `/api/blog/posts/${slug}/comments`, data);
-      return res.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['/api/blog/posts', slug, 'comments'] });
-      setCommentName('');
-      setCommentText('');
-      toast({ title: "Comment posted!", description: "Your comment has been added successfully." });
-    },
-    onError: () => {
-      toast({ title: "Error", description: "Failed to post comment. Please try again.", variant: "destructive" });
-    },
-  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -165,12 +115,6 @@ const BlogPost = () => {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  const handleCommentSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!commentName.trim() || !commentText.trim()) return;
-    commentMutation.mutate({ author_name: commentName.trim(), comment: commentText.trim() });
   };
 
   const formatDate = (dateString: string) => {
@@ -448,83 +392,6 @@ const BlogPost = () => {
                       </button>
                     </div>
                   </div>
-                </div>
-
-                {/* Comments Section */}
-                <div className="mt-14">
-                  <h3 className="font-heading font-bold text-primary text-xl md:text-2xl mb-6 flex items-center gap-2">
-                    <MessageCircle className="w-6 h-6" />
-                    Comments {comments.length > 0 && `(${comments.length})`}
-                  </h3>
-
-                  {/* Comment Form */}
-                  <form onSubmit={handleCommentSubmit} className="mb-10 bg-muted/30 rounded-xl border border-border/60 p-6">
-                    <div className="mb-4">
-                      <label htmlFor="comment-name" className="block text-sm font-semibold text-foreground/70 mb-1.5">Name</label>
-                      <input
-                        id="comment-name"
-                        type="text"
-                        value={commentName}
-                        onChange={(e) => setCommentName(e.target.value)}
-                        placeholder="Your name"
-                        className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground placeholder:text-foreground/40 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-colors"
-                        required
-                      />
-                    </div>
-                    <div className="mb-4">
-                      <label htmlFor="comment-text" className="block text-sm font-semibold text-foreground/70 mb-1.5">Comment</label>
-                      <textarea
-                        id="comment-text"
-                        value={commentText}
-                        onChange={(e) => setCommentText(e.target.value)}
-                        placeholder="Share your thoughts..."
-                        rows={4}
-                        maxLength={2000}
-                        className="w-full px-4 py-2.5 rounded-lg border border-border bg-background text-foreground placeholder:text-foreground/40 focus:outline-none focus:ring-2 focus:ring-accent/50 focus:border-accent transition-colors resize-vertical"
-                        required
-                      />
-                      <p className="text-xs text-foreground/40 mt-1">{commentText.length}/2000</p>
-                    </div>
-                    <button
-                      type="submit"
-                      disabled={commentMutation.isPending || !commentName.trim() || !commentText.trim()}
-                      className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-2.5 px-5 rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      <Send className="w-4 h-4" />
-                      {commentMutation.isPending ? 'Posting...' : 'Post Comment'}
-                    </button>
-                  </form>
-
-                  {/* Comments List */}
-                  {commentsLoading ? (
-                    <div className="space-y-4">
-                      {[1,2,3].map(i => (
-                        <div key={i} className="animate-pulse bg-muted/30 rounded-xl p-5">
-                          <div className="h-4 bg-muted rounded w-1/4 mb-3" />
-                          <div className="h-3 bg-muted rounded w-3/4" />
-                        </div>
-                      ))}
-                    </div>
-                  ) : comments.length === 0 ? (
-                    <p className="text-foreground/50 text-sm text-center py-8">No comments yet. Be the first to share your thoughts!</p>
-                  ) : (
-                    <div className="space-y-4">
-                      {comments.map((c) => (
-                        <div key={c.id} className="bg-muted/20 rounded-xl p-5 border border-border/40">
-                          <div className="flex items-center gap-2 mb-2">
-                            <div className="w-8 h-8 rounded-full bg-primary/10 text-primary flex items-center justify-center text-sm font-bold">
-                              {c.author_name.charAt(0).toUpperCase()}
-                            </div>
-                            <div>
-                              <span className="font-semibold text-sm text-primary">{c.author_name}</span>
-                              <span className="text-xs text-foreground/40 ml-2">{timeAgo(c.created_at)}</span>
-                            </div>
-                          </div>
-                          <p className="text-foreground/80 text-sm leading-relaxed whitespace-pre-wrap">{c.comment}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
                 </div>
 
                 {/* Back to blog */}
