@@ -4,107 +4,82 @@ import { User as SupabaseUser } from '@supabase/supabase-js';
 
 // The shape of your user object in the app
 export interface User {
-  id: string;
+  id: string; 
   username: string;
   email: string;
   role: string;
+  // Hardcoded stats for now as requested
   sessions_held: number;
   time_remaining: number;
   bonus_test_review_time: number;
-}
-
-interface AuthContextType {
-  user: User | null;
-  isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
-  isAuthenticated: boolean;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export function AuthProvider({ children }: { children: ReactNode }) {
+@@ -28,22 +27,50 @@
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Helper to fetch the profile from the "public.profiles" table
-  const fetchProfile = async (sbUser: SupabaseUser) => {
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', sbUser.id)
-        .single();
+  // Helper to convert real Supabase user -> App user with hardcoded stats
+  const formatUser = (sbUser: SupabaseUser): User => ({
+    id: sbUser.id,
+    email: sbUser.email || "",
+    username: sbUser.email?.split('@')[0] || "Student",
+    role: "student", // Default role
+    sessions_held: 12, // Hardcoded for now
+    time_remaining: 4.5, // Hardcoded for now
+    bonus_test_review_time: 1.0, // Hardcoded for now
+  });
 
-      if (error) {
-        console.error('Error fetching profile:', error);
-        // Fallback if profile doesn't exist yet (prevents crash)
-        return {
-          id: sbUser.id,
-          email: sbUser.email || "",
-          username: sbUser.email?.split('@')[0] || "Student",
-          role: "student",
-          sessions_held: 0,
-          time_remaining: 0,
-          bonus_test_review_time: 0
-        };
-      }
 
-      return {
-        id: sbUser.id,
-        email: sbUser.email || "",
-        username: data.username || sbUser.email?.split('@')[0],
-        role: data.role || "student",
-        sessions_held: data.sessions_held || 0,
-        time_remaining: Number(data.time_remaining) || 0,
-        bonus_test_review_time: Number(data.bonus_test_review_time) || 0,
-      };
-    } catch (err) {
-      console.error("Unexpected error fetching profile:", err);
-      return null;
-    }
-  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   useEffect(() => {
     // 1. Check active session on load
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
-        const fullUser = await fetchProfile(session.user);
-        setUser(fullUser);
+        setUser(formatUser(session.user));
+
       } else {
         setUser(null);
       }
-      setIsLoading(false);
-    });
-
+@@ -53,9 +80,11 @@
     // 2. Listen for changes (Login/Logout)
     const {
       data: { subscription },
-    } = supabase.auth.onAuthStateChange(async (_event, session) => {
+    } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
-        // Only fetch profile if we don't have it (or if it's a new login)
-        const fullUser = await fetchProfile(session.user);
-        setUser(fullUser);
+        setUser(formatUser(session.user));
+
+
       } else {
         setUser(null);
       }
-      setIsLoading(false);
-    });
-
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const login = async (email: string, password: string) => {
-    setIsLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-
-    if (error) {
+@@ -76,33 +105,32 @@
       setIsLoading(false);
       throw error;
     }
+    // onAuthStateChange handles the state update
   };
 
   const logout = async () => {
