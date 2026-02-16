@@ -74,6 +74,8 @@ declare module 'express-session' {
 }
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  const uuidParamSchema = z.string().uuid();
+
   const requireAdmin = (req: any, res: any, next: any) => {
     if (!req.session.userId || !req.session.user) {
       return res.status(401).json({ message: "Not authenticated" });
@@ -498,6 +500,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put("/api/admin/users/:id", requireAdmin, async (req, res) => {
     try {
       const id = req.params.id;
+      if (!uuidParamSchema.safeParse(id).success) {
+        return res.status(400).json({ message: "Invalid user id" });
+      }
       const { username, email, sessions_held, time_remaining, bonus_test_review_time, role } = req.body;
       const updates: any = {};
       if (username !== undefined) updates.username = username;
@@ -527,6 +532,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.put("/api/admin/users/:id/password", requireAdmin, async (req, res) => {
     try {
       const id = req.params.id;
+      if (!uuidParamSchema.safeParse(id).success) {
+        return res.status(400).json({ message: "Invalid user id" });
+      }
       const { password } = req.body;
       if (!password || password.length < 6) {
         return res.status(400).json({ message: "Password must be at least 6 characters" });
@@ -543,7 +551,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin: Delete student
   app.delete("/api/admin/users/:id", requireAdmin, async (req, res) => {
     try {
-      await storage.deleteUser(req.params.id);
+      const id = req.params.id;
+      if (!uuidParamSchema.safeParse(id).success) {
+        return res.status(400).json({ message: "Invalid user id" });
+      }
+      await storage.deleteUser(id);
       res.json({ message: "User deleted" });
     } catch (error) {
       console.error("Error deleting user:", error);
@@ -554,7 +566,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Admin: Get sessions for a user
   app.get("/api/admin/users/:id/sessions", requireAdmin, async (req, res) => {
     try {
-      const sessions = await storage.getSessionsByUserId(req.params.id);
+      const id = req.params.id;
+      if (!uuidParamSchema.safeParse(id).success) {
+        return res.status(400).json({ message: "Invalid user id" });
+      }
+      const sessions = await storage.getSessionsByUserId(id);
       res.json(sessions);
     } catch (error) {
       console.error("Error fetching sessions:", error);

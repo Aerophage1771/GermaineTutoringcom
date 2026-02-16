@@ -87,7 +87,7 @@ export default function Dashboard() {
     if (error) {
       toast({
         title: "Message Failed",
-        description: error.message,
+        description: "We couldn't send your message right now. Please try again.",
         variant: "destructive",
       });
       return;
@@ -301,7 +301,6 @@ export default function Dashboard() {
                           value={subject}
                           onChange={(event) => setSubject(event.target.value)}
                           placeholder="What do you need help with?"
-                          maxLength={200}
                           required
                         />
                       </div>

@@ -69,7 +69,7 @@ export type InsertTimeAddOn = z.infer<typeof insertTimeAddOnSchema>;
 export type TimeAddOn = typeof timeAddOns.$inferSelect;
 
 export const messages = pgTable("messages", {
-  id: bigint("id", { mode: "number" }).primaryKey(),
+  id: bigint("id", { mode: "bigint" }).primaryKey().generatedByDefaultAsIdentity(),
   user_id: uuid("user_id").references(() => profiles.id).notNull(),
   subject: text("subject").notNull(),
   content: text("content").notNull(),
