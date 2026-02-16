@@ -53,7 +53,7 @@ export const messages = pgTable("messages", {
   user_id: integer("user_id").references(() => profiles.id).notNull(),
   subject: text("subject").notNull(),
   content: text("content").notNull(),
-  is_read: boolean("is_read").default(false),
+  is_read: boolean("is_read").default(false).notNull(),
   created_at: timestamp("created_at").defaultNow(),
 });
 
@@ -61,7 +61,6 @@ export const insertMessageSchema = createInsertSchema(messages).pick({
   user_id: true,
   subject: true,
   content: true,
-  is_read: true,
 });
 
 // Time add-ons purchased by students

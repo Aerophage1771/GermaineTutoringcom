@@ -74,7 +74,7 @@ export default function Dashboard() {
     }
 
     const userId = Number(user.id);
-    if (!Number.isInteger(userId)) {
+    if (!Number.isFinite(userId)) {
       toast({
         title: "Unable to Send Message",
         description: "Your account is missing a valid user ID.",
@@ -151,7 +151,7 @@ export default function Dashboard() {
                       </div>
                       <div className="text-xs text-gray-600">Time Left</div>
                     </div>
-                    {Number(user.bonus_test_review_time) > 0 && (
+                    {bonusTestTime > 0 && (
                       <div className="text-center p-3 bg-gray-50 rounded-lg">
                         <div className="text-xl font-bold text-emerald-600">
                           {bonusTestTime.toFixed(1)}h
