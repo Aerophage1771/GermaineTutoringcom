@@ -12,7 +12,19 @@ export interface User {
   sessions_held: number;
   time_remaining: number;
   bonus_test_review_time: number;
-@@ -28,22 +27,50 @@
+}
+
+interface AuthContextType {
+  user: User | null;
+  isLoading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  isAuthenticated: boolean;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -27,55 +39,40 @@ export interface User {
     bonus_test_review_time: 1.0, // Hardcoded for now
   });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   useEffect(() => {
     // 1. Check active session on load
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         setUser(formatUser(session.user));
-
       } else {
         setUser(null);
       }
-@@ -53,9 +80,11 @@
+      setIsLoading(false);
+    });
+
     // 2. Listen for changes (Login/Logout)
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       if (session?.user) {
         setUser(formatUser(session.user));
-
-
       } else {
         setUser(null);
       }
-@@ -76,33 +105,32 @@
+      setIsLoading(false);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const login = async (email: string, password: string) => {
+    setIsLoading(true);
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (error) {
       setIsLoading(false);
       throw error;
     }
