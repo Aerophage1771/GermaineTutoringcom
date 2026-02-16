@@ -137,7 +137,7 @@ const Header = () => {
                 </button>
               </Link>
               <a
-                href="https://student.germainetutoring.com"
+                href="https://students.germainetutoring.com"
                 className="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-5 rounded-lg transition-colors text-sm lg:text-base border-2 border-primary"
               >
                 Student Log-In
@@ -213,7 +213,7 @@ const Header = () => {
                 </button>
               </Link>
               <a
-                href="https://student.germainetutoring.com"
+                href="https://students.germainetutoring.com"
                 onClick={() => setMobileMenuOpen(false)}
                 className="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-4 rounded-lg transition-colors text-left"
               >
