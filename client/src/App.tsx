@@ -29,10 +29,12 @@ import Progress from "@/pages/Progress";
 import AdminBlog from "@/pages/AdminBlog";
 import AdminDashboard from "@/pages/AdminDashboard";
 
+const isStudentPortal = import.meta.env.VITE_APP_MODE === "dashboard";
+
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Home} />
+      <Route path="/" component={isStudentPortal ? Login : Home} />
       <Route path="/methodology" component={MethodologyResults} />
       <Route path="/results" component={MethodologyResults} />
       <Route path="/programs" component={Programs} />
