@@ -120,7 +120,7 @@ export class DatabaseStorage implements IStorage {
     return await db
       .select()
       .from(sessions)
-      .where(eq(sessions.user_id, userId))
+      .where(eq(sessions.user_id, userId.toString()))
       .orderBy(desc(sessions.date));
   }
 
@@ -134,7 +134,7 @@ export class DatabaseStorage implements IStorage {
     await db
       .update(profiles)
       .set({ sessions_held: sql`${profiles.sessions_held} + 1` })
-      .where(eq(profiles.id, insertSession.user_id));
+      .where(eq(profiles.id, Number(insertSession.user_id)));
     
     return session;
   }
@@ -253,7 +253,7 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getSessionsByUserId(userId: number): Promise<Session[]> {
-    return db.select().from(sessions).where(eq(sessions.user_id, userId)).orderBy(desc(sessions.date));
+    return db.select().from(sessions).where(eq(sessions.user_id, userId.toString())).orderBy(desc(sessions.date));
   }
 
   async updateSession(id: number, updates: Partial<Session>): Promise<Session> {

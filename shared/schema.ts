@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, boolean, timestamp, decimal, varchar } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, decimal, varchar, uuid } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
@@ -29,11 +29,12 @@ export type User = typeof profiles.$inferSelect;
 // Sessions table for tracking tutoring sessions
 export const sessions = pgTable("sessions", {
   id: serial("id").primaryKey(),
-  user_id: integer("user_id").references(() => profiles.id).notNull(),
+  user_id: uuid("user_id").references(() => profiles.id).notNull(),
   date: timestamp("date").notNull(),
   summary: text("summary").notNull(),
   duration: decimal("duration", { precision: 3, scale: 1 }).notNull(), // in hours
   video_link: text("video_link"),
+  transcript: text("transcript"),
   created_at: timestamp("created_at").defaultNow(),
 });
 
@@ -43,6 +44,7 @@ export const insertSessionSchema = createInsertSchema(sessions).pick({
   summary: true,
   duration: true,
   video_link: true,
+  transcript: true,
 });
 
 export type InsertSession = z.infer<typeof insertSessionSchema>;
