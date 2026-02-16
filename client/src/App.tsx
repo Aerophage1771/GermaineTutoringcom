@@ -13,19 +13,7 @@ import MethodologyResults from "@/pages/MethodologyResults";
 import Programs from "@/pages/Programs";
 import Login from "@/pages/Login";
 import Dashboard from "@/pages/Dashboard";
-import PracticeTest from "@/pages/PracticeTest";
-import PracticeRC from "@/pages/PracticeRC";
-import QuestionPractice from "@/pages/QuestionPractice";
-import QuestionSetCreator from "@/pages/QuestionSetCreator";
-import ProblemLog from "@/pages/ProblemLog";
 import LearningLibrary from "@/pages/LearningLibrary";
-import TrainMe from "@/pages/TrainMe";
-import ExploreTests from "@/pages/ExploreTests";
-import SimulateTests from "@/pages/SimulateTests";
-import ExploreQuestions from "@/pages/ExploreQuestions";
-import CustomSets from "@/pages/CustomSets";
-import SimulateTestInterface from "@/pages/SimulateTestInterface";
-import Progress from "@/pages/Progress";
 import AdminBlog from "@/pages/AdminBlog";
 import AdminDashboard from "@/pages/AdminDashboard";
 
@@ -40,19 +28,7 @@ function Router() {
       <Route path="/programs" component={Programs} />
       <Route path="/login" component={Login} />
       <Route path="/dashboard" component={Dashboard} />
-      <Route path="/practice-test" component={PracticeTest} />
-      <Route path="/practice-rc" component={PracticeRC} />
-      <Route path="/question-practice" component={QuestionPractice} />
-      <Route path="/create-set" component={QuestionSetCreator} />
-      <Route path="/problem-log" component={ProblemLog} />
       <Route path="/learning-library" component={LearningLibrary} />
-      <Route path="/train-me" component={TrainMe} />
-      <Route path="/explore-tests" component={ExploreTests} />
-      <Route path="/simulate-tests" component={SimulateTests} />
-      <Route path="/explore-questions" component={ExploreQuestions} />
-      <Route path="/custom-sets" component={CustomSets} />
-      <Route path="/simulate-test/:testNumber" component={SimulateTestInterface} />
-      <Route path="/progress" component={Progress} />
       <Route path="/admin/dashboard" component={AdminDashboard} />
       <Route path="/admin/blog" component={AdminBlog} />
       <Route path="/admin/blog/new" component={AdminBlog} />
