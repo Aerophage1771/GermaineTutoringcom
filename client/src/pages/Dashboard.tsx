@@ -1,13 +1,14 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/lib/auth";
 import { useAuthRedirect } from "@/hooks/use-auth-redirect";
 import { useLocation } from "wouter";
-import { supabase } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Clock, BookOpen, Calendar, Archive, MessageCircle, FileText } from "lucide-react";
+import { ContactTutorDialog } from "@/components/ContactTutorDialog";
 
 // Calendly widget interface
 declare global {
@@ -29,15 +30,13 @@ interface Session {
 }
 
 const CALENDLY_2_HOUR_URL = "https://calendly.com/germaine-washington-tutoring/2-hours-lsat-tutoring";
-const TUTOR_EMAIL = "germaine@germainetutoring.com";
-const TUTOR_EMAIL_SUBJECT = "Student Message";
-const TUTOR_EMAIL_BODY = "I tried to contact my tutor from the dashboard but it did not send.";
 
 export default function Dashboard() {
   const { user, isLoading } = useAuthRedirect();
   const { logout } = useAuth();
   const { toast } = useToast();
   const [location, setLocation] = useLocation();
+  const [contactOpen, setContactOpen] = useState(false);
 
   // Data queries
   const { data: sessions = [] } = useQuery<Session[]>({
@@ -77,61 +76,6 @@ export default function Dashboard() {
     if (window.Calendly) {
       window.Calendly.initPopupWidget({ url });
     }
-  };
-
-  const handleContactTutor = async () => {
-    if (!user?.id) {
-      toast({
-        title: "Message failed",
-        description: "You must be logged in to contact your tutor.",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    const backupTutorEmailHref = `mailto:${TUTOR_EMAIL}?subject=${encodeURIComponent(TUTOR_EMAIL_SUBJECT)}&body=${encodeURIComponent(TUTOR_EMAIL_BODY)}`;
-
-    const { error } = await supabase.from("messages").insert({
-      user_id: user.id,
-      subject: "Dashboard Contact Request",
-      content: "Student requested tutor contact from the dashboard.",
-    });
-
-    if (error) {
-      console.error("Failed to insert dashboard contact message", error);
-      const { error: loggingError } = await supabase.from("messages").insert({
-        user_id: user.id,
-        subject: "Dashboard Contact Request Error",
-        content: "Dashboard contact request failed to send. Student was directed to email tutor as backup.",
-      });
-      if (loggingError) {
-        console.error("Failed to log dashboard contact error message", loggingError);
-      }
-      toast({
-        title: "Message not delivered",
-        description: (
-          <>
-            We couldn't deliver your tutor message. Please{" "}
-            <a
-              href={backupTutorEmailHref}
-              target="_blank"
-              rel="noreferrer"
-              className="underline"
-            >
-              email your tutor
-            </a>{" "}
-            as a backup.
-          </>
-        ),
-        variant: "destructive",
-      });
-      return;
-    }
-
-    toast({
-      title: "Message sent",
-      description: "Your tutor has been notified and will follow up soon.",
-    });
   };
 
   return (
@@ -286,14 +230,12 @@ export default function Dashboard() {
                   size="lg" 
                   variant="outline"
                   className="h-20 text-lg font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105 rounded-xl"
-                  onClick={() => {
-                    void handleContactTutor();
-                  }}
+                  onClick={() => setContactOpen(true)}
                 >
                   <MessageCircle className="h-6 w-6 mr-3" />
                   <div className="text-left">
                     <div>Contact Tutor</div>
-                    <div className="text-sm font-normal opacity-70">Get help and support</div>
+                    <div className="text-sm font-normal opacity-70">Send a message to your tutor</div>
                   </div>
                 </Button>
               </div>
@@ -301,6 +243,13 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {/* Contact Tutor Dialog */}
+      <ContactTutorDialog
+        open={contactOpen}
+        onOpenChange={setContactOpen}
+        userId={user.id}
+      />
     </div>
   );
 }
