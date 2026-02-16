@@ -3,7 +3,7 @@ import { User as SupabaseUser } from "@supabase/supabase-js";
 import { supabase } from "./supabase";
 
 interface User {
-  id: string;
+  id: string | number;
   username: string;
   email: string;
   role: string;
