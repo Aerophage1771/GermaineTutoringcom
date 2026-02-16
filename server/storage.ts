@@ -13,11 +13,11 @@ import bcrypt from "bcrypt";
 
 export interface IStorage {
   // User management (via profiles table)
-  getUser(id: number): Promise<User | undefined>;
+  getUser(id: string): Promise<User | undefined>;
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
-  updateUser(id: number, updates: Partial<User>): Promise<User>;
+  updateUser(id: string, updates: Partial<User>): Promise<User>;
   validatePassword(user: User, password: string): Promise<boolean>;
   
   // Subscription and consultation
@@ -29,7 +29,7 @@ export interface IStorage {
   createSession(session: InsertSession): Promise<Session>;
   
   // Time add-ons
-  getUserTimeAddOns(userId: number): Promise<TimeAddOn[]>;
+  getUserTimeAddOns(userId: string): Promise<TimeAddOn[]>;
   createTimeAddOn(addon: InsertTimeAddOn): Promise<TimeAddOn>;
 
   // Blog posts
@@ -47,8 +47,8 @@ export interface IStorage {
 
   // Admin operations
   getAllUsers(): Promise<User[]>;
-  deleteUser(id: number): Promise<void>;
-  updateUserPassword(id: number, hashedPassword: string): Promise<User>;
+  deleteUser(id: string): Promise<void>;
+  updateUserPassword(id: string, hashedPassword: string): Promise<User>;
   getAllSessions(): Promise<Session[]>;
   getSessionsByUserId(userId: string): Promise<Session[]>;
   updateSession(id: number, updates: Partial<Session>): Promise<Session>;
@@ -58,7 +58,7 @@ export interface IStorage {
 
 export class DatabaseStorage implements IStorage {
   // User management (via profiles table)
-  async getUser(id: number): Promise<User | undefined> {
+  async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(profiles).where(eq(profiles.id, id));
     return user || undefined;
   }
@@ -82,7 +82,7 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async updateUser(id: number, updates: Partial<User>): Promise<User> {
+  async updateUser(id: string, updates: Partial<User>): Promise<User> {
     const [user] = await db
       .update(profiles)
       .set(updates)
@@ -131,21 +131,16 @@ export class DatabaseStorage implements IStorage {
       .returning();
     
     // Update user's session count using SQL increment
-    const numericUserId = Number(insertSession.user_id);
-    if (!Number.isNaN(numericUserId)) {
-      await db
-        .update(profiles)
-        .set({ sessions_held: sql`${profiles.sessions_held} + 1` })
-        .where(eq(profiles.id, numericUserId));
-    } else {
-      console.warn(`Skipping profile sessions_held update for non-numeric user_id: ${insertSession.user_id}`);
-    }
+    await db
+      .update(profiles)
+      .set({ sessions_held: sql`${profiles.sessions_held} + 1` })
+      .where(eq(profiles.id, insertSession.user_id));
     
     return session;
   }
 
   // Time add-ons
-  async getUserTimeAddOns(userId: number): Promise<TimeAddOn[]> {
+  async getUserTimeAddOns(userId: string): Promise<TimeAddOn[]> {
     return await db
       .select()
       .from(timeAddOns)
@@ -240,11 +235,11 @@ export class DatabaseStorage implements IStorage {
     return db.select().from(profiles).orderBy(desc(profiles.created_at));
   }
 
-  async deleteUser(id: number): Promise<void> {
+  async deleteUser(id: string): Promise<void> {
     await db.delete(profiles).where(eq(profiles.id, id));
   }
 
-  async updateUserPassword(id: number, hashedPassword: string): Promise<User> {
+  async updateUserPassword(id: string, hashedPassword: string): Promise<User> {
     const [user] = await db
       .update(profiles)
       .set({ password: hashedPassword })

@@ -1,11 +1,11 @@
-import { pgTable, text, serial, integer, boolean, timestamp, decimal, varchar, uuid } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, boolean, timestamp, decimal, varchar, uuid, bigint } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 import { relations } from "drizzle-orm";
 
 // Profiles table for student/admin authentication with time tracking
 export const profiles = pgTable("profiles", {
-  id: serial("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
   username: text("username").notNull().unique(),
   email: text("email").notNull().unique(),
   password: text("password").notNull(),
@@ -53,7 +53,7 @@ export type Session = typeof sessions.$inferSelect;
 // Time add-ons purchased by students
 export const timeAddOns = pgTable("time_addons", {
   id: serial("id").primaryKey(),
-  user_id: integer("user_id").references(() => profiles.id).notNull(),
+  user_id: uuid("user_id").references(() => profiles.id).notNull(),
   hours_added: decimal("hours_added", { precision: 4, scale: 1 }).notNull(),
   addon_type: varchar("addon_type", { length: 50 }).notNull(), // 'regular', 'bonus_test_review'
   price_paid: decimal("price_paid", { precision: 8, scale: 2 }),
@@ -74,6 +74,7 @@ export type TimeAddOn = typeof timeAddOns.$inferSelect;
 export const profilesRelations = relations(profiles, ({ many }) => ({
   sessions: many(sessions),
   timeAddOns: many(timeAddOns),
+  messages: many(messages),
 }));
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
@@ -86,6 +87,13 @@ export const sessionsRelations = relations(sessions, ({ one }) => ({
 export const timeAddOnsRelations = relations(timeAddOns, ({ one }) => ({
   user: one(profiles, {
     fields: [timeAddOns.user_id],
+    references: [profiles.id],
+  }),
+}));
+
+export const messagesRelations = relations(messages, ({ one }) => ({
+  user: one(profiles, {
+    fields: [messages.user_id],
     references: [profiles.id],
   }),
 }));
@@ -180,3 +188,22 @@ export const insertBlogCommentSchema = createInsertSchema(blogComments).omit({
 
 export type InsertBlogComment = z.infer<typeof insertBlogCommentSchema>;
 export type BlogComment = typeof blogComments.$inferSelect;
+
+// Messages table for student-tutor contact
+export const messages = pgTable("messages", {
+  id: bigint("id", { mode: "number" }).primaryKey().generatedAlwaysAsIdentity(),
+  user_id: uuid("user_id").references(() => profiles.id),
+  subject: text("subject"),
+  content: text("content"),
+  is_read: boolean("is_read").default(false),
+  created_at: timestamp("created_at").defaultNow(),
+});
+
+export const insertMessageSchema = createInsertSchema(messages).pick({
+  user_id: true,
+  subject: true,
+  content: true,
+});
+
+export type InsertMessage = z.infer<typeof insertMessageSchema>;
+export type Message = typeof messages.$inferSelect;
