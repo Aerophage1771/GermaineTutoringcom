@@ -29,7 +29,6 @@ export default function Dashboard() {
   const { toast } = useToast();
 
   // Dialog states
-  const [isBookSessionOpen, setIsBookSessionOpen] = useState(false);
   const [isContactTutorOpen, setIsContactTutorOpen] = useState(false);
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
@@ -56,6 +55,7 @@ export default function Dashboard() {
   
   const timeRemainingColor = getTimeRemainingColor(timeRemaining);
   const canSchedule = timeRemaining > 0;
+  const canViewSessions = user.sessions_held > 0;
 
   // Calendly functions
   const openCalendlyWidget = (url: string) => {
@@ -168,78 +168,25 @@ export default function Dashboard() {
               </h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Book Session */}
-                <Dialog open={isBookSessionOpen} onOpenChange={setIsBookSessionOpen}>
-                  <DialogTrigger asChild>
-                    <Button 
-                      size="lg" 
-                      className="h-20 text-lg font-semibold bg-blue-600 hover:bg-blue-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
-                      disabled={!canSchedule}
-                    >
-                      <Calendar className="h-6 w-6 mr-3" />
-                      <div className="text-left">
-                        <div>Book Session</div>
-                        <div className="text-sm font-normal opacity-80">Schedule a new tutoring session</div>
-                      </div>
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-md">
-                    <DialogHeader>
-                      <DialogTitle>Choose Session Length</DialogTitle>
-                      <DialogDescription>
-                        Select the duration for your tutoring session
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="grid gap-4">
-                      <Button 
-                        className="h-16 text-lg font-semibold bg-blue-600 hover:bg-blue-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
-                        onClick={() => {
-                          openCalendlyWidget('https://calendly.com/germaine-washington-tutoring/1-hour-lsat-tutoring?hide_gdpr_banner=1');
-                          setIsBookSessionOpen(false);
-                        }}
-                      >
-                        <Clock className="h-5 w-5 mr-3" />
-                        <div className="text-left">
-                          <div>60 Minutes</div>
-                          <div className="text-sm font-normal opacity-80">Standard session</div>
-                        </div>
-                      </Button>
-                      
-                      <Button 
-                        className="h-16 text-lg font-semibold bg-emerald-600 hover:bg-emerald-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
-                        onClick={() => {
-                          openCalendlyWidget('https://calendly.com/germaine-washington-tutoring/90-min-lsat-tutoring');
-                          setIsBookSessionOpen(false);
-                        }}
-                      >
-                        <Clock className="h-5 w-5 mr-3" />
-                        <div className="text-left">
-                          <div>90 Minutes</div>
-                          <div className="text-sm font-normal opacity-80">Extended session</div>
-                        </div>
-                      </Button>
-                      
-                      <Button 
-                        className="h-16 text-lg font-semibold bg-purple-600 hover:bg-purple-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
-                        onClick={() => {
-                          openCalendlyWidget('https://calendly.com/germaine-washington-tutoring/2-hours-lsat-tutoring');
-                          setIsBookSessionOpen(false);
-                        }}
-                      >
-                        <Clock className="h-5 w-5 mr-3" />
-                        <div className="text-left">
-                          <div>120 Minutes</div>
-                          <div className="text-sm font-normal opacity-80">Deep dive session</div>
-                        </div>
-                      </Button>
-                    </div>
-                  </DialogContent>
-                </Dialog>
+                <Button 
+                  size="lg" 
+                  className="h-20 text-lg font-semibold bg-blue-600 hover:bg-blue-700 transition-all duration-200 transform hover:scale-105 rounded-xl shadow-lg"
+                  disabled={!canSchedule}
+                  onClick={() => openCalendlyWidget('https://calendly.com/germaine-washington-tutoring/2-hours-lsat-tutoring')}
+                >
+                  <Calendar className="h-6 w-6 mr-3" />
+                  <div className="text-left">
+                    <div>Book Session</div>
+                    <div className="text-sm font-normal opacity-80">Schedule a new tutoring session</div>
+                  </div>
+                </Button>
 
                 {/* Session Summaries */}
                 <Button 
                   size="lg" 
                   variant="outline"
-                  className="h-20 text-lg font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105 rounded-xl"
+                  className="h-20 text-lg font-semibold hover:bg-gray-50 transition-all duration-200 transform hover:scale-105 rounded-xl disabled:transform-none disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={!canViewSessions}
                   onClick={() => setLocation("/sessions")}
                 >
                   <FileText className="h-6 w-6 mr-3" />
