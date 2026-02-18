@@ -225,16 +225,81 @@ const BlogPost = () => {
 
   const toc = useMemo(() => extractToc(processedContent), [processedContent]);
 
+  const baseUrl = "https://germainetutoring.com";
+  const postUrl = post ? `${baseUrl}/blog/${post.slug}` : "";
+
+  const combinedJsonLd = useMemo(() => {
+    if (!post) return undefined;
+    return {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BlogPosting",
+          "headline": post.title,
+          "description": post.snippet,
+          "author": {
+            "@type": "Person",
+            "name": post.author
+          },
+          "datePublished": post.date,
+          "image": post.featured_image || `${baseUrl}/og-image.jpg`,
+          "publisher": {
+            "@type": "Organization",
+            "name": "Germaine Tutoring",
+            "logo": {
+              "@type": "ImageObject",
+              "url": `${baseUrl}/logo.png`
+            }
+          },
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": postUrl
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": baseUrl
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Blog",
+              "item": `${baseUrl}/blog`
+            }
+          ]
+        }
+      ]
+    };
+  }, [post, postUrl]);
+
+  if (post && combinedJsonLd) {
+    (combinedJsonLd["@graph"] as any[])[1].itemListElement.push({
+      "@type": "ListItem",
+      "position": 3,
+      "name": post.title,
+      "item": postUrl
+    });
+  }
+
   useSEO({
     title: post?.title,
     description: post?.snippet,
     ogTitle: post?.title,
     ogDescription: post?.snippet,
-    ogImage: post?.featured_image || undefined,
+    ogImage: post?.featured_image || `${baseUrl}/og-image.jpg`,
+    ogUrl: postUrl,
     ogType: "article",
+    twitterCard: "summary_large_image",
     articlePublishedTime: post?.date,
     articleAuthor: post?.author,
     articleTags: post?.tags,
+    canonical: postUrl,
+    jsonLd: combinedJsonLd,
   });
 
   if (!match) {
@@ -249,7 +314,7 @@ const BlogPost = () => {
         {/* Breadcrumb bar */}
         <div className="border-b border-border bg-muted/30">
           <div className="container mx-auto px-4 py-3">
-            <nav className="flex items-center gap-2 text-sm text-foreground/60">
+            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-foreground/60">
               <Link href="/">
                 <span className="hover:text-accent transition-colors cursor-pointer">Home</span>
               </Link>
