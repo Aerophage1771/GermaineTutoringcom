@@ -215,3 +215,8 @@
   margin-top: 1rem;
   margin-bottom: 0.5rem;
 }
+
+/* Hide default search cancel button in WebKit browsers */
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}

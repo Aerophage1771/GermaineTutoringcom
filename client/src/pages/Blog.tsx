@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Link } from "wouter";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Calendar, Clock, ArrowRight, BookOpen, Sparkles, Filter, Search } from "lucide-react";
+import { Calendar, Clock, ArrowRight, BookOpen, Sparkles, Filter, Search, X } from "lucide-react";
 import { useSEO } from "@/hooks/use-seo";
 import { blogPosts } from "@/data/posts";
 
@@ -117,6 +117,8 @@ const Blog = () => {
                       window.Calendly.initPopupWidget({
                         url: 'https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=1b385f'
                       });
+                    } else {
+                      window.open('https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=1b385f', '_blank');
                     }
                   }}
                   className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-6 rounded-xl hover:bg-primary/90 transition-colors shadow-md"
@@ -189,6 +191,7 @@ const Blog = () => {
               <button
                 key={cat.key}
                 onClick={() => setActiveFilter(cat.key)}
+                aria-pressed={activeFilter === cat.key}
                 className={`flex-shrink-0 px-4 py-2 rounded-full text-sm font-medium transition-all duration-150 ${
                   activeFilter === cat.key
                     ? "bg-primary text-white shadow-sm"
@@ -201,22 +204,25 @@ const Blog = () => {
           </div>
 
           {/* Search Bar */}
-          <div className="max-w-md mx-auto mb-8">
+          <div className="max-w-md mx-auto mb-8" role="search">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/40" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/40" aria-hidden="true" />
               <input
-                type="text"
+                type="search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search articles..."
+                aria-label="Search articles"
                 className="w-full text-sm border border-border rounded-full px-4 py-2.5 pl-10 pr-8 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-colors bg-white placeholder:text-foreground/40"
               />
               {searchQuery && (
                 <button
+                  type="button"
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground/40 hover:text-foreground/70 text-xs"
+                  aria-label="Clear search"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground/40 hover:text-foreground/70 transition-colors"
                 >
-                  ✕
+                  <X className="w-4 h-4" />
                 </button>
               )}
             </div>
@@ -342,6 +348,8 @@ const Blog = () => {
                         window.Calendly.initPopupWidget({
                           url: 'https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=1b385f'
                         });
+                      } else {
+                        window.open('https://calendly.com/germaine-washington-tutoring/initial-consultation?primary_color=1b385f', '_blank');
                       }
                     }}
                     className="inline-flex items-center gap-2 bg-primary text-white font-semibold py-3 px-8 rounded-xl hover:bg-primary/90 transition-colors shadow-md"
