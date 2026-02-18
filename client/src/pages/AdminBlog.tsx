@@ -12,6 +12,16 @@ import Footer from "@/components/Footer";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   Bold,
   Italic,
   Underline as UnderlineIcon,
@@ -92,6 +102,7 @@ function ToolbarButton({
       onClick={onClick}
       disabled={disabled}
       title={title}
+      aria-label={title}
       className={`p-2 rounded transition-colors ${
         active
           ? "bg-primary text-white"
@@ -670,7 +681,7 @@ function PostEditor({
 function PostListing() {
   const { toast } = useToast();
   const [, setLocation] = useLocation();
-  const [deleteConfirmId, setDeleteConfirmId] = useState<number | null>(null);
+  const [postToDelete, setPostToDelete] = useState<BlogPost | null>(null);
 
   const {
     data: posts,
@@ -687,7 +698,7 @@ function PostListing() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/blog/posts"] });
       toast({ title: "Post deleted" });
-      setDeleteConfirmId(null);
+      setPostToDelete(null);
     },
     onError: (err: Error) => {
       toast({
@@ -728,6 +739,7 @@ function PostListing() {
   });
 
   return (
+    <>
     <div className="max-w-5xl mx-auto">
       <div className="flex items-center justify-between mb-8">
         <div>
@@ -857,6 +869,9 @@ function PostListing() {
                     title={
                       post.status === "published" ? "Unpublish" : "Publish Now"
                     }
+                    aria-label={
+                      post.status === "published" ? "Unpublish post" : "Publish post now"
+                    }
                   >
                     {post.status === "published" ? (
                       <>
@@ -876,48 +891,49 @@ function PostListing() {
                     }
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg border border-border hover:bg-muted transition-colors"
                     title="Edit"
+                    aria-label="Edit post"
                   >
                     <Pencil className="w-3.5 h-3.5" />
                     <span className="hidden sm:inline">Edit</span>
                   </button>
                   <button
-                    onClick={() => setDeleteConfirmId(post.id)}
+                    onClick={() => setPostToDelete(post)}
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg border border-red-200 text-red-600 hover:bg-red-50 transition-colors"
                     title="Delete"
+                    aria-label="Delete post"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                     <span className="hidden sm:inline">Delete</span>
                   </button>
                 </div>
               </div>
-
-              {deleteConfirmId === post.id && (
-                <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg flex items-center justify-between">
-                  <p className="text-red-800 text-sm font-medium">
-                    Are you sure you want to delete "{post.title}"?
-                  </p>
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setDeleteConfirmId(null)}
-                      className="px-3 py-1.5 text-sm font-medium rounded-lg border border-border bg-white hover:bg-muted transition-colors"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      onClick={() => deleteMutation.mutate(post.id)}
-                      disabled={deleteMutation.isPending}
-                      className="px-3 py-1.5 text-sm font-medium rounded-lg bg-red-600 text-white hover:bg-red-700 transition-colors disabled:opacity-50"
-                    >
-                      {deleteMutation.isPending ? "Deleting..." : "Delete"}
-                    </button>
-                  </div>
-                </div>
-              )}
             </div>
           ))}
         </div>
       )}
     </div>
+
+    <AlertDialog open={!!postToDelete} onOpenChange={(open) => !open && setPostToDelete(null)}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This will permanently delete the blog post "{postToDelete?.title}". This action cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={() => postToDelete && deleteMutation.mutate(postToDelete.id)}
+            className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
+            disabled={deleteMutation.isPending}
+          >
+            {deleteMutation.isPending ? "Deleting..." : "Delete Post"}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+    </>
   );
 }
 
