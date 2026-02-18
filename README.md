@@ -1,9 +1,8 @@
 # GermaineTutoring.com — Premium LSAT Tutoring Website
 
-> A full-stack web application for **Germaine Washington's LSAT Tutoring** practice — featuring a public marketing site, an authenticated student dashboard, an LSAT question practice platform, a blog CMS, and an admin management panel.
+> A full-stack web application for **Germaine Washington's LSAT Tutoring** — featuring a public marketing site, an authenticated student dashboard (sessions, time tracking, learning library), a blog CMS, and an admin management panel.
 
-![TypeScript](https://img.shields.io/badge/TypeScript-95.3%25-blue)
-![MDX](https://img.shields.io/badge/MDX-4%25-yellow)
+![TypeScript](https://img.shields.io/badge/TypeScript-blue)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 ---
@@ -16,7 +15,6 @@
 - [Features](#features)
   - [Public Marketing Site](#public-marketing-site)
   - [Student Dashboard](#student-dashboard)
-  - [LSAT Practice Platform](#lsat-practice-platform)
   - [Blog CMS](#blog-cms)
   - [Admin Panel](#admin-panel)
 - [Pages & Routes](#pages--routes)
@@ -34,9 +32,9 @@
 GermaineTutoring.com is a premium LSAT tutoring website built for Germaine Washington, a perfect 180 LSAT scorer. The application serves two primary audiences:
 
 1. **Prospective students** — A polished marketing site that showcases tutoring methodology, programs, results, a strategy blog, and Calendly-integrated scheduling.
-2. **Enrolled students** — An authenticated dashboard with session tracking, time management, LSAT question practice, test simulation, progress analytics, and a problem log.
+2. **Enrolled students** — An authenticated dashboard with session tracking, time management, learning library, and quick actions (e.g. session booking).
 
-The site also includes a full **admin panel** for managing students, sessions, problem logs, and blog content.
+The site also includes a full **admin panel** for managing students, sessions, and blog content.
 
 ---
 
@@ -89,16 +87,17 @@ GermaineTutoringcom/
 │       ├── index.css           # Global styles & Tailwind theme configuration
 │       ├── components/         # Shared UI & section components
 │       │   ├── ui/             # shadcn/ui component library (30+ components)
-│       │   ├── Header.tsx      # Site header with navigation & Calendly integration
-│       │   ├── Footer.tsx      # Site footer
-│       │   ├── HeroSection.tsx # Landing page hero
+│       │   ├── Header.tsx           # Site header with navigation & Calendly integration
+│       │   ├── Footer.tsx          # Site footer
+│       │   ├── HeroSection.tsx     # Landing page hero
 │       │   ├── AboutSection.tsx
 │       │   ├── MethodologySection.tsx
 │       │   ├── ProgramsSection.tsx
 │       │   ├── ResultsSection.tsx
 │       │   ├── CTASection.tsx
 │       │   ├── FAQSection.tsx
-│       │   ├── MainNavigation.tsx  # Authenticated sidebar navigation
+│       │   ├── GuidesSection.tsx
+│       │   ├── ContactTutorDialog.tsx
 │       │   └── ScrollToTop.tsx
 │       ├── hooks/              # Custom React hooks
 │       │   ├── use-auth-redirect.ts
@@ -114,29 +113,20 @@ GermaineTutoringcom/
 │           ├── Blog.tsx
 │           ├── BlogPost.tsx
 │           ├── MethodologyResults.tsx
+│           ├── Methodology.tsx
 │           ├── Programs.tsx
+│           ├── Results.tsx
 │           ├── Login.tsx
 │           ├── Dashboard.tsx
-│           ├── TrainMe.tsx
-│           ├── ExploreTests.tsx
-│           ├── ExploreQuestions.tsx
-│           ├── SimulateTests.tsx
-│           ├── SimulateTestInterface.tsx
-│           ├── PracticeTest.tsx
-│           ├── PracticeRC.tsx
-│           ├── QuestionPractice.tsx
-│           ├── QuestionSetCreator.tsx
-│           ├── CustomSets.tsx
-│           ├── ProblemLog.tsx
+│           ├── Sessions.tsx
 │           ├── LearningLibrary.tsx
-│           ├── Progress.tsx
 │           ├── AdminDashboard.tsx
 │           ├── AdminBlog.tsx
 │           └── not-found.tsx
 ├── server/                     # Backend Express application
 │   ├── index.ts                # Server entry point, middleware setup, port binding
-│   ├── routes.ts               # All API route definitions (~1,050 lines)
-│   ├── storage.ts              # Database storage layer / data access (~750 lines)
+│   ├── routes.ts               # API route definitions
+│   ├── storage.ts              # Database storage layer / data access
 │   ├── db.ts                   # Drizzle + Neon database connection
 │   ├── blog.ts                 # Legacy MDX blog post loader (superseded by DB CMS)
 │   └── vite.ts                 # Vite dev server integration
@@ -177,26 +167,8 @@ GermaineTutoringcom/
 - **Session Management** — View past tutoring sessions with dates, summaries, durations, and video links
 - **Time Tracking** — Monitor remaining tutoring hours, bonus test review time
 - **Time Add-Ons** — Purchase additional tutoring hours
-- **Quick Actions** — One-click session booking via Calendly, access to practice tools, learning library, and problem log
-- **Practice Activity Log** — History of all practice sessions with scores and details
-
-### LSAT Practice Platform
-
-- **Train Me** — Smart practice mode with AI-generated drill sets based on performance and weak areas
-- **Explore Questions** — Browse and filter the entire LSAT question database by type, difficulty, prep test, section, and more
-- **Explore Tests** — Browse available prep tests
-- **Simulate Tests** — Full-length timed test simulation with a LawHub-style interface including:
-  - Section-by-section navigation
-  - Countdown timer
-  - Question flagging
-  - Answer grid overview
-  - Score calculation
-- **Practice Test (LR)** — Dedicated Logical Reasoning question practice
-- **Practice RC** — Dedicated Reading Comprehension passage practice
-- **Question Set Creator** — Build custom question sets from the database
-- **Custom Sets** — Manage and review saved question sets
-- **Problem Log** — Track mistakes with fields for correct reasoning, student flaws, and rules for future reference
-- **Progress** — Analytics dashboard with performance charts and trend tracking
+- **Quick Actions** — One-click session booking via Calendly, access to learning library
+- **Sessions** — Dedicated sessions page for session history
 - **Learning Library** — Organized study resources and concept materials
 
 ### Blog CMS
@@ -211,21 +183,22 @@ GermaineTutoringcom/
 
 ### Admin Panel
 
-- **Student Management** — Create, edit, and delete student accounts; reset passwords; adjust time balances
+- **Student Management** — List, edit, and delete student accounts; reset passwords; adjust time balances
 - **Session Management** — Create, edit, and delete tutoring session records for any student
-- **Problem Log Management** — View and manage student problem log entries
 - **Blog Management** — Full CRUD for blog posts, including image uploads and scheduled publishing
-- **Role-Based Access** — Admin middleware protects all admin routes; auto-seeded admin account on first run
+- **Role-Based Access** — Admin middleware protects all admin routes
 
 ---
 
 ## Pages & Routes
 
+Routing is defined in `client/src/App.tsx`. When `VITE_APP_MODE=dashboard`, the root path `/` serves the Login page instead of Home.
+
 ### Public Routes
 
 | Route | Page | Description |
 |---|---|---|
-| `/` | Home | Landing page with all marketing sections |
+| `/` | Home or Login | Landing page (or login when in dashboard mode) |
 | `/methodology` | MethodologyResults | Teaching methodology & results |
 | `/results` | MethodologyResults | Results (shared component with methodology) |
 | `/programs` | Programs | Tutoring program packages & pricing |
@@ -238,25 +211,14 @@ GermaineTutoringcom/
 | Route | Page | Description |
 |---|---|---|
 | `/dashboard` | Dashboard | Student home — sessions, time, quick actions |
-| `/train-me` | TrainMe | Smart practice hub with training options |
-| `/explore-questions` | ExploreQuestions | Browse LSAT questions with filters |
-| `/explore-tests` | ExploreTests | Browse available prep tests |
-| `/simulate-tests` | SimulateTests | Test simulation selection |
-| `/simulate-test/:testNumber` | SimulateTestInterface | LawHub-style timed test simulation |
-| `/practice-test` | PracticeTest | Logical Reasoning question practice |
-| `/practice-rc` | PracticeRC | Reading Comprehension passage practice |
-| `/question-practice` | QuestionPractice | General question practice mode |
-| `/create-set` | QuestionSetCreator | Build custom question sets |
-| `/custom-sets` | CustomSets | Manage saved question sets |
-| `/problem-log` | ProblemLog | Mistake tracking & reflection |
+| `/sessions` | Sessions | Session history and details |
 | `/learning-library` | LearningLibrary | Study resources & concepts |
-| `/progress` | Progress | Performance analytics & charts |
 
 ### Admin Routes
 
 | Route | Page | Description |
 |---|---|---|
-| `/admin/dashboard` | AdminDashboard | Student, session, and problem log management |
+| `/admin/dashboard` | AdminDashboard | Student and session management |
 | `/admin/blog` | AdminBlog | Blog post listing & management |
 | `/admin/blog/new` | AdminBlog | Create new blog post |
 | `/admin/blog/edit/:id` | AdminBlog | Edit existing blog post |
@@ -279,35 +241,8 @@ GermaineTutoringcom/
 |---|---|---|
 | `GET` | `/api/dashboard/sessions` | Get user's tutoring sessions |
 | `POST` | `/api/dashboard/sessions` | Create a new session record |
-| `GET` | `/api/dashboard/problem-log` | Get user's problem log entries |
-| `POST` | `/api/dashboard/problem-log` | Create a problem log entry |
-| `DELETE` | `/api/dashboard/problem-log/:id` | Delete a problem log entry |
-| `GET` | `/api/dashboard/practice-activities` | Get user's practice activities |
-| `POST` | `/api/dashboard/practice-activities` | Record a practice activity |
 | `GET` | `/api/dashboard/time-addons` | Get user's time add-ons |
 | `POST` | `/api/dashboard/time-addons` | Purchase a time add-on |
-
-### LSAT Questions (Public/Authenticated)
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/api/lsat/questions` | Browse questions with filters, search & pagination |
-| `GET` | `/api/lsat/lr-questions` | Browse Logical Reasoning questions |
-| `GET` | `/api/lsat/rc-questions` | Browse Reading Comprehension questions |
-| `GET` | `/api/lsat/random` | Get random questions (count, sectionType, difficulty) |
-| `GET` | `/api/lsat/prep-test/:prepTest` | Get all questions for a prep test |
-| `GET` | `/api/lsat/prep-test/:prepTest/section/:section` | Get questions for a specific section |
-| `GET` | `/api/lsat/browse` | Legacy browse endpoint |
-
-### Practice Sets (Authenticated)
-
-| Method | Endpoint | Description |
-|---|---|---|
-| `GET` | `/api/practice/sets` | Get user's custom practice sets |
-| `POST` | `/api/practice/sets` | Create a custom practice set |
-| `GET` | `/api/practice/set/:id` | Get a specific practice set |
-| `POST` | `/api/practice/smart-drill` | Generate AI-based smart drill set |
-| `POST` | `/api/practice/activity` | Log a practice activity result |
 
 ### Blog (Public)
 
@@ -334,7 +269,6 @@ GermaineTutoringcom/
 | Method | Endpoint | Description |
 |---|---|---|
 | `GET` | `/api/admin/users` | List all students |
-| `POST` | `/api/admin/users` | Create a student account |
 | `PUT` | `/api/admin/users/:id` | Update student details & time balance |
 | `DELETE` | `/api/admin/users/:id` | Delete a student account |
 | `PUT` | `/api/admin/users/:id/password` | Reset a student's password |
@@ -342,7 +276,6 @@ GermaineTutoringcom/
 | `POST` | `/api/admin/sessions` | Create a session for a student |
 | `PUT` | `/api/admin/sessions/:id` | Update a session |
 | `DELETE` | `/api/admin/sessions/:id` | Delete a session |
-| `GET` | `/api/admin/users/:id/problem-log` | Get problem log for a student |
 
 ### Public Lead Capture
 
@@ -353,28 +286,22 @@ GermaineTutoringcom/
 
 ### Database Schema
 
-The application uses **PostgreSQL** (via Neon serverless) with **Drizzle ORM**. All schemas are defined in `shared/schema.ts`.
+The application uses **PostgreSQL** (via Neon or Supabase) with **Drizzle ORM**. All schemas are defined in `shared/schema.ts`.
 
 | Table | Description |
 |---|---|
-| `users` | Student/admin accounts with session counts, time tracking (remaining hours, bonus test review time) |
-| `sessions` | Tutoring session records — date, summary, duration, optional video link |
-| `problem_log` | Student mistake tracking — prep test, section, question, correct reasoning, flaw analysis, rules |
-| `practice_sets` | Custom question sets created by students — name, type (LR/RC), question IDs (JSON) |
-| `question_details` | Full LSAT question content — stimulus text, answer choices, correct answer, explanations |
-| `practice_activities` | Practice/test result records — type, scores, time spent, detailed answer data, filters used |
+| `profiles` | Student/admin accounts — username, email, role, session counts, time tracking (remaining hours, bonus test review time) |
+| `sessions` | Tutoring session records — date, summary, duration, optional video link, transcript |
 | `time_addons` | Purchased tutoring time add-ons — hours added, type, price paid |
 | `subscribers` | Email newsletter sign-ups — name, email |
 | `consultations` | Consultation booking requests — contact info, current/goal scores, test date |
 | `blog_posts` | Blog CMS — title, slug, HTML content, excerpt, featured image, meta description, tags, status (draft/published/scheduled), timestamps |
 | `blog_comments` | Blog post comments — post slug, author name, comment text, timestamps |
-| `lsat_questions` | Combined LSAT question metadata (all section types) |
-| `lr_questions` | Optimized Logical Reasoning questions — question type, skills, difficulty |
-| `rc_questions` | Optimized Reading Comprehension questions — passage data, categories, difficulty |
+| `messages` | Student-tutor messages — subject, content, read status |
 
 ### Entity Relationships
 
-- `users` → has many `sessions`, `problem_log`, `practice_activities`, `time_addons`, `practice_sets`
+- `profiles` → has many `sessions`, `timeAddOns`, `messages`
 - `blog_posts` → has many `blog_comments` (linked via `post_slug`)
 
 ---

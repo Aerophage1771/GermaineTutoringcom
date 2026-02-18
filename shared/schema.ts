@@ -70,6 +70,25 @@ export const insertTimeAddOnSchema = createInsertSchema(timeAddOns).pick({
 export type InsertTimeAddOn = z.infer<typeof insertTimeAddOnSchema>;
 export type TimeAddOn = typeof timeAddOns.$inferSelect;
 
+// Messages table for student-tutor contact
+export const messages = pgTable("messages", {
+  id: bigint("id", { mode: "number" }).primaryKey().generatedAlwaysAsIdentity(),
+  user_id: uuid("user_id").references(() => profiles.id),
+  subject: text("subject"),
+  content: text("content"),
+  is_read: boolean("is_read").default(false),
+  created_at: timestamp("created_at").defaultNow(),
+});
+
+export const insertMessageSchema = createInsertSchema(messages).pick({
+  user_id: true,
+  subject: true,
+  content: true,
+});
+
+export type InsertMessage = z.infer<typeof insertMessageSchema>;
+export type Message = typeof messages.$inferSelect;
+
 // Relations
 export const profilesRelations = relations(profiles, ({ many }) => ({
   sessions: many(sessions),
@@ -188,22 +207,3 @@ export const insertBlogCommentSchema = createInsertSchema(blogComments).omit({
 
 export type InsertBlogComment = z.infer<typeof insertBlogCommentSchema>;
 export type BlogComment = typeof blogComments.$inferSelect;
-
-// Messages table for student-tutor contact
-export const messages = pgTable("messages", {
-  id: bigint("id", { mode: "number" }).primaryKey().generatedAlwaysAsIdentity(),
-  user_id: uuid("user_id").references(() => profiles.id),
-  subject: text("subject"),
-  content: text("content"),
-  is_read: boolean("is_read").default(false),
-  created_at: timestamp("created_at").defaultNow(),
-});
-
-export const insertMessageSchema = createInsertSchema(messages).pick({
-  user_id: true,
-  subject: true,
-  content: true,
-});
-
-export type InsertMessage = z.infer<typeof insertMessageSchema>;
-export type Message = typeof messages.$inferSelect;
