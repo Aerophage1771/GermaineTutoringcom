@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
+import { Menu, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 // Define Calendly types
 declare global {
@@ -15,6 +17,7 @@ declare global {
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { isAuthenticated, logout, user } = useAuth();
+  const [location] = useLocation();
   
   // Add Calendly script to the document when component mounts
   useEffect(() => {
@@ -88,14 +91,14 @@ const Header = () => {
         {/* Mobile menu button */}
         <button 
           onClick={toggleMobileMenu}
-          className="md:hidden text-primary focus:outline-none"
-          aria-label="Toggle mobile menu"
+          className="md:hidden text-primary focus-visible:ring-2 focus-visible:ring-primary rounded-md p-1 transition-colors"
+          aria-label={mobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
         >
-          <i className="fas fa-bars text-xl"></i>
+          {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>
         
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex space-x-6 items-center">
+        <nav className="hidden md:flex space-x-6 items-center h-full">
           {isAuthenticated ? (
             // Authenticated: Show only Logout button
             <Button 
@@ -111,28 +114,48 @@ const Header = () => {
               <Link href="/">
                 <button 
                   onClick={scrollToTop}
-                  className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
+                  className={cn(
+                    "text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors py-1 border-b-2 border-transparent",
+                    location === "/" && "text-primary border-primary"
+                  )}
+                  aria-current={location === "/" ? "page" : undefined}
+                >
                   Home
                 </button>
               </Link>
               <Link href="/methodology">
                 <button 
                   onClick={scrollToTop}
-                  className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
+                  className={cn(
+                    "text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors py-1 border-b-2 border-transparent",
+                    location === "/methodology" && "text-primary border-primary"
+                  )}
+                  aria-current={location === "/methodology" ? "page" : undefined}
+                >
                   Methodology & Results
                 </button>
               </Link>
               <Link href="/programs">
                 <button 
                   onClick={scrollToTop}
-                  className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
+                  className={cn(
+                    "text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors py-1 border-b-2 border-transparent",
+                    location === "/programs" && "text-primary border-primary"
+                  )}
+                  aria-current={location === "/programs" ? "page" : undefined}
+                >
                   Tutoring Programs
                 </button>
               </Link>
               <Link href="/blog">
                 <button 
                   onClick={scrollToTop}
-                  className="text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors">
+                  className={cn(
+                    "text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors py-1 border-b-2 border-transparent",
+                    location.startsWith("/blog") && "text-primary border-primary"
+                  )}
+                  aria-current={location.startsWith("/blog") ? "page" : undefined}
+                >
                   LSAT Blog
                 </button>
               </Link>
@@ -174,7 +197,11 @@ const Header = () => {
                     scrollToTop();
                     setMobileMenuOpen(false);
                   }}
-                  className="text-foreground hover:text-primary font-medium transition-colors text-left"
+                  className={cn(
+                    "text-foreground hover:text-primary font-medium transition-colors text-left px-2 py-1 rounded-md",
+                    location === "/" && "bg-primary/10 text-primary"
+                  )}
+                  aria-current={location === "/" ? "page" : undefined}
                 >
                   Home
                 </button>
@@ -185,7 +212,11 @@ const Header = () => {
                     scrollToTop();
                     setMobileMenuOpen(false);
                   }}
-                  className="text-foreground hover:text-primary font-medium transition-colors text-left"
+                  className={cn(
+                    "text-foreground hover:text-primary font-medium transition-colors text-left px-2 py-1 rounded-md",
+                    location === "/methodology" && "bg-primary/10 text-primary"
+                  )}
+                  aria-current={location === "/methodology" ? "page" : undefined}
                 >
                   Methodology & Results
                 </button>
@@ -196,7 +227,11 @@ const Header = () => {
                     scrollToTop();
                     setMobileMenuOpen(false);
                   }}
-                  className="text-foreground hover:text-primary font-medium transition-colors text-left"
+                  className={cn(
+                    "text-foreground hover:text-primary font-medium transition-colors text-left px-2 py-1 rounded-md",
+                    location === "/programs" && "bg-primary/10 text-primary"
+                  )}
+                  aria-current={location === "/programs" ? "page" : undefined}
                 >
                   Tutoring Programs
                 </button>
@@ -207,7 +242,11 @@ const Header = () => {
                     scrollToTop();
                     setMobileMenuOpen(false);
                   }}
-                  className="text-foreground hover:text-primary font-medium transition-colors text-left"
+                  className={cn(
+                    "text-foreground hover:text-primary font-medium transition-colors text-left px-2 py-1 rounded-md",
+                    location.startsWith("/blog") && "bg-primary/10 text-primary"
+                  )}
+                  aria-current={location.startsWith("/blog") ? "page" : undefined}
                 >
                   LSAT Blog
                 </button>
