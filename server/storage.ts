@@ -92,10 +92,8 @@ export class DatabaseStorage implements IStorage {
   }
 
   async validatePassword(user: User, password: string): Promise<boolean> {
-    if (user.password.startsWith('$2')) {
-      return bcrypt.compare(password, user.password);
-    }
-    return user.password === password;
+    // Only use bcrypt.compare to prevent plain-text password fallbacks
+    return bcrypt.compare(password, user.password);
   }
 
   // Subscription and consultation
