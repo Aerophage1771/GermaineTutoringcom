@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
+import { Menu, X } from "lucide-react";
 
 // Define Calendly types
 declare global {
@@ -88,10 +89,14 @@ const Header = () => {
         {/* Mobile menu button */}
         <button 
           onClick={toggleMobileMenu}
-          className="md:hidden text-primary focus:outline-none"
-          aria-label="Toggle mobile menu"
+          className="md:hidden text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-md transition-colors"
+          aria-label={mobileMenuOpen ? "Close mobile menu" : "Open mobile menu"}
         >
-          <i className="fas fa-bars text-xl"></i>
+          {mobileMenuOpen ? (
+            <X className="h-6 w-6" />
+          ) : (
+            <Menu className="h-6 w-6" />
+          )}
         </button>
         
         {/* Desktop Navigation */}
