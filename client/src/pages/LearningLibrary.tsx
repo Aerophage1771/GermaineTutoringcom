@@ -5,31 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ChevronRight, ArrowLeft, BookOpen, Brain, FileText, Lightbulb } from "lucide-react";
+import { ChevronRight, ArrowLeft, Lightbulb } from "lucide-react";
 import type { SectionData, LibraryModule, Lesson } from "@/types/studentLibrary";
-import { studentLibrarySections } from "@/data/studentLibraryData";
+import {
+  SECTION_LIST,
+  loadSectionData,
+  type SectionKey,
+} from "@/data/studentLibrary/sections";
+import { SECTION_COUNTS } from "@/data/studentLibrary/manifest";
 import { ContentBlockRenderer } from "@/components/LearningLibrary/ContentBlockRenderer";
-
-const SECTION_META: Record<
-  string,
-  { description: string; icon: React.ComponentType<{ className?: string }>; color: string }
-> = {
-  "Logical Reasoning": {
-    description: "Master argument analysis and logical thinking",
-    icon: Brain,
-    color: "bg-emerald-600 hover:bg-emerald-700",
-  },
-  "Reading Comprehension": {
-    description: "Develop advanced reading and analysis skills",
-    icon: BookOpen,
-    color: "bg-purple-600 hover:bg-purple-700",
-  },
-  "Advanced Passages": {
-    description: "Practice with advanced passage types and questions",
-    icon: FileText,
-    color: "bg-slate-600 hover:bg-slate-700",
-  },
-};
 
 export default function LearningLibrary() {
   const { user, isLoading } = useAuthRedirect();
@@ -38,6 +22,8 @@ export default function LearningLibrary() {
   const [selectedModule, setSelectedModule] = useState<LibraryModule | null>(null);
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [sectionLoadingKey, setSectionLoadingKey] = useState<SectionKey | null>(null);
+  const [sectionLoadError, setSectionLoadError] = useState<string | null>(null);
 
   if (isLoading || !user) {
     return (
@@ -47,10 +33,19 @@ export default function LearningLibrary() {
     );
   }
 
-  const handleSectionClick = (section: SectionData) => {
-    setSelectedSection(section);
-    setSelectedModule(null);
-    setSelectedLesson(null);
+  const handleSectionClick = async (meta: (typeof SECTION_LIST)[number]) => {
+    setSectionLoadError(null);
+    setSectionLoadingKey(meta.key);
+    try {
+      const data = await loadSectionData(meta.key);
+      setSelectedSection(data);
+      setSelectedModule(null);
+      setSelectedLesson(null);
+    } catch (err) {
+      setSectionLoadError(err instanceof Error ? err.message : "Failed to load section");
+    } finally {
+      setSectionLoadingKey(null);
+    }
   };
 
   const handleModuleClick = (module: LibraryModule) => {
@@ -67,6 +62,7 @@ export default function LearningLibrary() {
     setSelectedSection(null);
     setSelectedModule(null);
     setSelectedLesson(null);
+    setSectionLoadError(null);
   };
 
   const handleBackToModules = () => {
@@ -116,48 +112,54 @@ export default function LearningLibrary() {
           {selectedModule
             ? selectedModule.description
             : selectedSection
-              ? SECTION_META[selectedSection.section]?.description ??
-                `Explore ${selectedSection.section.toLowerCase()} topics`
+              ? SECTION_LIST.find((m) => m.title === selectedSection.section)
+                  ?.description ?? `Explore ${selectedSection.section.toLowerCase()} topics`
               : "Comprehensive study materials organized by LSAT section"}
         </p>
+        {sectionLoadError && (
+          <p className="mt-2 text-sm text-red-600" role="alert">
+            {sectionLoadError}
+          </p>
+        )}
       </div>
 
       {/* Main Content */}
       {!selectedSection ? (
-        /* Section grid */
+        /* Section grid: metadata only, no content loaded */
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {studentLibrarySections.map((section, index) => {
-            const meta = SECTION_META[section.section] ?? {
-              description: `Explore ${section.section}`,
-              icon: FileText,
-              color: "bg-gray-600 hover:bg-gray-700",
-            };
+          {SECTION_LIST.map((meta) => {
             const IconComponent = meta.icon;
-            const moduleCount = section.modules.reduce(
-              (acc, m) => acc + m.lessons.length,
-              0
-            );
+            const counts = SECTION_COUNTS[meta.key];
+            const isLoadingThis = sectionLoadingKey === meta.key;
             return (
               <Card
-                key={index}
+                key={meta.key}
                 className="cursor-pointer transition-all duration-200 hover:shadow-lg hover:scale-[1.02] border border-gray-200 shadow-sm"
-                onClick={() => handleSectionClick(section)}
+                onClick={() => handleSectionClick(meta)}
               >
                 <CardContent className="p-6">
                   <div
                     className={`w-16 h-16 ${meta.color} rounded-lg flex items-center justify-center mb-4 transition-colors`}
                   >
-                    <IconComponent className="h-8 w-8 text-white" />
+                    {isLoadingThis ? (
+                      <div className="h-8 w-8 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    ) : (
+                      <IconComponent className="h-8 w-8 text-white" />
+                    )}
                   </div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    {section.section}
+                    {meta.title}
                   </h3>
                   <p className="text-gray-600 mb-4">{meta.description}</p>
                   <div className="flex items-center justify-between">
                     <span className="text-sm text-gray-500">
-                      {section.modules.length} modules · {moduleCount} lessons
+                      {counts
+                        ? `${counts.modules} modules · ${counts.lessons} lessons`
+                        : "—"}
                     </span>
-                    <ChevronRight className="h-5 w-5 text-gray-400" />
+                    {!isLoadingThis && (
+                      <ChevronRight className="h-5 w-5 text-gray-400" />
+                    )}
                   </div>
                 </CardContent>
               </Card>
