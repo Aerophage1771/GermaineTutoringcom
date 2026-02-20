@@ -174,7 +174,7 @@ GermaineTutoringcom/
 ### Blog CMS
 
 - **Rich Text Editor** — TipTap-powered editor with toolbar for formatting, headings, lists, blockquotes, links, image uploads, and more
-- **Draft/Publish Workflow** — Posts support `draft` and `published` statuses
+- **Draft/Publish/Scheduled Workflow** — Posts support `draft`, `published`, and `scheduled` statuses with automatic publishing
 - **SEO Fields** — Custom slugs, meta descriptions, excerpts, and featured images
 - **Image Uploads** — Multer-based image upload with Sharp optimization
 - **HTML Sanitization** — All blog content is sanitized via `sanitize-html` before storage
@@ -185,7 +185,7 @@ GermaineTutoringcom/
 
 - **Student Management** — List, edit, and delete student accounts; reset passwords; adjust time balances
 - **Session Management** — Create, edit, and delete tutoring session records for any student
-- **Blog Management** — Full CRUD for blog posts, including image uploads
+- **Blog Management** — Full CRUD for blog posts, including image uploads and scheduled publishing
 - **Role-Based Access** — Admin middleware protects all admin routes
 
 ---
@@ -295,7 +295,7 @@ The application uses **PostgreSQL** (via Neon or Supabase) with **Drizzle ORM**.
 | `time_addons` | Purchased tutoring time add-ons — hours added, type, price paid |
 | `subscribers` | Email newsletter sign-ups — name, email |
 | `consultations` | Consultation booking requests — contact info, current/goal scores, test date |
-| `blog_posts` | Blog CMS — title, slug, HTML content, excerpt, featured image, meta description, tags, status (draft/published), timestamps |
+| `blog_posts` | Blog CMS — title, slug, HTML content, excerpt, featured image, meta description, tags, status (draft/published/scheduled), timestamps |
 | `blog_comments` | Blog post comments — post slug, author name, comment text, timestamps |
 | `messages` | Student-tutor messages — subject, content, read status |
 

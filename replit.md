@@ -92,7 +92,7 @@ scripts/              # Data import utilities
 - **time_addons** — Purchased tutoring time add-ons
 - **subscribers** — Email newsletter sign-ups
 - **consultations** — Consultation booking requests
-- **blog_posts** — Blog posts CMS (title, slug, HTML content, excerpt, featured image, meta description, tags, status draft/published, timestamps)
+- **blog_posts** — Blog posts CMS (title, slug, HTML content, excerpt, featured image, meta description, tags, status draft/published/scheduled, scheduled_at, timestamps)
 - **blog_comments** — Blog post comments (post_slug, author_name, comment text, timestamps)
 - **lsat_questions** — Combined LSAT question metadata
 - **lr_questions** — Logical Reasoning questions (optimized, separated table)

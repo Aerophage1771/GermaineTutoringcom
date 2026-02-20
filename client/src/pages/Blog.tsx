@@ -6,6 +6,15 @@ import { Calendar, Clock, ArrowRight, BookOpen, Sparkles, Filter, Search, X } fr
 import { useSEO } from "@/hooks/use-seo";
 import { blogPosts } from "@/data/posts";
 
+// Define Calendly types
+declare global {
+  interface Window {
+    Calendly?: {
+      initPopupWidget: (options: { url: string }) => void;
+    }
+  }
+}
+
 const TAG_LABELS: Record<string, string> = {
   "logical-reasoning": "Logical Reasoning",
   "reading-comprehension": "Reading Comprehension",
@@ -51,53 +60,10 @@ const Blog = () => {
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const baseUrl = "https://germainetutoring.com";
-  const blogUrl = `${baseUrl}/blog`;
-
-  const combinedJsonLd = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "Blog",
-        "name": "Germaine Tutoring LSAT Strategy Blog",
-        "description": "Practical, systems-based LSAT techniques from a perfect 180 scorer. Tips for Logical Reasoning, Reading Comprehension, and more.",
-        "url": blogUrl,
-        "publisher": {
-          "@type": "Organization",
-          "name": "Germaine Tutoring"
-        }
-      },
-      {
-        "@type": "BreadcrumbList",
-        "itemListElement": [
-          {
-            "@type": "ListItem",
-            "position": 1,
-            "name": "Home",
-            "item": baseUrl
-          },
-          {
-            "@type": "ListItem",
-            "position": 2,
-            "name": "Blog",
-            "item": blogUrl
-          }
-        ]
-      }
-    ]
-  };
-
   useSEO({
     title: "LSAT Strategy Blog",
     description: "Practical, systems-based LSAT techniques from a perfect 180 scorer. Tips for Logical Reasoning, Reading Comprehension, and more.",
-    ogTitle: "LSAT Strategy Blog | Germaine Tutoring",
-    ogDescription: "Master the LSAT with expert guides and strategies from a 180-scoring tutor.",
-    ogImage: `${baseUrl}/og-image.jpg`,
-    ogUrl: blogUrl,
     ogType: "website",
-    twitterCard: "summary_large_image",
-    canonical: blogUrl,
-    jsonLd: combinedJsonLd,
   });
 
   const posts = blogPosts;
