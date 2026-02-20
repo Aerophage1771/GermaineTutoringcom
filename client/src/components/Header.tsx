@@ -115,8 +115,8 @@ const Header = () => {
                 <button 
                   onClick={scrollToTop}
                   className={cn(
-                    "text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors py-1 border-b-2 border-transparent",
-                    location === "/" && "text-primary border-primary"
+                    "text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors py-1 border-b border-transparent",
+                    location === "/" && "text-primary border-primary/50"
                   )}
                   aria-current={location === "/" ? "page" : undefined}
                 >
@@ -127,8 +127,8 @@ const Header = () => {
                 <button 
                   onClick={scrollToTop}
                   className={cn(
-                    "text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors py-1 border-b-2 border-transparent",
-                    location === "/methodology" && "text-primary border-primary"
+                    "text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors py-1 border-b border-transparent",
+                    location === "/methodology" && "text-primary border-primary/50"
                   )}
                   aria-current={location === "/methodology" ? "page" : undefined}
                 >
@@ -139,8 +139,8 @@ const Header = () => {
                 <button 
                   onClick={scrollToTop}
                   className={cn(
-                    "text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors py-1 border-b-2 border-transparent",
-                    location === "/programs" && "text-primary border-primary"
+                    "text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors py-1 border-b border-transparent",
+                    location === "/programs" && "text-primary border-primary/50"
                   )}
                   aria-current={location === "/programs" ? "page" : undefined}
                 >
@@ -151,8 +151,8 @@ const Header = () => {
                 <button 
                   onClick={scrollToTop}
                   className={cn(
-                    "text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors py-1 border-b-2 border-transparent",
-                    location.startsWith("/blog") && "text-primary border-primary"
+                    "text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors py-1 border-b border-transparent",
+                    location.startsWith("/blog") && "text-primary border-primary/50"
                   )}
                   aria-current={location.startsWith("/blog") ? "page" : undefined}
                 >
