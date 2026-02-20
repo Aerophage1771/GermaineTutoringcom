@@ -47,6 +47,15 @@ const getPrimaryCategory = (tags: string[]) => {
   return tags[0] || "lsat-prep";
 };
 
+/** Strip HTML tags and return lowercased plain text for search matching. */
+const getSearchableText = (html: string): string => {
+  return html
+    .replace(/<[^>]*>/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toLowerCase();
+};
+
 const Blog = () => {
   const [activeFilter, setActiveFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
@@ -110,13 +119,23 @@ const Blog = () => {
     if (activeFilter !== "all") {
       result = result.filter(p => p.tags.includes(activeFilter));
     }
+    const afterCategory = result;
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase().trim();
-      result = result.filter(p =>
-        p.title.toLowerCase().includes(q) ||
-        p.snippet.toLowerCase().includes(q) ||
-        p.tags.some(t => t.toLowerCase().includes(q))
-      );
+      const matchesQuery = (p: (typeof posts)[0], term: string) =>
+        p.title.toLowerCase().includes(term) ||
+        p.snippet.toLowerCase().includes(term) ||
+        p.tags.some(t => t.toLowerCase().includes(term)) ||
+        getSearchableText(p.content).includes(term);
+
+      result = afterCategory.filter(p => matchesQuery(p, q));
+
+      if (result.length === 0 && q.includes(" ")) {
+        const words = q.split(/\s+/).filter(w => w.length >= 2);
+        if (words.length >= 2) {
+          result = afterCategory.filter(p => words.every(word => matchesQuery(p, word)));
+        }
+      }
     }
     return result;
   }, [posts, activeFilter, searchQuery]);
