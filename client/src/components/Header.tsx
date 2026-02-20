@@ -3,6 +3,7 @@ import { Link, useLocation } from "wouter";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 // Define Calendly types
 declare global {
@@ -114,8 +115,8 @@ const Header = () => {
                 <button 
                   onClick={scrollToTop}
                   className={cn(
-                    "text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors py-1 border-b-2 border-transparent",
-                    (location === "/" || location === "/home") && "text-primary border-primary"
+                    "text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors py-1 border-b border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm",
+                    (location === "/" || location === "/home") && "text-primary border-primary/50"
                   )}
                   aria-current={location === "/" || location === "/home" ? "page" : undefined}
                 >
@@ -126,8 +127,8 @@ const Header = () => {
                 <button 
                   onClick={scrollToTop}
                   className={cn(
-                    "text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors py-1 border-b-2 border-transparent",
-                    location === "/methodology" && "text-primary border-primary"
+                    "text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors py-1 border-b border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm",
+                    location === "/methodology" && "text-primary border-primary/50"
                   )}
                   aria-current={location === "/methodology" ? "page" : undefined}
                 >
@@ -138,8 +139,8 @@ const Header = () => {
                 <button 
                   onClick={scrollToTop}
                   className={cn(
-                    "text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors py-1 border-b-2 border-transparent",
-                    location === "/programs" && "text-primary border-primary"
+                    "text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors py-1 border-b border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm",
+                    location === "/programs" && "text-primary border-primary/50"
                   )}
                   aria-current={location === "/programs" ? "page" : undefined}
                 >
@@ -150,8 +151,8 @@ const Header = () => {
                 <button 
                   onClick={scrollToTop}
                   className={cn(
-                    "text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors py-1 border-b-2 border-transparent",
-                    location.startsWith("/blog") && "text-primary border-primary"
+                    "text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors py-1 border-b border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 rounded-sm",
+                    location.startsWith("/blog") && "text-primary border-primary/50"
                   )}
                   aria-current={location.startsWith("/blog") ? "page" : undefined}
                 >
@@ -197,8 +198,8 @@ const Header = () => {
                     setMobileMenuOpen(false);
                   }}
                   className={cn(
-                    "text-foreground hover:text-primary font-medium transition-colors text-left px-2 py-1 rounded-md",
-                    (location === "/" || location === "/home") && "bg-primary/10 text-primary"
+                    "text-foreground hover:text-primary font-medium transition-colors text-left px-2 py-1 rounded-md border-b border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                    (location === "/" || location === "/home") && "text-primary border-primary/50"
                   )}
                   aria-current={location === "/" || location === "/home" ? "page" : undefined}
                 >
@@ -212,8 +213,8 @@ const Header = () => {
                     setMobileMenuOpen(false);
                   }}
                   className={cn(
-                    "text-foreground hover:text-primary font-medium transition-colors text-left px-2 py-1 rounded-md",
-                    location === "/methodology" && "bg-primary/10 text-primary"
+                    "text-foreground hover:text-primary font-medium transition-colors text-left px-2 py-1 rounded-md border-b border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                    location === "/methodology" && "text-primary border-primary/50"
                   )}
                   aria-current={location === "/methodology" ? "page" : undefined}
                 >
@@ -227,8 +228,8 @@ const Header = () => {
                     setMobileMenuOpen(false);
                   }}
                   className={cn(
-                    "text-foreground hover:text-primary font-medium transition-colors text-left px-2 py-1 rounded-md",
-                    location === "/programs" && "bg-primary/10 text-primary"
+                    "text-foreground hover:text-primary font-medium transition-colors text-left px-2 py-1 rounded-md border-b border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                    location === "/programs" && "text-primary border-primary/50"
                   )}
                   aria-current={location === "/programs" ? "page" : undefined}
                 >
@@ -242,8 +243,8 @@ const Header = () => {
                     setMobileMenuOpen(false);
                   }}
                   className={cn(
-                    "text-foreground hover:text-primary font-medium transition-colors text-left px-2 py-1 rounded-md",
-                    location.startsWith("/blog") && "bg-primary/10 text-primary"
+                    "text-foreground hover:text-primary font-medium transition-colors text-left px-2 py-1 rounded-md border-b border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2",
+                    location.startsWith("/blog") && "text-primary border-primary/50"
                   )}
                   aria-current={location.startsWith("/blog") ? "page" : undefined}
                 >
