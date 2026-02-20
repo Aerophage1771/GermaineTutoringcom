@@ -315,7 +315,7 @@ const BlogPost = () => {
         <div className="border-b border-border bg-muted/30">
           <div className="container mx-auto px-4 py-3">
             <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-foreground/60">
-              <Link href="/">
+              <Link href="/home">
                 <span className="hover:text-accent transition-colors cursor-pointer">Home</span>
               </Link>
               <ChevronRight className="w-3.5 h-3.5" />

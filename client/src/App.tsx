@@ -1,4 +1,4 @@
-import { Switch, Route } from "wouter";
+import { Switch, Route, Redirect } from "wouter";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
@@ -23,7 +23,8 @@ const isStudentPortal = import.meta.env.VITE_APP_MODE === "dashboard";
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={isStudentPortal ? Login : Home} />
+      <Route path="/" component={isStudentPortal ? () => <Redirect to="/login" /> : Home} />
+      <Route path="/home" component={Home} />
       <Route path="/methodology" component={MethodologyResults} />
       <Route path="/results" component={MethodologyResults} />
       <Route path="/programs" component={Programs} />

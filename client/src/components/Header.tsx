@@ -84,7 +84,7 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 bg-white shadow-md">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-        <Link href="/" className="flex items-center">
+        <Link href="/home" className="flex items-center">
           <h1 className="text-primary font-heading font-bold text-xl md:text-2xl">GermaineTutoring.com</h1>
         </Link>
         
@@ -111,14 +111,14 @@ const Header = () => {
           ) : (
             // Not authenticated: Show full navigation
             <>
-              <Link href="/">
+              <Link href="/home">
                 <button 
                   onClick={scrollToTop}
                   className={cn(
                     "text-foreground hover:text-primary font-medium text-sm lg:text-base transition-colors py-1 border-b-2 border-transparent",
-                    location === "/" && "text-primary border-primary"
+                    (location === "/" || location === "/home") && "text-primary border-primary"
                   )}
-                  aria-current={location === "/" ? "page" : undefined}
+                  aria-current={location === "/" || location === "/home" ? "page" : undefined}
                 >
                   Home
                 </button>
@@ -160,7 +160,7 @@ const Header = () => {
                 </button>
               </Link>
               <a
-                href="https://students.germainetutoring.com"
+                href="https://students.germainetutoring.com/login"
                 className="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-5 rounded-lg transition-colors text-sm lg:text-base border-2 border-primary"
               >
                 Student Log-In
@@ -191,7 +191,7 @@ const Header = () => {
           ) : (
             // Not authenticated: Show full navigation
             <>
-              <Link href="/">
+              <Link href="/home">
                 <button 
                   onClick={() => {
                     scrollToTop();
@@ -199,9 +199,9 @@ const Header = () => {
                   }}
                   className={cn(
                     "text-foreground hover:text-primary font-medium transition-colors text-left px-2 py-1 rounded-md",
-                    location === "/" && "bg-primary/10 text-primary"
+                    (location === "/" || location === "/home") && "bg-primary/10 text-primary"
                   )}
-                  aria-current={location === "/" ? "page" : undefined}
+                  aria-current={location === "/" || location === "/home" ? "page" : undefined}
                 >
                   Home
                 </button>
@@ -252,7 +252,7 @@ const Header = () => {
                 </button>
               </Link>
               <a
-                href="https://students.germainetutoring.com"
+                href="https://students.germainetutoring.com/login"
                 onClick={() => setMobileMenuOpen(false)}
                 className="bg-primary hover:bg-primary/90 text-white font-bold py-2 px-4 rounded-lg transition-colors text-left"
               >
