@@ -370,7 +370,7 @@ const BlogPost = () => {
                 <div className="max-w-3xl mx-auto">
                   {/* Tags */}
                   <div className="flex flex-wrap gap-2 mb-5">
-                    {post.tags.map((tag) => (
+                    {post.tags.map((tag: string) => (
                       <span
                         key={tag}
                         className="inline-block text-xs font-semibold px-2.5 py-1 rounded-full bg-accent/10 text-accent"

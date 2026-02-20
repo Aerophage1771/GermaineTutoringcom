@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { Link } from "wouter";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import { Calendar, Clock, ArrowRight, BookOpen, Sparkles, Filter, Search } from "lucide-react";
+import { Calendar, Clock, ArrowRight, BookOpen, Sparkles, Filter, Search, X } from "lucide-react";
 import { useSEO } from "@/hooks/use-seo";
 import { blogPosts } from "@/data/posts";
 
@@ -115,7 +115,7 @@ const Blog = () => {
       result = result.filter(p =>
         p.title.toLowerCase().includes(q) ||
         p.snippet.toLowerCase().includes(q) ||
-        p.tags.some(t => t.toLowerCase().includes(q))
+        p.tags.some((t: string) => t.toLowerCase().includes(q))
       );
     }
     return result;
@@ -248,18 +248,20 @@ const Blog = () => {
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-foreground/40" />
               <input
-                type="text"
+                type="search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search articles..."
-                className="w-full text-sm border border-border rounded-full px-4 py-2.5 pl-10 pr-8 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-colors bg-white placeholder:text-foreground/40"
+                aria-label="Search blog articles"
+                className="w-full text-sm border border-border rounded-full px-4 py-2.5 pl-10 pr-10 focus:outline-none focus:ring-2 focus:ring-accent/30 focus:border-accent/50 transition-colors bg-white placeholder:text-foreground/40"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground/40 hover:text-foreground/70 text-xs"
+                  aria-label="Clear search"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-foreground/40 hover:text-foreground/70 transition-colors rounded-full p-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/50"
                 >
-                  ✕
+                  <X className="w-4 h-4" />
                 </button>
               )}
             </div>

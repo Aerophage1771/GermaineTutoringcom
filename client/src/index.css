@@ -141,6 +141,11 @@
   scrollbar-width: none;
 }
 
+/* Hide default search cancel button for custom search inputs */
+input[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+}
+
 /* TipTap Editor Styles */
 .tiptap {
   outline: none;
