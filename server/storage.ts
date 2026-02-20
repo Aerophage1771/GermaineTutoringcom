@@ -39,8 +39,6 @@ export interface IStorage {
   createBlogPost(post: InsertBlogPost): Promise<BlogPostType>;
   updateBlogPost(id: number, updates: Partial<InsertBlogPost>): Promise<BlogPostType>;
   deleteBlogPost(id: number): Promise<void>;
-  getScheduledPostsDue(): Promise<BlogPostType[]>;
-  publishScheduledPost(id: number): Promise<BlogPostType>;
 
   getCommentsByPostSlug(slug: string): Promise<BlogComment[]>;
   createComment(comment: InsertBlogComment): Promise<BlogComment>;
@@ -92,10 +90,8 @@ export class DatabaseStorage implements IStorage {
   }
 
   async validatePassword(user: User, password: string): Promise<boolean> {
-    if (user.password.startsWith('$2')) {
-      return bcrypt.compare(password, user.password);
-    }
-    return user.password === password;
+    // Only use bcrypt.compare to prevent plain-text password fallbacks
+    return bcrypt.compare(password, user.password);
   }
 
   // Subscription and consultation
@@ -190,29 +186,6 @@ export class DatabaseStorage implements IStorage {
 
   async deleteBlogPost(id: number): Promise<void> {
     await db.delete(blogPosts).where(eq(blogPosts.id, id));
-  }
-
-  async getScheduledPostsDue(): Promise<BlogPostType[]> {
-    return db.select().from(blogPosts).where(
-      and(
-        eq(blogPosts.status, "scheduled"),
-        lte(blogPosts.scheduled_at, new Date())
-      )
-    );
-  }
-
-  async publishScheduledPost(id: number): Promise<BlogPostType> {
-    const [updated] = await db
-      .update(blogPosts)
-      .set({
-        status: "published",
-        published_at: new Date(),
-        scheduled_at: null,
-        updated_at: new Date(),
-      })
-      .where(eq(blogPosts.id, id))
-      .returning();
-    return updated;
   }
 
   async getCommentsByPostSlug(slug: string): Promise<BlogComment[]> {
