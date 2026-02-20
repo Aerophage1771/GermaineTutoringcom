@@ -8,9 +8,14 @@ interface SEOOptions {
   ogImage?: string;
   ogUrl?: string;
   ogType?: string;
+  twitterCard?: string;
+  twitterSite?: string;
+  twitterCreator?: string;
   articlePublishedTime?: string;
   articleAuthor?: string;
   articleTags?: string[];
+  canonical?: string;
+  jsonLd?: Record<string, any>;
 }
 
 const setMetaTag = (property: string, content: string) => {
@@ -34,6 +39,40 @@ const setMetaTag = (property: string, content: string) => {
 const removeMetaTag = (property: string) => {
   const element = document.querySelector(`meta[property="${property}"]`) || 
                   document.querySelector(`meta[name="${property}"]`);
+  if (element) {
+    element.remove();
+  }
+};
+
+const setCanonicalTag = (url: string) => {
+  let element = document.querySelector('link[rel="canonical"]');
+  if (!element) {
+    element = document.createElement('link');
+    element.setAttribute('rel', 'canonical');
+    document.head.appendChild(element);
+  }
+  element.setAttribute('href', url);
+};
+
+const removeCanonicalTag = () => {
+  const element = document.querySelector('link[rel="canonical"]');
+  if (element) {
+    element.remove();
+  }
+};
+
+const setJsonLd = (data: Record<string, any>) => {
+  let element = document.querySelector('script[type="application/ld+json"]');
+  if (!element) {
+    element = document.createElement('script');
+    element.setAttribute('type', 'application/ld+json');
+    document.head.appendChild(element);
+  }
+  element.textContent = JSON.stringify(data);
+};
+
+const removeJsonLd = () => {
+  const element = document.querySelector('script[type="application/ld+json"]');
   if (element) {
     element.remove();
   }
@@ -69,6 +108,18 @@ export const useSEO = (options: SEOOptions) => {
       setMetaTag('og:type', options.ogType);
     }
 
+    if (options.twitterCard) {
+      setMetaTag('twitter:card', options.twitterCard);
+    }
+
+    if (options.twitterSite) {
+      setMetaTag('twitter:site', options.twitterSite);
+    }
+
+    if (options.twitterCreator) {
+      setMetaTag('twitter:creator', options.twitterCreator);
+    }
+
     if (options.articlePublishedTime) {
       setMetaTag('article:published_time', options.articlePublishedTime);
     }
@@ -84,6 +135,14 @@ export const useSEO = (options: SEOOptions) => {
       options.articleTags.forEach(tag => {
         setMetaTag('article:tag', tag);
       });
+    }
+
+    if (options.canonical) {
+      setCanonicalTag(options.canonical);
+    }
+
+    if (options.jsonLd) {
+      setJsonLd(options.jsonLd);
     }
 
     return () => {
@@ -115,6 +174,18 @@ export const useSEO = (options: SEOOptions) => {
         removeMetaTag('og:type');
       }
 
+      if (options.twitterCard) {
+        removeMetaTag('twitter:card');
+      }
+
+      if (options.twitterSite) {
+        removeMetaTag('twitter:site');
+      }
+
+      if (options.twitterCreator) {
+        removeMetaTag('twitter:creator');
+      }
+
       if (options.articlePublishedTime) {
         removeMetaTag('article:published_time');
       }
@@ -127,8 +198,17 @@ export const useSEO = (options: SEOOptions) => {
         const existingTags = document.querySelectorAll('meta[property="article:tag"]');
         existingTags.forEach(tag => tag.remove());
       }
+
+      if (options.canonical) {
+        removeCanonicalTag();
+      }
+
+      if (options.jsonLd) {
+        removeJsonLd();
+      }
     };
   }, [options.title, options.description, options.ogTitle, options.ogDescription, 
-      options.ogImage, options.ogUrl, options.ogType, options.articlePublishedTime, 
-      options.articleAuthor, options.articleTags]);
+      options.ogImage, options.ogUrl, options.ogType, options.twitterCard, options.twitterSite,
+      options.twitterCreator, options.articlePublishedTime,
+      options.articleAuthor, options.articleTags, options.canonical, JSON.stringify(options.jsonLd)]);
 };

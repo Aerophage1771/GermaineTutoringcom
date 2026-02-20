@@ -8,8 +8,28 @@ import { setupVite, serveStatic, log } from "./vite";
 import { storage } from "./storage";
 
 const app = express();
+
+// Security headers middleware
+app.use((_req, res, next) => {
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("X-XSS-Protection", "1; mode=block");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+  if (app.get("env") === "production") {
+    res.setHeader(
+      "Strict-Transport-Security",
+      "max-age=31536000; includeSubDomains"
+    );
+  }
+  next();
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+if (app.get("env") === "production") {
+  app.set("trust proxy", 1);
+}
 
 app.use("/uploads", express.static(path.join(process.cwd(), "public", "uploads"), {
   maxAge: "30d",
@@ -17,6 +37,10 @@ app.use("/uploads", express.static(path.join(process.cwd(), "public", "uploads")
 }));
 
 // Set up session middleware
+if (app.get("env") === "production" && !process.env.SESSION_SECRET) {
+  throw new Error("SESSION_SECRET is required in production");
+}
+
 const MemoryStoreSession = MemoryStore(session);
 app.use(session({
   store: new MemoryStoreSession({
@@ -26,8 +50,9 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false, // Set to true in production with HTTPS
+    secure: app.get("env") === "production",
     httpOnly: true,
+    sameSite: "lax",
     maxAge: 24 * 60 * 60 * 1000 // 24 hours
   }
 }));
