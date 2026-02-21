@@ -1,0 +1,14 @@
+import type { ContentBlock } from "@/types/studentLibrary";
+import { ContentBlockRenderer } from "@/components/LearningLibrary/ContentBlockRenderer";
+
+const content: ContentBlock[] = [{"type":"h3","text":"Step-by-Step Approach"},{"type":"h4","text":"Step 1: Locate the Principle in the Passage"},{"type":"paragraph","text":"The question stem will almost always direct you to a specific idea. Look for phrases that name a concept, theory, or standard. Your first task is to return to the passage and locate the exact sentences that define and explain this principle. Do not rely on your memory."},{"type":"h4","text":"Step 2: Isolate the Principle and Its Conditions"},{"type":"paragraph","text":"Don't just read the principle—dissect it. Your goal is to create a simple checklist of the necessary conditions or criteria that must be met for the principle to apply."},{"type":"list","items":["**Example:** If the passage defines a specific type of legal fraud as \"an intentional misrepresentation of a material fact,\" your checklist would be:\n1. Was there a misrepresentation?\n2. Was it intentional?\n3. Was the fact material (i.e., important)?"]},{"type":"h4","text":"Step 3: Apply the Checklist to Each Answer Choice"},{"type":"paragraph","text":"Treat each answer choice as a separate case study. Go through your checklist from Step 1 and apply it to the scenario described. Your goal is to find the one answer choice that satisfies every single condition on your list. If a scenario fails even one condition, eliminate it immediately."},{"type":"hr"},{"type":"h3","text":"If You Get Stuck Between Two Choices..."},{"type":"h4","text":"Tie-Breaker #1: The Strict Re-Check"},{"type":"paragraph","text":"The error is almost always in a subtle misreading of the principle, not the scenarios. Go back to the passage and re-read the sentence(s) describing the rule, paying extremely close attention to every word. Is there a crucial qualifier you skimmed over (e.g., \"only if,\" \"primarily,\" \"unintended\")? Re-create your checklist with this stricter understanding and re-apply it to your final options. The deciding factor is often a single, precise word in the passage."},{"type":"h4","text":"Tie-Breaker #2: Focus on the Difference"},{"type":"paragraph","text":"Stop looking at how your final contenders are similar to the rule. Instead, ask, \"**What is the single key difference between these two answer choices?**\" Isolate that one point of divergence. Then, return to the passage one last time and check which choice's unique element is a better fit for the principle's specific language and logic. This narrows your final decision to a single, critical point of comparison."}];
+
+export default function Lesson() {
+  return (
+    <div className="space-y-1">
+      {content.map((block, index) => (
+        <ContentBlockRenderer key={index} block={block} />
+      ))}
+    </div>
+  );
+}

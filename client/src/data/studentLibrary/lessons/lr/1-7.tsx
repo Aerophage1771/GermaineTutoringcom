@@ -1,0 +1,14 @@
+import type { ContentBlock } from "@/types/studentLibrary";
+import { ContentBlockRenderer } from "@/components/LearningLibrary/ContentBlockRenderer";
+
+const content: ContentBlock[] = [{"type":"h2","text":"Advanced Concepts: Difficult Argument Part Questions"},{"type":"paragraph","text":"So far, we've covered the common roles that make up the vast majority of Argument Part questions. But what about the ones that still feel tough, even when you can map the basic structure? These questions are designed to test a deeper, more abstract level of understanding."},{"type":"h3","text":"1. The Logic Becomes More Complex"},{"type":"paragraph","text":"On harder questions, statements don't just act as simple premises or conclusions. They perform more sophisticated strategic jobs. Your task moves from identifying a building block to characterizing a complex maneuver."},{"type":"list","items":["**Chains of Reasoning:** The flow might be a longer chain: `Premise → IC1 → IC2 → Main Conclusion`.","**Arguments within Arguments:** The author might describe another person's argument to critique it. A question could ask about a premise *within the argument the author is attacking*.","**Strategic Moves:** A statement's primary job might be rhetorical, such as a **concession**, a **counterexample**, or a statement that **rules out an alternative explanation**."]},{"type":"paragraph","text":"When you encounter a statement that doesn't feel simple, ask yourself: **What is the author *doing* with this piece of information?**"},{"type":"h3","text":"2. The Language Becomes Abstract"},{"type":"paragraph","text":"Often, the stimulus is clear, but the answer choices are written in academic jargon. This is intentional. The test-makers are assessing your ability to think about logical structure in the abstract."},{"type":"paragraph","text":"Hard answer choices might say: *\"\"It denies a claim that the argument takes to be assumed in the reasoning that it rejects.\"\"*"},{"type":"paragraph","text":"Don't be intimidated. Break it down. Read slowly and substitute the abstract terms (\"the reasoning that it rejects\") with the actual content from the stimulus (\"the economists' argument\")."},{"type":"h3","text":"A Mindset for Hard Questions"},{"type":"list","ordered":true,"items":["**Start with Your Map:** Always identify the main conclusion and primary support first.","**Analyze the Target's Relationship to the Core:** How does the target connect to the main conclusion and its premises?","**Find the *Most Precise* Description:** Hard questions have tempting wrong answers that are \"close enough.\" Your job is to find the choice that is flawlessly accurate."]}];
+
+export default function Lesson() {
+  return (
+    <div className="space-y-1">
+      {content.map((block, index) => (
+        <ContentBlockRenderer key={index} block={block} />
+      ))}
+    </div>
+  );
+}

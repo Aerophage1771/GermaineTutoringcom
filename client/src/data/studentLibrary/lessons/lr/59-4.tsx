@@ -1,0 +1,14 @@
+import type { ContentBlock } from "@/types/studentLibrary";
+import { ContentBlockRenderer } from "@/components/LearningLibrary/ContentBlockRenderer";
+
+const content: ContentBlock[] = [{"type":"h3","text":"Lesson 4: Invalid Math"},{"type":"paragraph","text":"**Lesson Objective:** To identify arguments based on fundamentally flawed arithmetic or probability errors. These arguments perform calculations that are logically broken."},{"type":"h4","text":"Fallacy 1: The Overlapping Sets Fallacy"},{"type":"paragraph","text":"Treating groups as mutually exclusive when they could overlap."},{"type":"list","items":["**The Core Trap:** Adding percentages of two groups and assuming the sum is the total.","**Example:** \"30% failed Math, 40% failed History. So 70% failed at least one.\" (Flaw: What if the Math failures are the same people as the History failures? The total could be as low as 40%).","**LSAT Application:** Arguments that sum percentages of \"accidents caused by X\" and \"accidents caused by Y\" without considering accidents caused by *both*."]},{"type":"h4","text":"Fallacy 2: The Inverse Fallacy (Probability)"},{"type":"paragraph","text":"Confusing the probability of A given B with the probability of B given A."},{"type":"list","items":["**The Core Trap:** Reversing the conditional probability.","**Example:** \"99% of people with Disease Z test positive. John tested positive, so he probably has Disease Z.\" (Flaw: If the disease is rare, false positives from healthy people might vastly outnumber true positives).","**LSAT Application:** \"Most extreme insomniacs drink coffee. Therefore, coffee drinkers are likely insomniacs.\" (Flaw: The group of coffee drinkers is huge; the group of insomniacs is small)."]},{"type":"h4","text":"Fallacy 3: The Flaw of Net Effect"},{"type":"paragraph","text":"Focusing on one side of a calculation (e.g., Revenue) while ignoring the other (e.g., Cost)."},{"type":"list","items":["**The Core Trap:** Ignoring the other side of the ledger.","**Example:** \"We increased sales, so profits will go up.\" (Flaw: Profit = Revenue - Cost. If marketing costs went up more than sales, profits go down).","**LSAT Application:** A regulation reduced pollution from one source but forced production to a dirtier factory overseas, increasing *net* global pollution."]},{"type":"callout","variant":"summary","title":"Lesson Takeaway","text":"These fallacies share a theme of **incomplete mathematics**. Train yourself to ask:\n* Could these groups overlap?\n* Is the argument reversing the probability?\n* What is the other side of the equation?"}];
+
+export default function Lesson() {
+  return (
+    <div className="space-y-1">
+      {content.map((block, index) => (
+        <ContentBlockRenderer key={index} block={block} />
+      ))}
+    </div>
+  );
+}

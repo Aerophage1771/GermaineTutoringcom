@@ -1,0 +1,14 @@
+import type { ContentBlock } from "@/types/studentLibrary";
+import { ContentBlockRenderer } from "@/components/LearningLibrary/ContentBlockRenderer";
+
+const content: ContentBlock[] = [{"type":"h3","text":"Step-by-Step Approach"},{"type":"h4","text":"Step 1: Synthesize the Author's Core Argument and Tone"},{"type":"paragraph","text":"Before looking at the answers, consolidate your understanding of the author's perspective. Don't just find the main point; internalize their entire stance. Ask yourself:"},{"type":"list","items":["What is their central claim or thesis?","What is their attitude toward the main subject (e.g., critical, supportive, objective)?","What are the main reasons they provide to support their claims?"]},{"type":"h4","text":"Step 2: Treat Each Answer Choice as a Hypothesis to Be Proven"},{"type":"paragraph","text":"For each answer choice, your task is to find a specific sentence or set of sentences in the passage that directly supports it. Ask yourself, \"Can I point to a line in the text that makes this statement true?\""},{"type":"list","items":["**Find Direct Proof:** The correct answer will be a direct consequence of the text. Look for a \"verifying quotation\" that logically proves the answer choice.","**Eliminate Unsupported Claims:** If you cannot find clear textual evidence to support an answer choice, eliminate it, even if it seems plausible.","**Check Ownership:** Be careful not to select a statement that belongs to a 3rd-party whom the author is criticizing or merely describing. The proof must reflect the author's *own* perspective."]},{"type":"hr"},{"type":"h3","text":"If You Get Stuck Between Two Choices..."},{"type":"h4","text":"Tie-Breaker #1: The Scope Test"},{"type":"paragraph","text":"Often, one of the final two choices will be a narrow, factually correct restatement of a single detail, while the other will be a broader conclusion that synthesizes the author's overall argument. Ask yourself, \"Is this question asking for a specific fact the author mentioned, or for a conclusion they would agree with?\" Author Viewpoint questions typically reward the answer that reflects a more holistic understanding of the author's reasoning."},{"type":"h4","text":"Tie-Breaker #2: The Intensity Check"},{"type":"paragraph","text":"Isolate the most important qualifying or modifying words in your final two answer choices (e.g., \"proves\" vs. \"suggests,\" \"always\" vs. \"likely\"). Go back to the passage and examine the author's own language. Is their tone absolute and certain, or is it more cautious and nuanced? Match the intensity of the answer choice to the intensity of the author's own claims. A mismatch in certainty is a common reason for a wrong answer."}];
+
+export default function Lesson() {
+  return (
+    <div className="space-y-1">
+      {content.map((block, index) => (
+        <ContentBlockRenderer key={index} block={block} />
+      ))}
+    </div>
+  );
+}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ComponentType } from "react";
 import { useAuthRedirect } from "@/hooks/use-auth-redirect";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -6,24 +6,27 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChevronRight, ArrowLeft, Lightbulb } from "lucide-react";
-import type { SectionData, LibraryModule, Lesson } from "@/types/studentLibrary";
+import type { SectionData, LibraryModule, LessonStub } from "@/types/studentLibrary";
 import {
   SECTION_LIST,
   loadSectionData,
   type SectionKey,
 } from "@/data/studentLibrary/sections";
 import { SECTION_COUNTS } from "@/data/studentLibrary/manifest";
-import { ContentBlockRenderer } from "@/components/LearningLibrary/ContentBlockRenderer";
 
 export default function LearningLibrary() {
   const { user, isLoading } = useAuthRedirect();
   const [, setLocation] = useLocation();
+  const [selectedSectionKey, setSelectedSectionKey] = useState<SectionKey | null>(null);
   const [selectedSection, setSelectedSection] = useState<SectionData | null>(null);
   const [selectedModule, setSelectedModule] = useState<LibraryModule | null>(null);
-  const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
+  const [selectedLesson, setSelectedLesson] = useState<LessonStub | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [sectionLoadingKey, setSectionLoadingKey] = useState<SectionKey | null>(null);
   const [sectionLoadError, setSectionLoadError] = useState<string | null>(null);
+  const [LessonComponent, setLessonComponent] = useState<ComponentType | null>(null);
+  const [lessonLoadError, setLessonLoadError] = useState<string | null>(null);
+  const [lessonLoading, setLessonLoading] = useState(false);
 
   if (isLoading || !user) {
     return (
@@ -38,6 +41,7 @@ export default function LearningLibrary() {
     setSectionLoadingKey(meta.key);
     try {
       const data = await loadSectionData(meta.key);
+      setSelectedSectionKey(meta.key);
       setSelectedSection(data);
       setSelectedModule(null);
       setSelectedLesson(null);
@@ -53,12 +57,29 @@ export default function LearningLibrary() {
     setSelectedLesson(null);
   };
 
-  const handleLessonClick = (lesson: Lesson) => {
+  const handleLessonClick = (lesson: LessonStub) => {
     setSelectedLesson(lesson);
+    setLessonLoadError(null);
+    setLessonComponent(null);
     setIsModalOpen(true);
+    if (!selectedSectionKey) return;
+    setLessonLoading(true);
+    import(
+      `@/data/studentLibrary/lessons/${selectedSectionKey}/${lesson.id}.tsx`
+    )
+      .then((m) => {
+        setLessonComponent(() => m.default);
+      })
+      .catch((err) => {
+        setLessonLoadError(err?.message ?? "Lesson failed to load");
+      })
+      .finally(() => {
+        setLessonLoading(false);
+      });
   };
 
   const handleBackToSections = () => {
+    setSelectedSectionKey(null);
     setSelectedSection(null);
     setSelectedModule(null);
     setSelectedLesson(null);
@@ -73,6 +94,8 @@ export default function LearningLibrary() {
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedLesson(null);
+    setLessonComponent(null);
+    setLessonLoadError(null);
   };
 
   return (
@@ -220,7 +243,7 @@ export default function LearningLibrary() {
         </div>
       )}
 
-      {/* Lesson content modal */}
+      {/* Lesson content modal: lazy-loaded .tsx component per lesson */}
       <Dialog open={isModalOpen} onOpenChange={closeModal}>
         <DialogContent className="max-w-4xl max-h-[85vh]">
           <DialogHeader>
@@ -230,11 +253,19 @@ export default function LearningLibrary() {
             </DialogTitle>
           </DialogHeader>
           <ScrollArea className="max-h-[70vh] pr-4">
-            <div className="space-y-1">
-              {selectedLesson?.content.map((block, index) => (
-                <ContentBlockRenderer key={index} block={block} />
-              ))}
-            </div>
+            {lessonLoadError && (
+              <p className="text-sm text-red-600" role="alert">
+                {lessonLoadError}
+              </p>
+            )}
+            {lessonLoading && (
+              <div className="flex items-center justify-center py-12">
+                <div className="animate-spin rounded-full h-10 w-10 border-2 border-blue-600 border-t-transparent" />
+              </div>
+            )}
+            {!lessonLoading && !lessonLoadError && LessonComponent && (
+              <LessonComponent />
+            )}
           </ScrollArea>
         </DialogContent>
       </Dialog>

@@ -1,0 +1,14 @@
+import type { ContentBlock } from "@/types/studentLibrary";
+import { ContentBlockRenderer } from "@/components/LearningLibrary/ContentBlockRenderer";
+
+const content: ContentBlock[] = [{"type":"h2","text":"MODULE 13: Principle - Apply"},{"type":"paragraph","text":"**Question Goal**\n\nTake a general rule from the passage and find the one specific example in the answer choices that correctly applies it."},{"type":"h3","text":"Introduction"},{"type":"paragraph","text":"You're provided a general rule (the principle). You're supposed to take that general rule, identify when it is applicable and the judgment that it tells you to reach, then identify the answer choice that has the same situation and the same judgment you're instructed to reach."},{"type":"h3","text":"Common Question Stems"},{"type":"list","items":["\"\"\"\"Which one of the following judgments most closely conforms to the principle stated above?\"\"\"\"","\"\"\"\"Which one of the following is an application of the principle described?\"\"\"\"","\"\"\"\"The reasoning in which one of the following is most strongly supported by the guidelines?\"\"\"\""]},{"type":"h3","text":"Core Concepts"},{"type":"paragraph","text":"The process is mechanical. You must break down the rule and then find the one answer choice that perfectly matches its structure."},{"type":"h4","text":"1. Break Down the Rule into Its Parts"},{"type":"paragraph","text":"First, identify the exact conditions that make the rule apply, and the exact result that happens when they are met."},{"type":"list","items":["**The Conditions (The \"\"If\"\" part):** What specific facts must be present for the rule to activate?","**The Result (The \"\"Then\"\" part):** What is the specific outcome that the rule dictates?"]},{"type":"paragraph","text":"*Example Rule:* \"\"An action is wrong if it violates a societal rule that promotes general welfare.\"\""},{"type":"list","items":["**Condition 1:** An action violates a rule.","**Condition 2:** That rule promotes general welfare.","**Result:** The action is wrong."]},{"type":"paragraph","text":"For the rule to apply, both conditions must be met."},{"type":"h4","text":"2. Find the Matching Scenario"},{"type":"paragraph","text":"Next, check each answer choice against the parts you identified."},{"type":"list","items":["**The Correct Answer:** Will describe a situation where the facts meet all the required **Conditions**, and the conclusion it reaches is the exact **Result** stated in the rule.","**Wrong Answers:** Will fail to match. They might describe a situation that doesn't meet all the conditions, or they will reach a result that is different from the one the rule requires."]}];
+
+export default function Lesson() {
+  return (
+    <div className="space-y-1">
+      {content.map((block, index) => (
+        <ContentBlockRenderer key={index} block={block} />
+      ))}
+    </div>
+  );
+}

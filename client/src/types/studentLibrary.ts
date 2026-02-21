@@ -17,10 +17,17 @@ export type ContentBlock =
   | { type: "options"; items: string[] }
   | { type: "process"; steps: string[] };
 
+/** Lesson with full content (used by lesson .tsx components). */
 export interface Lesson {
   id: string;
   title: string;
   content: ContentBlock[];
+}
+
+/** Lesson stub for structure-only section data (id + title only). */
+export interface LessonStub {
+  id: string;
+  title: string;
 }
 
 export interface LibraryModule {
@@ -29,7 +36,7 @@ export interface LibraryModule {
   category: string;
   unit: string;
   description: string;
-  lessons: Lesson[];
+  lessons: Lesson[] | LessonStub[];
 }
 
 export interface SectionData {

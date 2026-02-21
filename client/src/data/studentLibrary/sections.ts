@@ -37,15 +37,15 @@ export const SECTION_LIST: SectionMeta[] = [
   },
 ];
 
-/** Load one section's data on demand. Uses dynamic import so only the chosen section is in the bundle chunk. */
+/** Load one section's structure on demand (modules + lesson id/title only; lesson content is in .tsx). */
 export async function loadSectionData(key: SectionKey): Promise<SectionData> {
   switch (key) {
     case "lr":
-      return (await import("./lr")).default;
+      return (await import("./lr.structure")).default;
     case "rc":
-      return (await import("./rc")).default;
+      return (await import("./rc.structure")).default;
     case "advanced":
-      return (await import("./advanced")).default;
+      return (await import("./advanced.structure")).default;
     default:
       throw new Error(`Unknown section: ${key}`);
   }
