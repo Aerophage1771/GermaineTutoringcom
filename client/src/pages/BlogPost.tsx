@@ -121,7 +121,7 @@ const BlogPost = () => {
   const [match, params] = useRoute("/blog/:slug");
   const slug = params?.slug;
   const [tocOpen, setTocOpen] = useState(false);
-  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const [commentName, setCommentName] = useState('');
   const [commentText, setCommentText] = useState('');
   const { toast } = useToast();
@@ -157,15 +157,16 @@ const BlogPost = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setShowScrollTop(window.scrollY > 400);
+      const currentScrollY = window.scrollY;
+      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (totalHeight) {
+        setScrollProgress((currentScrollY / totalHeight) * 100);
+      }
     };
     window.addEventListener('scroll', handleScroll);
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
 
   const handleCommentSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -308,6 +309,13 @@ const BlogPost = () => {
 
   return (
     <div className="bg-background min-h-screen">
+      {/* Reading Progress Bar */}
+      <div className="fixed top-0 left-0 w-full h-1 z-[60] pointer-events-none">
+        <div
+          className="h-full bg-accent transition-all duration-150 ease-out"
+          style={{ width: `${scrollProgress}%` }}
+        />
+      </div>
       <Header />
 
       <main>
@@ -608,17 +616,6 @@ const BlogPost = () => {
       </main>
 
       <Footer />
-
-      {/* Scroll to Top Button */}
-      {showScrollTop && (
-        <button
-          onClick={scrollToTop}
-          className="fixed bottom-6 right-6 z-50 w-11 h-11 rounded-full bg-primary text-white shadow-lg hover:bg-accent transition-all duration-300 flex items-center justify-center hover:scale-110"
-          aria-label="Scroll to top"
-        >
-          <ChevronUp className="w-5 h-5" />
-        </button>
-      )}
     </div>
   );
 };
