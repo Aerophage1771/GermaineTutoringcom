@@ -12,7 +12,7 @@ const Home = () => {
   return (
     <div className="bg-background">
       <Header />
-      <main>
+      <main id="main-content" tabIndex={-1}>
         <HeroSection />
         <AboutSection />
         <MethodologySection />

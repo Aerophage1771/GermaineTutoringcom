@@ -132,6 +132,11 @@
   scroll-margin-top: 80px;
 }
 
+/* Skip link target focus */
+#main-content:focus {
+  outline: none;
+}
+
 /* Hide scrollbar for filter bar */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
