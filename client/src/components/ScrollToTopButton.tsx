@@ -16,6 +16,7 @@ export function ScrollToTopButton() {
     };
 
     window.addEventListener("scroll", toggleVisibility);
+    toggleVisibility();
     return () => window.removeEventListener("scroll", toggleVisibility);
   }, []);
 
