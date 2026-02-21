@@ -241,7 +241,7 @@ const Blog = () => {
         </div>
       </section>
 
-      <main className="py-10 md:py-14">
+      <main id="main-content" tabIndex={-1} className="py-10 md:py-14">
         <div className="container mx-auto px-4">
 
           {/* Category Filters */}

@@ -581,7 +581,7 @@ function AdminDashboard() {
     <div className="bg-background min-h-screen flex flex-col">
       <Header />
 
-      <main className="flex-1 py-8">
+      <main id="main-content" tabIndex={-1} className="flex-1 py-8">
         <div className="container mx-auto px-4">
           <h1 className="font-heading font-bold text-primary text-3xl mb-8">Admin Dashboard</h1>
 

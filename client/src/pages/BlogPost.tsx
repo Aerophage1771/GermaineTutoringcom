@@ -310,7 +310,7 @@ const BlogPost = () => {
     <div className="bg-background min-h-screen">
       <Header />
 
-      <main>
+      <main id="main-content" tabIndex={-1}>
         {/* Breadcrumb bar */}
         <div className="border-b border-border bg-muted/30">
           <div className="container mx-auto px-4 py-3">

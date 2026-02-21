@@ -857,7 +857,7 @@ const AdminBlog = () => {
   return (
     <div className="bg-background min-h-screen">
       <Header />
-      <main className="py-12">
+      <main id="main-content" tabIndex={-1} className="py-12">
         <div className="container mx-auto px-4">
           {isEditorView ? (
             <PostEditor

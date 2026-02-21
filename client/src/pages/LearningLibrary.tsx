@@ -99,7 +99,7 @@ export default function LearningLibrary() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-gray-50 p-6">
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
@@ -269,6 +269,6 @@ export default function LearningLibrary() {
           </ScrollArea>
         </DialogContent>
       </Dialog>
-    </div>
+    </main>
   );
 }

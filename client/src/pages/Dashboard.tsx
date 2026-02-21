@@ -79,7 +79,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
@@ -250,6 +250,6 @@ export default function Dashboard() {
         onOpenChange={setContactOpen}
         userId={user.id}
       />
-    </div>
+    </main>
   );
 }

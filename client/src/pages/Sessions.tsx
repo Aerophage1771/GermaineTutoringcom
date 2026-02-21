@@ -73,7 +73,7 @@ export default function Sessions() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8 space-y-6">
         <Button variant="outline" onClick={() => setLocation("/dashboard")}>
           Back to Dashboard
@@ -152,6 +152,6 @@ export default function Sessions() {
           </ScrollArea>
         </DialogContent>
       </Dialog>
-    </div>
+    </main>
   );
 }

@@ -115,7 +115,7 @@ const Programs = () => {
     <div className="bg-background min-h-screen">
       <Header />
       
-      <main className="py-20">
+      <main id="main-content" tabIndex={-1} className="py-20">
         {/* Hero Section */}
         <section className="container mx-auto px-4 mb-16">
           <div className="max-w-4xl mx-auto text-center">
